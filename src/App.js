@@ -1,209 +1,146 @@
-import React, {useState, useEffect} from 'react';
-import AuthRootStackScreen from './AuthRootStackScreen';
-import {connect} from 'react-redux';
-import {PermissionsAndroid, Platform, BackHandler, View} from 'react-native';
-import * as actions from './Store/Actions';
-import {NavigationContainer} from '@react-navigation/native';
-import MainAppScreens from './InApp';
-import Geolocation from '@react-native-community/geolocation';
+import React, {useEffect} from 'react';
+import Main from './Main';
+import {Provider, connect, useDispatch} from 'react-redux';
+import {
+  Text,
+  PermissionsAndroid,
+  StyleSheet,
+  Platform,
+  BackHandler,
+} from 'react-native';
+import {store, persistor} from './Store/index';
+import messaging from '@react-native-firebase/messaging';
+import {PersistGate} from 'redux-persist/integration/react';
+import FlashMessage from 'react-native-flash-message';
+// import Geolocation from '@react-native-community/geolocation';
+import SampleTesting from './Screens/testing';
+const App = () => {
 
-const Main = ({
-  userReducer,
-  userCoordsReducer,
-  nearMeUsers,
-  updateLocation,
-  coords,
-}) => {
-  const isLogin = userReducer?.isLogin;
-  const USER_ID = userReducer?.data?.user_id;
-  const [watchId, setWatchId] = useState(null);
-  // const [token, onChangeToken] = useState(null);
-  // useEffect(() => {
-  //   console.log();
-  //   try {
-  //     async function GetToken() {
-  //       let Token = await AsyncStorage.getItem('token');
-  //       if (Token) {
-  //         console.log(Token, 'Data OF USER');
-  //         if (userLogin?.data?.id) {
-  //           // alert("SADAD")
-  //           userGet(userLogin.data.id);
-  //         }
-  //         // console.log(Token.Token, 'Token OF USER')
-  //         onChangeToken(Token);
-  //       }
-  //     }
-  //     GetToken();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   //   if(userLogin?.data?.id){
-  //   //     userGet(userLogin.data.id)
-  //   //     console.log(userLogin.data.id, "MAIN SCREEN")
-  //   //     nearMeUsers(coords.latitude, coords.longitude, userLogin.data.id)
-  //   //   }
-  //   //   console.log(userLogin?.data?.id, "MAIN SCREEN")
-  //   //   console.log(coords, "COORDINATE MAIN SCREEN")
-  // }, [userReducer]);
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const remote = await messaging().registerDeviceForRemoteMessages();
+    // console.log(remote, 'await messaging().registerDeviceForRemoteMessages();');
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-  // useEffect(()=>{
-  //   if(userLogin?.data?.id){
-  //     userGet(userLogin.data.id)
-  //     console.log(userLogin.data.id, "MAIN SCREEN")
-  //   }
-  //   console.log(userLogin?.data?.id, "MAIN SCREEN")
-
-  // },[])
-
-  // useEffect(() => {
-  //   console.log(userAuthSignUp, 'MAIN userAuthSignUp');
-  //   // if()
-  //   onChangeToken(userAuthSignUp.token);
-  //   // if(userAuthSignUp){
-  //   //   console.log(userAuthSignUp, "userAuthSignUp")
-  //   //   //  onChangeToken()
-  //   // }else{
-  //   //   onChangeToken(null)
-  //   // }
-  // }, [userAuthSignUp]);
-  // // if(userLogin.token ||  token){
-  // //   return(
-  // //     <View style={{justifyContent:'center', flex: 1, alignItems:'center'}}>
-  // //       <ActivityIndicator size={40} color="red"/>
-  // //     </View>
-  // //   )
-  // }
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
 
   useEffect(() => {
-    const requestLocationPermission = async () => {
-      if (Platform.OS === 'ios') {
-        getOneTimeLocation();
-        subscribeLocationLocation();
-      } else {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Location Access Required!',
-              message:
-                'BMAD requires location access to see people around you.',
-              buttonNegative: 'Cancel',
-              buttonPositive: 'OK',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            getOneTimeLocation();
-            subscribeLocationLocation();
-          } else {
-            console.log('Permission Denied');
-            BackHandler.exitApp();
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    };
-    requestLocationPermission();
-    return () => {
-      Geolocation.clearWatch(watchId);
-      console.log('clearing watch id...');
-    };
+    requestUserPermission();
   }, []);
 
+
   useEffect(() => {
-    if (userCoordsReducer?.lat == null) {
-      getOneTimeLocation();
-    }
-    // console.log(userCoordsReducer, 'userCoordsReducer');
-  }, [userCoordsReducer]);
-
-  const getOneTimeLocation = () => {
-    // console.log('one time==================');
-    Geolocation.getCurrentPosition(
-      //Will give you the current location
-      position => {
-        // setLocationStatus('You are Here');
-        // console.log("----------------- get one time")
-        coords(position.coords.latitude, position.coords.longitude);
-
-        // console.log('getting one time location coords...');
-      },
-      error => {
-        console.log(error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 30000,
-        maximumAge: 1000,
-      },
-    );
-  };
-
-  const subscribeLocationLocation = () => {
-    let watchID = Geolocation.watchPosition(
-      position => {
-        coords(position.coords.latitude, position.coords.longitude);
-        if (isLogin) {
-          // console.log('LOGGED IN HAYY====================');
-          updateLocation({
-            user_id: USER_ID,
-            user_latitude: position.coords.latitude,
-            user_longitude: position.coords.longitude,
-          });
+    async function requestLocationPermission() {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        
+        } else {
+          BackHandler.exitApp();
         }
-        // console.log('UPDATING LOCATION.......................');
-      },
-      error => {
-        console.log(error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        maximumAge: 1000,
-      },
-    );
-
-    setWatchId(watchID);
-  };
-  useEffect(() => {
-    if (
-      userReducer?.isLogin &&
-      userCoordsReducer?.lat !== '' &&
-      userCoordsReducer?.long !== '' &&
-      USER_ID !== undefined
-    ) {
-      nearMeUsers(userCoordsReducer?.lat, userCoordsReducer?.long, USER_ID);
+      } catch (err) {
+        console.warn(err);
+      }
     }
-  }, [userCoordsReducer]);
-  return (
-    <>
-    <View style={{
-      flex: 1,
-      backgroundColor:'red'
-    }}>
+    requestLocationPermission();
+  }, []);
+  // useEffect(() => {
+  //   const requestLocationPermission = async () => {
+  //     if (Platform.OS === 'ios') {
+  //       getOneTimeLocation();
+  //       subscribeLocationLocation();
+  //     } else {
+  //       try {
+  //         const granted = await PermissionsAndroid.request(
+  //           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //           {
+  //             title: 'Location Access Required',
+  //             message: 'This App needs to Access your location',
+  //           },
+  //         );
+  //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //           //To Check, If Permission is granted
+  //           getOneTimeLocation();
+  //         } else {
+  //           console.log('Permission Denied');
+  //           BackHandler.exitApp();
+  //         }
+  //       } catch (err) {
+  //         console.log(err);
+  //       }
+  //     }
+  //   };
+  //   requestLocationPermission();
+  //   return () => {
+  //     Geolocation.clearWatch(watchID);
+  //   };
+  // }, []);
 
-    </View>
-      {/* {userReducer?.isLogin ? (
-        <MainAppScreens />
-      ) : (
-        <NavigationContainer>
-          <AuthRootStackScreen />
-        </NavigationContainer>
-      )} */}
-    </>
+  // const getOneTimeLocation = () => {
+  //   console.log('Getting Location ...');
+  //   Geolocation.getCurrentPosition(
+  //     //Will give you the current location
+  //     position => {
+  //       // setLocationStatus('You are Here');
+  //       // dispatch(coords(position.coords.latitude, position.coords.longitude));
+  //     },
+  //     error => {
+  //       console.log(error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: false,
+  //       timeout: 30000,
+  //       maximumAge: 1000,
+  //     },
+  //   );
+  // };
+
+  // const subscribeLocationLocation = () => {
+  //   watchID = Geolocation.watchPosition(
+  //     position => {
+  //       // setLocationStatus('You are Here');
+  //       console.log(position, 'APP.js watchPosition');
+  //     },
+  //     error => {
+  //       console.log(error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: false,
+  //       maximumAge: 1000,
+  //     },
+  //   );
+  // };
+
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Main />
+        <FlashMessage
+          position="top"
+          statusBarHeight="10"
+          style={styles.flashMessage}
+        />
+      </PersistGate>
+    </Provider>
   );
 };
 
-const mapStatetoProps = ({userReducer, userAuthSignUp, userCoordsReducer}) => {
-  return {userReducer, userAuthSignUp, userCoordsReducer};
-};
-
-export default connect(mapStatetoProps, actions)(Main);
-
-// {
-//   userLogin.token ||  token ?
-//   <AuthRootStackScreen/> : (
-//     <NavigationContainer>
-//          <MainAppScreens />
-//     </NavigationContainer>
-//   )
-// }
+const styles = StyleSheet.create({
+  flashMessage: {
+    position: 'absolute',
+    zIndex: 9999,
+    borderRadius: 12,
+    top: 30,
+    width: '96%',
+    alignSelf: 'center',
+    marginTop: 20,
+  },
+});
+export default App;

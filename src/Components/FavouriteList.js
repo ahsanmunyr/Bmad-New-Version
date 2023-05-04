@@ -86,7 +86,7 @@ const FavouriteList = ({Name, Value, Images, Id, Favourite}) => {
                 </View>
               ) : null}
             </View>
-            <View style={{width: 120, height: 60}}>
+            <View style={{width: 120,}}>
               <Text
                 //   numberOfLines={1}
                 style={{

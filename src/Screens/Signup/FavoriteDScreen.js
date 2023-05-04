@@ -150,7 +150,7 @@ const FavoriteDScreen = ({
   return (
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
-      <View style={{alignItems: 'center', height: hp('100%')}}>
+      <View style={{alignItems: 'center', height: hp(100)}}>
         <FlatList
           contentContainerStyle={{
             justifyContent: 'center',
@@ -167,7 +167,7 @@ const FavoriteDScreen = ({
           showsHorizontalScrollIndicator={false}
           ListEmptyComponent={null}
           ListHeaderComponent={<View style={{height: 40}}></View>}
-          ListFooterComponent={<View style={{height: 100}}></View>}
+          ListFooterComponent={<View style={{height: 120}}></View>}
           data={Data}
           keyExtractor={(item, index) => index}
           extraData={items}

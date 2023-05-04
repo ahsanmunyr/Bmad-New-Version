@@ -94,11 +94,11 @@ const AuthRootStackScreen = ({
           ),
           headerTransparent: false,
           headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
+            <View
+              // onPress={() => navigation.goBack()}
               style={styles.leftIconStyle}>
-              <Icon name="arrow-back" size={width * 0.07} color="#B01125" />
-            </TouchableOpacity>
+              {/* <Icon name="arrow-back" size={width * 0.07} color="#B01125" /> */}
+            </View>
           ),
           headerRight: () => (
             <TouchableOpacity
@@ -143,11 +143,11 @@ const AuthRootStackScreen = ({
           ),
           headerTransparent: false,
           headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
+            <View
+              // onPress={() => navigation.goBack()}
               style={styles.leftIconStyle}>
-              <Icon name="arrow-back" size={width * 0.07} color="#B01125" />
-            </TouchableOpacity>
+              {/* <Icon name="arrow-back" size={width * 0.07} color="#B01125" /> */}
+            </View>
           ),
           headerRight: () => (
             <TouchableOpacity
