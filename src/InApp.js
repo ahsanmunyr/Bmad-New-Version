@@ -1,27 +1,34 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {View, StyleSheet, LogBox, Text, Dimensions} from 'react-native';
+import {View, StyleSheet, LogBox, Text, Dimensions, Animated, Platform} from 'react-native';
 import OfferADrink from './Screens/Offer/OfferADrink';
 import OutOfDrink from './Screens/Offer/OutOfDrink';
 import ProceedToPay from './Screens/Offer/ProceedToPay';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import Animated, {interpolate} from 'react-native-reanimated';
+
+import {interpolate} from 'react-native-reanimated';
 import {withFancyDrawer} from './withFancyHeader';
 import DrawerContent from './CustomDrawer';
 // import {createStackNavigator} from '@react-navigation/stack';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PushNotification from 'react-native-push-notification';
 import {connect} from 'react-redux';
-import ChatStack from './Screens/Chat/ChatStack';
+
 import * as actions from './Store/Actions';
 import {NavigationContainer} from '@react-navigation/native';
 import Connections from './Screens/Connections/Connections';
 import ConnectionStack from './Screens/Connections/ConnectionStack';
+import ChatStack from './Screens/Chat/ChatStack';
+import MyProfileScreen from './Screens/Home/Profile/MyProfileScreen';
+import BottomTab from './BottomTab';
 import messaging from '@react-native-firebase/messaging';
 import {io} from 'socket.io-client';
-import MyProfileScreen from './Screens/Home/Profile/MyProfileScreen';
 import Geolocation from '@react-native-community/geolocation';
+
+
 import MyTabs from './MyTabs';
-import BottomTab from './BottomTab';
+
+import { ScreensArray2 } from './src/screens/drawer/arrays';
+import SplashScreen from 'react-native-splash-screen';
 
 const {width, height} = Dimensions.get('window');
 
@@ -32,7 +39,7 @@ LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
-export const AnimatedContext = React.createContext(void 0);
+export const AnimatedContext = React.createContext(0);
 
 const Drawer = createDrawerNavigator();
 const STACK = createNativeStackNavigator();
@@ -60,7 +67,6 @@ const MainAppScreens = ({
 }) => {
  
   const socket = useRef();
-  const [animatedValue, setAnimatedValue] = useState(new Animated.Value(0));
   const USER_ID = userReducer?.data?.user_id;
 
   useEffect(() => {
@@ -177,6 +183,9 @@ const MainAppScreens = ({
   }, []);
 
   useEffect(() => {
+
+    SplashScreen.hide()
+
     requestUserPermission();
     getOneTimeLocation();
   }, []);
@@ -202,74 +211,99 @@ const MainAppScreens = ({
     );
   };
   return (
-    <AnimatedContext.Provider value={animatedValue}>
-      <View style={{backgroundColor: '#B01125', flex: 1}}>
-        <NavigationContainer>
-          <Drawer.Navigator
-            statusBarAnimation="slide"
-            minSwipeDistance={12}
-            drawerStyle={{
-              backgroundColor: 'transparent',
-            }}
-            drawerType={'slide'}
-            initialRouteName="home"
-            overlayColor="transparent"
-            drawerContent={props => {
-              setAnimatedValue(props.progress);
-              return <DrawerContent {...props} />;
-            }}>
-            <Drawer.Screen name="home" component={withFancyDrawer(BottomTab)} />
-            {/* <Drawer.Screen
-              name="cards"
-              component={withFancyDrawer(CreditCards)}
-            /> */}
-            <Drawer.Screen
-              name="connections"
-              component={withFancyDrawer(ConnectionStack)}
-            />
-            <Drawer.Screen
-              name="profile"
-              component={withFancyDrawer(MyProfileScreen)}
-            />
-
-            {/* <Drawer.Screen
-              name="Change Password"
-              component={withFancyDrawer(MyProfileScreen)}
-            /> */}
-
-            <STACK.Screen
-              name="OfferADrink"
-              options={{headerShown: false}}
-              component={withFancyDrawer(OfferADrink)}
-            />
-            <STACK.Screen
-              name="OutOfDrink"
-              options={{headerShown: false}}
-              component={withFancyDrawer(OutOfDrink)}
-            />
-            <STACK.Screen
-              name="ProceedToPay"
-              options={{headerShown: false}}
-              component={withFancyDrawer(ProceedToPay)}
-            />
-            <STACK.Screen
-              name="chats"
-              options={{headerShown: false}}
-              component={withFancyDrawer(ChatStack)}
-            />
-          </Drawer.Navigator>
-        </NavigationContainer>
-      </View>
-    </AnimatedContext.Provider>
+    <NavigationContainer>
+    <Drawer.Navigator
+      screenOptions={{
+        drawerStyle: styles.drawerStyles,
+        drawerType: 'slide',
+        
+        overlayColor: 'transparent',
+        swipeEdgeWidth: Platform.OS === 'android' && 180,
+        sceneContainerStyle: styles.sceneStyles,
+        headerShown: false
+      }}
+      drawerContent={(props) => <DrawerContent {...props} />}
+    >
+      {ScreensArray2.map((_, i) => (
+        <Drawer.Screen key={i} name={_.route} component={_.component}
+          options={{
+            item: _,
+          }}
+        />
+      ))}
+    </Drawer.Navigator>
+    </NavigationContainer>
   );
 };
 const mapStateToProps = ({userReducer}) => {
   return {userReducer};
 };
 
-export default connect(mapStateToProps, actions)(MainAppScreens, MyTabs);
+export default connect(mapStateToProps, actions)(MainAppScreens);
 // export default MainAppScreens;
+{/* <AnimatedContext.Provider value={animatedValue}>
+<View style={{backgroundColor: '#B01125', flex: 1}}>
+  <NavigationContainer>
+    <Drawer.Navigator
+      statusBarAnimation="slide"
+      minSwipeDistance={12}
+      drawerStyle={{
+        backgroundColor: 'transparent',
+      }}
+      drawerType={'slide'}
+      initialRouteName="home"
+      overlayColor="transparent"
+      drawerContent={props => {
+        setAnimatedValue(props.progress);
+        return <DrawerContent {...props} />;
+      }}
+      >
+      <Drawer.Screen name="home" component={(BottomTab)} />
+      <Drawer.Screen
+        name="connections"
+        component={ConnectionStack}
+      />
+      <Drawer.Screen
+        name="profile"
+        component={withFancyDrawer(MyProfileScreen)}
+      />
+      <STACK.Screen
+        name="OfferADrink"
+        options={{headerShown: false}}
+        component={withFancyDrawer(OfferADrink)}
+      />
+      <STACK.Screen
+        name="OutOfDrink"
+        options={{headerShown: false}}
+        component={withFancyDrawer(OutOfDrink)}
+      />
+      <STACK.Screen
+        name="ProceedToPay"
+        options={{headerShown: false}}
+        component={withFancyDrawer(ProceedToPay)}
+      />
+      <STACK.Screen
+        name="chats"
+        options={{headerShown: false}}
+        component={withFancyDrawer(ChatStack)}
+      />
+    </Drawer.Navigator>
+  </NavigationContainer>
+</View>
+</AnimatedContext.Provider> */}
 var styles = StyleSheet.create({
+  drawerStyles: {
+    width: 260,
+    backgroundColor: '#B01125',
+
+  },
+  sceneStyles:{
+    backgroundColor: '#B01125'
+  },
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'white'
+  },
   drawerContent: {
     flex: 1,
   },

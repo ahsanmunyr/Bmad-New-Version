@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import AuthRootStackScreen from './AuthRootStackScreen';
 import {connect} from 'react-redux';
-import {PermissionsAndroid, Platform, BackHandler} from 'react-native';
+import {PermissionsAndroid, Platform, BackHandler, View} from 'react-native';
 import * as actions from './Store/Actions';
 import {NavigationContainer} from '@react-navigation/native';
 import MainAppScreens from './InApp';
@@ -178,6 +178,9 @@ const Main = ({
     <>
       {userReducer?.isLogin ? (
         <MainAppScreens />
+        // <View style={{backgroundColor:'red', flex: 1}}>
+
+        // </View>
       ) : (
         <NavigationContainer>
           <AuthRootStackScreen />
