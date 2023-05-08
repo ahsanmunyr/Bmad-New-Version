@@ -17,7 +17,9 @@ function ProfileStack({navigation}) {
   const ProfileStack = createNativeStackNavigator();
 
   return (
-    <ProfileStack.Navigator initialRouteName="BMAD">
+    <ProfileStack.Navigator screenOptions={{
+      headerBackVisible: false
+    }} initialRouteName="BMAD">
       {/* Drinks */}
       <ProfileStack.Screen
         name="Drinks"
@@ -42,20 +44,14 @@ function ProfileStack({navigation}) {
             </Text>
           ),
           headerTransparent: false,
-          headerLeft: () => (
-            <View style={{left: 20}}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('BMAD', {
-                    screen: 'BMAD',
-                    initial: false,
-                  })
-                }>
-                <Icon name="arrow-back" size={25} color="white" />
+          headerLeft: () => null,
+          headerRight: () => (
+            <View style={{right: 0}}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Icon name="ios-enter-outline" size={30} color="white" />
               </TouchableOpacity>
             </View>
           ),
-          headerRight: () => <MessageIcon navigation={navigation} />,
         })}
         component={Drinks}
       />
@@ -86,7 +82,7 @@ function ProfileStack({navigation}) {
             <TouchableOpacity
               onPress={() => navigation.openDrawer()}
               style={{}}>
-              <View style={{padding: 10, top: 3}}>
+              <View style={{padding: 10, top: 0}}>
                 <Image
                   resizeMode="contain"
                   style={{height: 25, width: 25}}
@@ -95,7 +91,7 @@ function ProfileStack({navigation}) {
               </View>
             </TouchableOpacity>
           ),
-          headerRight: () => <MessageIcon navigation={navigation} />,
+          headerRight: () => null
         })}
         component={BMAD}
       />
@@ -200,7 +196,7 @@ function ProfileStack({navigation}) {
             <TouchableOpacity
               onPress={() => navigation.openDrawer()}
               style={{}}>
-              <View style={{padding: 10, top: 3}}>
+              <View style={{padding: 10, top: 0}}>
                 <Image
                   resizeMode="contain"
                   style={{height: 25, width: 25}}
@@ -212,7 +208,7 @@ function ProfileStack({navigation}) {
           headerRight: () => (
             <View style={{right: 20}}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Icon name="ios-enter-outline" size={30} color="#B01125" />
+                <Icon name="ios-enter-outline" size={30} color="white" />
               </TouchableOpacity>
             </View>
           ),
@@ -243,23 +239,11 @@ function ProfileStack({navigation}) {
             </Text>
           ),
           headerTransparent: false,
-          headerLeft: () => (
-            <View style={{left: 20}}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('BMAD', {
-                    screen: 'BMAD',
-                    initial: false,
-                  })
-                }>
-                <Icon name="arrow-back" size={25} color="white" />
-              </TouchableOpacity>
-            </View>
-          ),
+          headerLeft: () => null,
           headerRight: () => (
-            <View style={{right: 20}}>
+            <View style={{right: 0}}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Icon name="ios-enter-outline" size={30} color="#B01125" />
+                <Icon name="ios-enter-outline" size={30} color="white" />
               </TouchableOpacity>
             </View>
           ),

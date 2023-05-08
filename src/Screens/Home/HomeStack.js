@@ -52,7 +52,7 @@ function HomeStack({navigation}) {
             <TouchableOpacity
               onPress={() => navigation.openDrawer()}
               style={{}}>
-              <View style={{padding: 10, top: 3}}>
+              <View style={{padding: 10, top: 0}}>
                 <Image
                   resizeMode="contain"
                   style={{height: 25, width: 25}}
@@ -100,22 +100,7 @@ function HomeStack({navigation}) {
           //     </View>
           //   </TouchableOpacity>
           // ),
-          headerLeft: () => (
-            <View style={{left: 20}}>
-              <TouchableOpacity
-                onPress={
-                  () =>
-                    navigation.navigate('HOME', {
-                      screen: 'home',
-                      initial: false,
-                    })
-
-                  // console.log("dsdasds")
-                }>
-                <Icon2 name="arrow-back" size={25} color="white" />
-              </TouchableOpacity>
-            </View>
-          ),
+          headerLeft: () => null,
           headerRight: () => <MessageIcon navigation={navigation} />,
         })}
         component={MainPost}
@@ -145,7 +130,7 @@ function HomeStack({navigation}) {
             <TouchableOpacity
               onPress={() => navigation.openDrawer()}
               style={{}}>
-              <View style={{padding: 10, top: 3}}>
+              <View style={{padding: 10, top: 0}}>
                 <Image
                   resizeMode="contain"
                   style={{height: 25, width: 25}}

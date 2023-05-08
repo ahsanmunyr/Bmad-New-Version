@@ -28,6 +28,7 @@ import {connect} from 'react-redux';
 import {themeRed} from '../../Assets/Colors/Colors';
 import {useIsFocused} from '@react-navigation/native';
 import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import { responsiveScreenFontSize } from 'react-native-responsive-dimensions';
 
 const {width, height} = Dimensions.get('window');
 
@@ -267,7 +268,7 @@ const HomeScreen = ({
                       <AppText
                         nol={3}
                         family="Poppins-Medium"
-                        size={width * 0.05}
+                        size={responsiveScreenFontSize(2)}
                         style={{alignSelf: 'center'}}
                         color="black"
                         Label={'Offer drinks and connect'}
@@ -276,7 +277,7 @@ const HomeScreen = ({
                         style={{marginTop: -5}}
                         nol={1}
                         family="Poppins-Medium"
-                        size={width * 0.05}
+                        size={responsiveScreenFontSize(2)}
                         color="black"
                         Label={' to see their posts.'}
                       />

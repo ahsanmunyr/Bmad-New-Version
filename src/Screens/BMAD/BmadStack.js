@@ -38,7 +38,7 @@ function BmadStack({navigation}) {
               <TouchableOpacity
                 onPress={() => navigation.openDrawer()}
                 style={{}}>
-                <View style={{padding: 10, top: 3}}>
+                <View style={{padding: 10, top: 0}}>
                   <Image
                     resizeMode="contain"
                     style={{height: 25, width: 25}}

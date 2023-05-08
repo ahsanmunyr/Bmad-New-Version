@@ -245,12 +245,14 @@ import {
   View,
   StatusBar,
 } from 'react-native';
-import React, {useReducer, useRef} from 'react';
+import React, {useReducer, useRef, useState, useEffect} from 'react';
+import * as actions from './Store/Actions';
 import {useDrawerProgress} from '@react-navigation/drawer';
 // import colors from './src/constants/Colors';
 import {colors, constant } from './src/screens/drawer/constant';
 import Icon, {Icons} from './src/components/Icons';
-
+import {connect} from 'react-redux';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -259,11 +261,18 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import DrawerItemList from './src/screens/drawer/drawer2/DrawerItemList';
+import { responsiveFontSize, responsiveScreenWidth } from 'react-native-responsive-dimensions';
 
-const CustomDrawer = props => {
-  const {state, descriptors, navigation} = props;
+const CustomDrawer = (props,{
+  userReducer,
+  SignOut,
+  navigation,
+  userLogin,
+  showDrawerConnectionsBadge,
+  connectionsReducer,
+}) => {
   const scrollRef = useRef(null);
-
+  const [hasNewRequests, setHasNewRequests] = useState(false);
   const drawerProgress = useDrawerProgress();
 
   const viewStyles = useAnimatedStyle(() => {
@@ -272,6 +281,12 @@ const CustomDrawer = props => {
       transform: [{translateX}],
     };
   });
+
+  useEffect(() => {
+    if (connectionsReducer?.showConnectionsBadge) {
+      setHasNewRequests(true);
+    }
+  }, [connectionsReducer?.showConnectionsBadge]);
 
   const viewStyles2 = type =>
     useAnimatedStyle(() => {
@@ -291,9 +306,16 @@ const CustomDrawer = props => {
       <Animated.View
         style={[styles.row, styles.view, styles.marginTop, viewStyles2('top')]}>
         <View style={styles.iconContainer}>
-          <Icon name="logo-electron" type={Icons.Ionicons} size={30} />
+        <Image
+              resizeMode="contain"
+              source={require('./Assets/Images/brand.png')}
+              style={{
+                width: 180,
+                height: 200,
+              }}
+            />
         </View>
-        <Text style={styles.headerTitle}>Hello there👋</Text>
+
       </Animated.View>
       {/* Drawer List Item */}
       <Animated.ScrollView
@@ -311,22 +333,21 @@ const CustomDrawer = props => {
             styles.view,
             styles.marginBottom,
             viewStyles2('bottom'),
-          ]}>
-          <Image
-            style={styles.profile}
-            source={require('./src/assets/images/avatar.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.headerTitle}>Kelsey Van</Text>
-            <Text style={styles.text}>Software Engineer</Text>
-          </View>
+          ,{width: responsiveScreenWidth(40), justifyContent:'space-around'}]}>
+             <MaterialIcons name="logout" color="white" size={30} />
+         <Text style={{color: 'white', fontSize:responsiveFontSize(3), fontWeight:'500'}}>Logout</Text>
         </Animated.View>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default CustomDrawer;
+function mapStateToProps({userReducer, userLogin,connectionsReducer}) {
+  return {userReducer, userLogin,connectionsReducer};
+}
+export default connect(mapStateToProps, actions)(CustomDrawer);
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -372,7 +393,7 @@ const styles = StyleSheet.create({
     padding: constant.SPACING / 2.4,
     borderRadius: constant.borderRadius,
     margin: constant.SPACING / 2,
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary,
   },
   separator: {
     width: '100%',
@@ -395,5 +416,41 @@ const styles = StyleSheet.create({
   },
   profileText: {
     color: colors.white,
+  },
+  drawerContent: {
+    flex: 1,
+  },
+  userInfoSection: {
+    paddingLeft: 20,
+  },
+  title: {
+    marginTop: 20,
+    fontWeight: 'bold',
+  },
+  caption: {
+    fontSize: 14,
+    lineHeight: 14,
+  },
+
+  section: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  paragraph: {
+    fontWeight: 'bold',
+    marginRight: 3,
+  },
+  drawerSection: {
+    marginTop: 15,
+  },
+  preference: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  bottomDrawerSection: {
+    marginBottom: 30,
   },
 });

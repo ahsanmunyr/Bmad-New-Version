@@ -7,12 +7,13 @@ import {
   StyleSheet,
   Platform,Dimensions
 } from 'react-native';
+import { responsiveWidth } from 'react-native-responsive-dimensions';
 const {width, height} = Dimensions.get('window');
 
 export default Preview = ({
 item
 }) => {
-  console.log(item, "IMAGE");
+  // console.log(item, "IMAGE");
   return (
     <View style={styles.videoContainer}>
       <View style={[styles.imageContainer, styles.shadow]}>
@@ -47,10 +48,10 @@ const styles = StyleSheet.create({
     // backgroundColor:'white'
   },
   videoPreview: {
-    width: width * 0.85,
+    width: 350,
     height: height * 0.25,
     // borderRadius: 8,
-    margin: width * 0.022,
+    // margin: width * 0.022,
   },
   desc: {
     fontSize: 14,
