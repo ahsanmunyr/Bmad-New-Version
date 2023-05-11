@@ -249,7 +249,7 @@ import React, {useReducer, useRef, useState, useEffect} from 'react';
 import * as actions from './Store/Actions';
 import {useDrawerProgress} from '@react-navigation/drawer';
 // import colors from './src/constants/Colors';
-import {colors, constant } from './src/screens/drawer/constant';
+import {colors, constant} from './src/screens/drawer/constant';
 import Icon, {Icons} from './src/components/Icons';
 import {connect} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -261,16 +261,23 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import DrawerItemList from './src/screens/drawer/drawer2/DrawerItemList';
-import { responsiveFontSize, responsiveScreenWidth } from 'react-native-responsive-dimensions';
+import {
+  responsiveFontSize,
+  responsiveScreenWidth,
+} from 'react-native-responsive-dimensions';
 
-const CustomDrawer = (props,{
-  userReducer,
-  SignOut,
-  navigation,
-  userLogin,
-  showDrawerConnectionsBadge,
-  connectionsReducer,
-}) => {
+const CustomDrawer = (
+  props,
+  {
+    userReducer,
+    SignOut,
+    navigation,
+    userLogin,
+    showDrawerConnectionsBadge,
+    connectionsReducer,
+  },
+) => {
+  console.log(props?.SignOut, "SignOut");
   const scrollRef = useRef(null);
   const [hasNewRequests, setHasNewRequests] = useState(false);
   const drawerProgress = useDrawerProgress();
@@ -306,16 +313,15 @@ const CustomDrawer = (props,{
       <Animated.View
         style={[styles.row, styles.view, styles.marginTop, viewStyles2('top')]}>
         <View style={styles.iconContainer}>
-        <Image
-              resizeMode="contain"
-              source={require('./Assets/Images/brand.png')}
-              style={{
-                width: 180,
-                height: 200,
-              }}
-            />
+          <Image
+            resizeMode="contain"
+            source={require('./Assets/Images/brand.png')}
+            style={{
+              width: 180,
+              height: 200,
+            }}
+          />
         </View>
-
       </Animated.View>
       {/* Drawer List Item */}
       <Animated.ScrollView
@@ -326,28 +332,36 @@ const CustomDrawer = (props,{
         <DrawerItemList {...props} styles={styles} />
       </Animated.ScrollView>
       {/* footer */}
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => props?.SignOut(userReducer?.data?.user_id?.toString())}>
         <Animated.View
           style={[
             styles.row,
             styles.view,
             styles.marginBottom,
             viewStyles2('bottom'),
-          ,{width: responsiveScreenWidth(40), justifyContent:'space-around'}]}>
-             <MaterialIcons name="logout" color="white" size={30} />
-         <Text style={{color: 'white', fontSize:responsiveFontSize(3), fontWeight:'500'}}>Logout</Text>
+            ,
+            {width: responsiveScreenWidth(40), justifyContent: 'space-around'},
+          ]}>
+          <MaterialIcons name="logout" color="white" size={30} />
+          <Text
+            style={{
+              color: 'white',
+              fontSize: responsiveFontSize(3),
+              fontWeight: '500',
+            }}>
+            Logout
+          </Text>
         </Animated.View>
       </TouchableOpacity>
     </View>
   );
 };
 
-function mapStateToProps({userReducer, userLogin,connectionsReducer}) {
-  return {userReducer, userLogin,connectionsReducer};
+function mapStateToProps({userReducer, userLogin, connectionsReducer}) {
+  return {userReducer, userLogin, connectionsReducer};
 }
 export default connect(mapStateToProps, actions)(CustomDrawer);
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -360,7 +374,7 @@ const styles = StyleSheet.create({
     padding: constant.SPACING / 1.5,
   },
   marginTop: {
-    marginTop: 50
+    marginTop: 50,
   },
   marginBottom: {
     marginBottom: constant.SPACING / 2,
