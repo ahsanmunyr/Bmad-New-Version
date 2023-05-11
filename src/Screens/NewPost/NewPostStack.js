@@ -31,28 +31,19 @@ const NewPostStack = ({navigation}) => {
           ),
           headerTransparent: false,
           headerLeft: () => (
-            <View style={{left: 20}}>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Icon name="arrow-back" size={25} color="white" />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              onPress={() => navigation.openDrawer()}
+              style={{}}>
+              <View style={{padding: 10, top: 0}}>
+                <Image
+                  resizeMode="contain"
+                  style={{height: 25, width: 25}}
+                  source={require('./../../Assets/Images/menu1.png')}
+                />
+              </View>
+            </TouchableOpacity>
           ),
-          headerRight: () => (
-            <View
-              style={{
-                backgroundColor: themeRed,
-                borderRadius: 50,
-                borderColor: themeRed,
-                borderWidth: 1,
-                right: 20,
-              }}>
-              {/* <Image
-                resizeMode="contain"
-                source={require('./../../Assets/Images/Check.png')}
-                style={{width: 20, height: 20, margin: 4}}
-              /> */}
-            </View>
-          ),
+          headerRight: () => null
         })}
         component={NewPostScreen}
       />

@@ -9,15 +9,11 @@ import messaging from '@react-native-firebase/messaging';
 export const postAction =
   (caption, images, id, navigation, clearAllStates, _onPostFailed) =>
   async dispatch => {
-    console.log(
-      'API DATA: ',
+    console.log({
       id,
-      caption,
-      images[0].uri.substring(0, 30),
-      images.length,
-    );
+    });
     var bodyFormData = new FormData();
-    let arr = [];
+
     if (images) {
       images.forEach((item, i) => {
         bodyFormData.append('post_file', {
@@ -28,108 +24,110 @@ export const postAction =
       });
     }
 
-    // bodyFormData.append('post_file', {
-    //   uri: images[0].path,
-    //   type: images[0].type,
-    //   name: `filename.jpg`,
-    // });
+    // bodyFormData.append('post_file', null)
 
     bodyFormData.append('user_id', id);
     bodyFormData.append('post_desc', caption);
     bodyFormData.append('post_title', 'Test Title');
 
-    // bodyFormData.append('post_title', 'tags');
-    // const URL = `${api}/api/post/createPost`;
-    // const header = {
-    //   headers: {
-    //     'Content-Type':
-    //       'multipart/form-data; boundary=<calculated when request is sent>',
-    //   },
-    // };
-    try {
-      // const response = await axios.post(URL, {bodyFormData}, header);
-
-      const response = await axios({
-        method: 'post',
-        url: `${api}/api/post/createpost`,
-        // data: {
-        //   post_id: 46,
-        //   post_desc: 'Test Descript',
-        //   post_file: [{
-        //     uri: images[0].uri,
-        //     type: 'image/jpeg',
-        //     name: `filename.jpg`,
-        //   }],
-        //   post_title: 'test',
-        // },
-        data: bodyFormData,
-        headers: {
-          // 'Content-Type':
-          // 'multipart/form-data; boundary=<calculated when request is sent>',
-          // 'application/x-www-form-urlencoded',
-          Accept: 'application/json',
-        },
-      });
-      if (response.data.success) {
-        clearAllStates();
-
-        showMessage({
-          message: 'Posted!',
-          description: '',
-          type: 'success',
-        });
-      } else {
-        showMessage({
-          message: 'Failed to Post!',
-          description: '',
-          type: 'success',
-        });
+    let url = `${api}/api/post/createpost`;
+    // console.log(url, "URL");
+    fetch(url, {
+      method: 'POST',
+      body: bodyFormData,
+      headers: {
+        Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res, '===============================');
+        if (res.success) {
+          showMessage({
+            message: 'Posted!',
+            description: '',
+            type: 'success',
+          });
+          clearAllStates();
+        } else {
+          _onPostFailed();
+        }
+        // clearAllStates()
+      })
+      .catch(err => {
+        console.log(err, 'ERROR');
         _onPostFailed();
-      }
-    } catch (err) {
-      _onPostFailed();
-      console.log('Cannot Post Now, Something went wrong.');
-      console.log(err.message);
-      // console.log(err.response.data);
-    }
+      });
+
+    // axios({
+    //   method: 'POST',
+    //   url: `https://e95c-110-93-244-255.ngrok-free.app/api/post/createpost`,
+    //   data: bodyFormData,
+    //   headers: {
+    //     Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    // })
+    //   .then(res => {
+    //     console.log(res.data);
+    //     if (res.data.success) {
+    //       clearAllStates();
+
+    //       showMessage({
+    //         message: 'Posted!',
+    //         description: '',
+    //         type: 'success',
+    //       });
+    //     } else {
+    //       showMessage({
+    //         message: 'Failed to Post!',
+    //         description: '',
+    //         type: 'success',
+    //       });
+    //       _onPostFailed();
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err, 'ERROR');
+    //     _onPostFailed();
+    //   });
+
+    // try {
+
+    //   const response = await axios({
+    //     method: 'post',
+    //     url: `${api}/api/post/createpost`,
+    //     data: bodyFormData,
+    //     headers: {
+
+    //       Accept: 'application/json',
+    //     },
+    //   });
+    //   console.log(response.data, "response.dataresponse.data");
+    //   if (response.data.success) {
+    //     clearAllStates();
+
+    //     showMessage({
+    //       message: 'Posted!',
+    //       description: '',
+    //       type: 'success',
+    //     });
+    //   } else {
+    //     showMessage({
+    //       message: 'Failed to Post!',
+    //       description: '',
+    //       type: 'success',
+    //     });
+    //     _onPostFailed();
+    //   }
+    // } catch (err) {
+    //   _onPostFailed();
+    //   console.log('Cannot Post Now, Something went wrong.');
+    //   console.log(err.message, "MESSAGE");
+    //   // console.log(err.response.data);
+    // }
   };
-
-// export const userGet = userID => async dispatch => {
-//   try {
-//     // console.error(userID, "USER GET")
-//     const response = await axios.get(`${api}/api/auth/userInfo`, {
-//       params: {
-//         user_id: userID,
-//       },
-//     });
-
-//     // console.log(response.data.data)"user_latitude": "24.7931192", "user_lives": "Karachi", "user_longitude": "67.0665601"
-//     if (response.data.status) {
-//       // console.log(" USER DATA ======ACTION======")
-//       // alert("SADSAD")
-//       const userData = JSON.stringify(response.data.data);
-//       await AsyncStorage.setItem('user', userData);
-//       dispatch({
-//         type: types.USER_GET_INFO,
-//         payload: response.data.data,
-//       });
-//     } else {
-//       showMessage({
-//         message: 'Error',
-//         description: 'AUTH Error',
-//         danger: 'error',
-//       });
-//       // alert("error")
-//     }
-//   } catch (error) {
-//     showMessage({
-//       message: 'Error',
-//       description: 'AUTH Error',
-//       danger: 'error',
-//     });
-//     console.log(error);
-//   }
-// };
 
 export const nearMeUsers = (latitude, longitude, userId) => async dispatch => {
   // console.log('FETCHING NEAR ME USERS !!!!!!!!!!!!!!!!!!!!!!');
@@ -1314,25 +1312,22 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
       console.log('Old image going in api');
       // formData.append('post_file', data.user_image);
     }
-    console.log(data, "datadatadatadatadatadatadata")
+    console.log(data, 'datadatadatadatadatadatadata');
 
     formData.append('user_id', data.user_id);
     formData.append('user_name', data.user_name);
     formData.append('user_contact', data.user_contact);
     formData.append('user_lives', data.user_lives);
     formData.append('country_code', data.country_code);
-   
 
     const URL = `${api}/api/post/editProfile`;
     const response = await axios.put(URL, formData, {
       headers: {
-        'Content-Type':
-          'multipart/form-data;',
+        'Content-Type': 'multipart/form-data;',
       },
     });
-    console.log( response.data, "==========response.data===========");
+    console.log(response.data, '==========response.data===========');
     if (response.data.status === true) {
-      
       showMessage({
         message: 'Updated Successfully!',
         type: 'success',
@@ -1351,7 +1346,7 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
           user_name: data.user_name,
           user_contact: data.user_contact,
           country_code: data.country_code,
-          user_phoneCountryCode: data.user_phoneCountryCode
+          user_phoneCountryCode: data.user_phoneCountryCode,
         },
       });
       onSuccess();

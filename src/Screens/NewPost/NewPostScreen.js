@@ -37,6 +37,7 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 import TagInput from 'react-native-tags-input';
 import * as actions from '../../Store/Actions';
 import {connect} from 'react-redux';
+import { responsiveHeight, responsiveScreenFontSize } from 'react-native-responsive-dimensions';
 
 const {width, height} = Dimensions.get('window');
 
@@ -258,43 +259,43 @@ const NewPostScreen = ({
                 />
               </View>
             </TouchableOpacity>
-            <View style={{marginTop: 10, flexDirection:'row'}}> 
-            {filePath != null
-              ? filePath.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        alignContent: 'center',
-                        // padding: 12,
-                        height: 200,
-                        width: 200,
-                        // borderWidth: 1, borderColor:'grey'
-                      }}>
-                      <Image
-                        resizeMode='cover'
+            <View style={{marginTop: 10, flexDirection: 'row'}}>
+              {filePath != null
+                ? filePath.map((item, index) => {
+                    return (
+                      <View
                         key={index}
-                        source={item}
                         style={{
-                          width: 180,
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'flex-start',
+                          alignContent: 'center',
+                          // padding: 12,
                           height: 200,
-                          marginHorizontal: 3,
-                          // top: 8,
-                          
-                          backgroundColor: 'white',
-                          borderWidth: 1,
-                          borderColor:'#e8e8e8',
-                          borderRadius: 3,
-                        }}
-                      />
-                    </View>
-                  );
-                })
-              : null}
-              </View>
+                          width: 200,
+                          // borderWidth: 1, borderColor:'grey'
+                        }}>
+                        <Image
+                          resizeMode="cover"
+                          key={index}
+                          source={item}
+                          style={{
+                            width: 180,
+                            height: 200,
+                            marginHorizontal: 3,
+                            // top: 8,
+
+                            backgroundColor: 'white',
+                            borderWidth: 1,
+                            borderColor: '#e8e8e8',
+                            borderRadius: 3,
+                          }}
+                        />
+                      </View>
+                    );
+                  })
+                : null}
+            </View>
           </ScrollView>
         </View>
       </View>
@@ -306,10 +307,10 @@ const NewPostScreen = ({
               padding: 20,
             }}>
             <AppText
-              nol={1}
+              nol={2}
               textAlign="left"
               family="Poppins-SemiBold"
-              size={hp('2%')}
+              size={responsiveScreenFontSize(1.8)}
               color="white"
               Label={'Write a short description about your post:'}
             />
@@ -321,7 +322,8 @@ const NewPostScreen = ({
               onChange={event => onChangeCaption(event.nativeEvent.text)}
               onSubmitEditing={event => onChangeCaption(event.nativeEvent.text)}
               multiline={true}
-              maxLength={40}
+              maxLength={150}
+              numberOfLines={4}
               textAlignVertical="top"
               style={styles.textFieldStyle}
             />
@@ -386,7 +388,7 @@ const NewPostScreen = ({
                 style={{
                   position: 'absolute',
                   top: isIOS ? height * 0.035 : height * 0.05,
-                  left:isIOS ? width * 0.1: width * 0.15,
+                  left: isIOS ? width * 0.1 : width * 0.15,
                   // backgroundColor:'white',
                   width: width * 0.4,
                   height: height * 0.3,
@@ -460,7 +462,7 @@ var styles = StyleSheet.create({
     top: 10,
     padding: width * 0.02,
     color: 'white',
-    height: height * 0.095,
+    height: responsiveHeight(20),
     fontSize: width * 0.04,
   },
   tagInputContainerStyle: {

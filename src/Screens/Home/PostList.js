@@ -39,6 +39,7 @@ const PostList = ({
   userReducer,
   _onPressHeart,
 }) => {
+
   const IMAGES = item?.post_url?.map(ele => `${imageUrl}/${ele}`);
 
   const route = useRoute();
@@ -72,6 +73,7 @@ const PostList = ({
                 color="black"
                 Label={Name}
               />
+              
               <AppText
                 nol={1}
                 textAlign="left"
@@ -171,7 +173,7 @@ const PostList = ({
       </View>
 
       {/* Photos Slider  */}
-      {console.log(IMAGES, "000")}
+      {/* {console.log(IMAGES, "000")} */}
       <View style={styles.photosView}>
       <View style={{height: 30}} />
         <FlatListSlider
@@ -250,6 +252,7 @@ const styles = StyleSheet.create({
   nameAndDateView: {
     justifyContent: 'flex-start',
     flexDirection: 'column',
+    // backgroundColor:'red'
   },
   postInfoInnerView: {
     justifyContent: 'flex-start',

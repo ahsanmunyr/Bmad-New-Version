@@ -1,24 +1,19 @@
 import React, {useContext} from 'react';
-import Animated, {interpolateNode} from 'react-native-reanimated';
+import Animated, {interpolate} from 'react-native-reanimated';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
 import {AnimatedContext} from './InApp';
-
+import {useDrawerProgress} from '@react-navigation/drawer';
 export function withFancyDrawer(Component) {
   function Wrapper({children}) {
-    const animated = useContext(AnimatedContext);
-    const scale = interpolateNode(animated, {
-      inputRange: [0, 1],
-      outputRange: [1, 0.8],
-    });
-    const translateMainCard = interpolateNode(animated, {
-      inputRange: [0, 1],
-      outputRange: [0, 20],
-    });
-    const translateTransparentCard = interpolateNode(animated, {
-      inputRange: [0, 0.5, 1],
-      outputRange: [0, 0, -50],
-    });
+    const drawerProgress = useDrawerProgress();
+    const scale = interpolate(drawerProgress, [0, 1], [1, 0.8]);
+    const translateMainCard = interpolate(drawerProgress, [0, 1], [0, 20]);
+    const translateTransparentCard = interpolate(
+      drawerProgress,
+      [0, 0.5, 1],
+      [0, 0, -50],
+    );
 
     return (
       <View
@@ -34,7 +29,6 @@ export function withFancyDrawer(Component) {
             }}
           />
           <Card>{children}</Card>
-          
         </TransitionContainer>
       </View>
     );
