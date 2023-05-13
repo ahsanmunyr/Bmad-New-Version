@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {Badge} from 'react-native-elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, PROVIDER_DEFAULT, Circle} from 'react-native-maps';
 import {
   markers,
   mapDarkStyle,
@@ -181,8 +181,9 @@ const NearMeScreen = ({
         <MapView
           optimizeWaypoints={true}
           // minZoomLevel={16} // revert it back to 16 !!
-          onMarkerDragEnd={onRegionChange}
+          // onMarkerDragEnd={onRegionChange}
           ref={_map}
+          
           initialRegion={state?.region}
           style={{flex: 1}}
           provider={Platform.OS == 'android' ? PROVIDER_GOOGLE : null}>
@@ -211,17 +212,17 @@ const NearMeScreen = ({
               />
             )}
           </Marker>
-          <MapView.Circle
-            key={(
-              parseFloat(state?.region?.latitude) +
-              parseFloat(state?.region?.longitude)
-            ).toString()}
+          {/* <Circle
+            // key={(
+            //   parseFloat(state?.region?.latitude) +
+            //   parseFloat(state?.region?.longitude)
+            // ).toString()}
             center={state?.region}
             radius={2000}
             strokeWidth={2}
             strokeColor={themeRed}
             fillColor={'rgba(176,17,37,0.2)'}
-          />
+          /> */}
           {/* Maps Users Location on Map  */}
           {state?.users?.map((marker, index) => {
             const scaleStyle = {
@@ -232,7 +233,7 @@ const NearMeScreen = ({
               ],
             };
             return (
-              <MapView.Marker
+              <Marker
                 key={index}
                 coordinate={{
                   latitude: parseFloat(marker?.user_latitude, 10),
@@ -240,33 +241,7 @@ const NearMeScreen = ({
                 }}
                 title={marker.user_name}
                 onPress={e => onMarkerPress(e)}>
-                {/* <Animated.View style={styles.markerWrap}>
-                  <Animated.View
-                    style={{
-                      borderColor: '#EA2C2E',
-                      borderRadius: 50,
-                      padding: 0,
-                      alignItems: 'center',
-                      // width: width *0.02,
-                      // height: '100%',
-                      justifyContent: 'center',
-                    }}>
-                    {marker?.user_image ? (
-                      <Animated.Image
-                        source={{uri: `${imageUrl}/${marker?.user_image}`}}
-                        style={[styles.marker, scaleStyle]}
-                        resizeMode="cover"
-                      />
-                    ) : (
-                      <Animated.Image
-                        source={require('./../../Assets/Images/maroon-dp2.jpeg')}
-                        style={[styles.marker, scaleStyle]}
-                        resizeMode="cover"
-                      />
-                    )}
-                  </Animated.View>
-                </Animated.View> */}
-              </MapView.Marker>
+              </Marker>
             );
           })}
         </MapView>
