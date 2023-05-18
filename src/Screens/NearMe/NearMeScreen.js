@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {Badge} from 'react-native-elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, PROVIDER_DEFAULT, Circle} from 'react-native-maps';
 import {
   markers,
   mapDarkStyle,
@@ -181,8 +181,9 @@ const NearMeScreen = ({
         <MapView
           optimizeWaypoints={true}
           // minZoomLevel={16} // revert it back to 16 !!
-          onMarkerDragEnd={onRegionChange}
+          // onMarkerDragEnd={onRegionChange}
           ref={_map}
+          
           initialRegion={state?.region}
           style={{flex: 1}}
           provider={Platform.OS == 'android' ? PROVIDER_GOOGLE : null}>
@@ -232,7 +233,7 @@ const NearMeScreen = ({
               ],
             };
             return (
-              <MapView.Marker
+              <Marker
                 key={index}
                 coordinate={{
                   latitude: parseFloat(marker?.user_latitude, 10),
