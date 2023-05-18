@@ -98,7 +98,7 @@ const ForgotScreen = ({navigation, forgotPassword}) => {
           }}>
           <TouchableOpacityBtn
             onPress={() => {
-              console.log('ssadsssads');
+              // console.log('ssadsssads');
               forgotPassword({user_email: email}, onSuccess);
             }}
             title="Continue"

@@ -98,14 +98,9 @@ function ProfileStack({navigation}) {
       <ProfileStack.Screen
         name="MyProfile"
         options={({route, navigation}) => ({
-          headerShown: true,
+          headerShown: false,
 
-          headerStyle: {
-            height: 110,
-            backgroundColor: themeRed,
-            borderBottomWidth: 0,
-            borderBottomColor: 'grey',
-          },
+        
           headerStatusBarHeight: 32,
           headerTitle: props => null,
           headerTransparent: true,

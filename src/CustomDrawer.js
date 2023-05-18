@@ -340,7 +340,6 @@ const CustomDrawer = (
             styles.view,
             styles.marginBottom,
             viewStyles2('bottom'),
-            ,
             {width: responsiveScreenWidth(40), justifyContent: 'space-around'},
           ]}>
           <MaterialIcons name="logout" color="white" size={30} />

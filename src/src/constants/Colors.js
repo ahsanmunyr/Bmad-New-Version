@@ -21,7 +21,7 @@ export default {
     line: '#282C35',
     gray: '#CCCCCC',
     darkGray: '#999999',
-
+    themeColor: "#B01125",
     darkOverlayColor: 'rgba(0, 0, 0, 0.4)',
     darkOverlayColor2: 'rgba(0, 0, 0, 0.8)',
     lightOverlayColor: 'rgba(255, 255, 255, 0.6)',

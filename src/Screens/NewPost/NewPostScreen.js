@@ -33,11 +33,16 @@ import AppText from '../../Components/AppText';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import LottieView from 'lottie-react-native';
 import Icon1 from 'react-native-vector-icons/FontAwesome5';
-import Icon2 from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import TagInput from 'react-native-tags-input';
 import * as actions from '../../Store/Actions';
 import {connect} from 'react-redux';
-import { responsiveHeight, responsiveScreenFontSize } from 'react-native-responsive-dimensions';
+import {
+  responsiveHeight,
+  responsiveScreenFontSize,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
+import {colors} from '../../src/screens/drawer/constant';
 
 const {width, height} = Dimensions.get('window');
 
@@ -72,55 +77,6 @@ const NewPostScreen = ({
     tag: '',
     tagsArray: [],
   });
-
-  const launchCamera = () => {
-    const options = {
-      selectionLimit: 6,
-      mediaType: 'photo',
-      includeBase64: true,
-    };
-    // console.log(ImagePicker.launchImageLibrary)
-    launchImageLibrary(options, response => {
-      console.log('Response = ', response);
-      var ArraySingleImage = [];
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response) {
-        console.log('User tapped custom button: ', response.customButton);
-        // SelectMultipleImage();
-
-        var ImageArray = [];
-        for (var i = 0; i < response.assets.length; i++) {
-          let showImage = {
-            uri: 'data:image/jpeg;base64,' + response.assets[i].data,
-          };
-          // console.log(showImage);
-          ImageArray.push(showImage);
-        }
-        setFilePath(ImageArray);
-      } else {
-        console.log(response.assets[0].uri);
-        // uri: 'data:image/jpeg;base64,' + this.state.resourcePath.data,
-        const source = {
-          uri: `data:${response.assets[0].type};base64,${response.assets[0].uri}`,
-        };
-        // {"assets":
-        // [{"fileName": "rn_image_picker_lib_temp_d4e88f8f-0037-45e7-8169-1218ee0551a2.jpg",
-        // "fileSize": 284924,
-        // "height": 900,
-        // "type": "image/jpeg",
-        // "uri": "file:///data/user/0/com.bmad/cache/rn_image_picker_lib_temp_d4e88f8f-0037-45e7-8169-1218ee0551a2.jpg",
-        // "width": 1200}]}
-        // `data:${userImage.type};base64,${userImage.base64}`
-        // `data:${response.assets[0].type};base64,${response.assets[0].base64}`
-        console.log(source);
-        ArraySingleImage.push(source);
-        setFilePath(ArraySingleImage);
-      }
-    });
-  };
 
   const SelectMultipleImage = () => {
     ImagePickerMultiple.openPicker({
@@ -232,13 +188,13 @@ const NewPostScreen = ({
                 shadowRadius: 3.84,
 
                 elevation: 5,
-                width: 180,
+                height: responsiveHeight(24),
+                width: 190,
                 justifyContent: 'center',
                 alignContent: 'center',
                 marginLeft: 20,
                 marginTop: 10,
                 marginRight: 20,
-                height: 200,
               }}>
               <View
                 style={{
@@ -271,10 +227,35 @@ const NewPostScreen = ({
                           alignItems: 'flex-start',
                           alignContent: 'center',
                           // padding: 12,
-                          height: 200,
-                          width: 200,
+                          height: responsiveHeight(30),
+                          width: 210,
                           // borderWidth: 1, borderColor:'grey'
                         }}>
+                        <TouchableOpacity key={index} style={{
+                                zIndex: 99,
+                        }} onPress={()=>{
+                          
+                         let val =  filePath.filter((x, i) => i !== index);
+                         setFilePath(val)
+                      
+                          // alert('asd')
+                        }}>
+                        <View
+                          style={{
+                            height: 30,
+                            width: 30,
+                            backgroundColor: colors.themeblue,
+                            borderRadius: responsiveScreenFontSize(50),
+                            position: 'absolute',
+                            left: -5,
+                            zIndex: 99,
+                            top: -10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}>
+                          <Entypo name="cross" size={responsiveScreenFontSize(3)} color="white" />
+                        </View>
+                        </TouchableOpacity>
                         <Image
                           resizeMode="cover"
                           key={index}

@@ -139,6 +139,8 @@ export const nearMeUsers = (latitude, longitude, userId) => async dispatch => {
 
     // console.log('Total Near Me Users: ', response.data.data.length);
     if (response.data.data.length > 0) {
+
+
       // console.log('Near Me Users Fetched!');
       dispatch({
         type: types.NEAR_ME_USERS,
@@ -673,6 +675,7 @@ export const getAllCommentsOfPost = postId => async dispatch => {
         type: types.GET_POST_COMMENTS,
         payload: response.data.data,
       });
+      return response.data.data
     } else {
       showMessage({
         message: 'Oh Snap!',
@@ -1059,6 +1062,12 @@ export const buyMoreDrinks = (data, _closeStripeModal) => async dispatch => {
         type: types.BUY_DRINKS,
         payload: data.coins,
       });
+      showMessage({
+        message: 'You buy a drink',
+        // description: 'Offer requested, Wait for his/her approval.',
+        type: 'success',
+      });
+      _closeStripeModal();
     } else {
       _closeStripeModal();
       showMessage({
@@ -1298,66 +1307,116 @@ export const createConversation =
 
 export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
   try {
-    console.log(data?.imageObj?.mime, 'data?.imageObj?.mime');
-    // console.log(data)
+    console.log(data.imageObj, 'data.imageObjdata.imageObjdata.imageObj');
     var formData = new FormData();
     if (data?.imageObj !== null) {
-      console.log('image obj.........................');
       formData.append('post_file', {
         uri: data.imageObj.path,
-        name: 'dumy.jpg',
+        name: data.imageObj.filename || `filename.jpg`,
         type: data.imageObj.mime,
       });
     } else {
       console.log('Old image going in api');
-      // formData.append('post_file', data.user_image);
     }
-    console.log(data, 'datadatadatadatadatadatadata');
 
     formData.append('user_id', data.user_id);
     formData.append('user_name', data.user_name);
     formData.append('user_contact', data.user_contact);
     formData.append('user_lives', data.user_lives);
-    formData.append('country_code', data.country_code);
+    formData.append('country_code', '+92');
+
 
     const URL = `${api}/api/post/editProfile`;
-    const response = await axios.put(URL, formData, {
+    fetch(URL, {
+      method: 'PUT',
+      body: formData,
       headers: {
-        'Content-Type': 'multipart/form-data;',
+        Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+        'Content-Type': 'multipart/form-data',
       },
-    });
-    console.log(response.data, '==========response.data===========');
-    if (response.data.status === true) {
-      showMessage({
-        message: 'Updated Successfully!',
-        type: 'success',
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res, '===============================');
+        if (res.status) {
+          dispatch({
+            type: types.UPDATE_PROFILE,
+            payload: {
+              user_image:
+              res?.data?.data?.User_Images?.length > 0
+                  ? res?.data?.data?.User_Images[0]
+                  : data.user_image,
+              user_contact: data.phone_no,
+              user_lives: data.user_lives,
+              user_id: data.user_id,
+              user_name: data.user_name,
+              user_contact: data.user_contact,
+              country_code: data.country_code,
+              user_phoneCountryCode: data.user_phoneCountryCode,
+            },
+          });
+          showMessage({
+            message: 'Profile Updated!',
+            description: '',
+            type: 'success',
+          });
+          onSuccess();
+        } else {
+          _onFailed();
+          showMessage({
+            message: 'Failed to update!',
+            danger: 'error',
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err, 'ERROR');
+        _onFailed();
+        showMessage({
+          message: 'Failed to update!',
+          danger: 'error',
+        });
       });
 
-      dispatch({
-        type: types.UPDATE_PROFILE,
-        payload: {
-          user_image:
-            response?.data?.data?.User_Images?.length > 0
-              ? response?.data?.data?.User_Images[0]
-              : data.user_image,
-          user_contact: data.phone_no,
-          user_lives: data.user_lives,
-          user_id: data.user_id,
-          user_name: data.user_name,
-          user_contact: data.user_contact,
-          country_code: data.country_code,
-          user_phoneCountryCode: data.user_phoneCountryCode,
-        },
-      });
-      onSuccess();
-    } else {
-      _onFailed();
-      showMessage({
-        message: 'Failed to update!',
-        danger: 'error',
-      });
-    }
+    // const URL = `${api}/api/post/editProfile`;
+    // const response = await axios.put(URL, formData, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data;',
+    //   },
+    // });
+    // console.log(response, '==========response===========');
+    // if (response.data.status === true) {
+    //   showMessage({
+    //     message: 'Updated Successfully!',
+    //     type: 'success',
+    //   });
+
+    //   dispatch({
+    //     type: types.UPDATE_PROFILE,
+    //     payload: {
+    //       user_image:
+    //         response?.data?.data?.User_Images?.length > 0
+    //           ? response?.data?.data?.User_Images[0]
+    //           : data.user_image,
+    //       user_contact: data.phone_no,
+    //       user_lives: data.user_lives,
+    //       user_id: data.user_id,
+    //       user_name: data.user_name,
+    //       user_contact: data.user_contact,
+    //       country_code: data.country_code,
+    //       user_phoneCountryCode: data.user_phoneCountryCode,
+    //     },
+    //   });
+    //   onSuccess();
+    // } else {
+    //   _onFailed();
+    //   showMessage({
+    //     message: 'Failed to update!',
+    //     danger: 'error',
+    //   });
+    // }
   } catch (error) {
+    console.log(error, 'error');
     _onFailed();
     showMessage({
       message: 'Failed to update!, Network Error',

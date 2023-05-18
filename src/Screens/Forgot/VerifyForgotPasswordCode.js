@@ -34,13 +34,17 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import PhoneInput from 'react-native-phone-number-input';
-const VerifyForgotPasswordCode = ({navigation, verfifyForgotCode, route}) => {
+const VerifyForgotPasswordCode = ({navigation, verfifyForgotCode, route, forgotPassword}) => {
   const [code, onChangeCode] = React.useState('');
   const email = route?.params.email;
   const onSuccess = () => {
     onChangeCode('');
     navigation.navigate('resetPassword', {email: email});
   };
+
+  const onSuccessResendCode = () => {
+
+  } 
 
   return (
     // <View style={styles.container}>
@@ -94,7 +98,7 @@ const VerifyForgotPasswordCode = ({navigation, verfifyForgotCode, route}) => {
 
         <View
           style={{
-            height: hp('20%'),
+            height: hp('15%'),
             justifyContent: 'space-between',
             alignItems: 'center',
             flexDirection: 'column',
@@ -102,6 +106,13 @@ const VerifyForgotPasswordCode = ({navigation, verfifyForgotCode, route}) => {
             bottom: 30,
             // backgroundColor:'blue'
           }}>
+         
+          <TouchableOpacityBtn
+            onPress={() => {
+              forgotPassword({user_email: route?.params.email}, onSuccessResendCode);
+            }}
+            title="Resend Code"
+          />
           <TouchableOpacityBtn
             onPress={() => {
               verfifyForgotCode({code: code}, onSuccess);

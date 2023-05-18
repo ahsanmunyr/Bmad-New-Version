@@ -235,7 +235,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
         user_lives: country,
         user_image: userReducer?.data?.user_image,
         imageObj: imageObject,
-        country_code: countryCode,
+        country_code: countryCode ? countryCode : userReducer?.data?.country_code ,
         user_phoneCountryCode: countryCodeForPhone
       };
 
@@ -288,11 +288,11 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
     <SafeAreaView style={styles.container}>
       {/* <StatusBar translucent backgroundColor="transparent" /> */}
       <View style={{height: STATUS_BAR_HEIGHT, backgroundColor: themeRed}}>
-        <StatusBar
+        {/* <StatusBar
           translucent
           // backgroundColor={themeRed}
           barStyle="light-content"
-        />
+        /> */}
       </View>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
@@ -332,6 +332,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
               height: isIOS ? height * 0.45 : height * 0.5,
             },
           ]}>
+            <View style={{}} />
           {image !== null || userReducer?.data?.user_image ? (
             <Image
               style={[
@@ -376,50 +377,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
             </Text>
           </View>
         </View>
-        {/* <Animated.View
-        style={[
-          styles.imagebackground,
-          {
-            height: animatedHeaderHeight,
-          },
-        ]}>
-        {image !== null || userReducer?.data?.user_image ? (
-          <Animated.Image
-            style={[
-              styles.imagebackground,
-              {
-                height: animatedHeaderHeight,
-                backgroundColor: animatedHeaderBgColor,
-              },
-            ]}
-            resizeMode="cover"
-            source={{
-              uri: image
-                ? image
-                : `${imageUrl}/${userReducer?.data?.user_image}`,
-            }}
-          />
-        ) : (
-          <Animated.Image
-            style={[
-              styles.imagebackground,
-              {
-                height: animatedHeaderHeight,
-                backgroundColor: animatedHeaderBgColor,
-              },
-            ]}
-            resizeMode="cover"
-            source={require('../../../Assets/Images/test.png')}
-          />
-        )}
-
-       
-      </Animated.View> */}
-        {/* </ImageBackground> */}
-
-        {/* </Animated.View> */}
-
-        {/* <View style={{paddingTop: 10}}></View> */}
+  
         <View style={styles.formView}>
           <Text style={styles.formLabelStyle}>Username</Text>
           <TextInput
@@ -488,18 +446,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
             }}>
             {country}
           </Text>
-          {/* <IconComp
-            type={'AntDesign'}
-            iconName={'caretdown'}
-            passedStyle={{
-              width: width * 0.7,
-              marginTop: -40,
-              marginLeft: 70,
-              color: 'black',
-              fontSize: width * 0.04,
-              fontFamily: 'Poppins-Medium',
-            }}
-          /> */}
+
           <AntDesign
             name="caretdown"
             color="black"
@@ -512,7 +459,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
               fontFamily: 'Poppins-Medium',
             }}
           />
-          {/* </TouchableOpacity> */}
+     
 
           {loading ? (
             <View style={styles.updateBtnStyle}>
@@ -526,123 +473,13 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
               <Text style={styles.btnTxt}>Update</Text>
             </TouchableOpacity>
           )}
-        </View>
-      </ScrollView>
-      {/* <ScrollView
-        scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: AnimatedHeaderValue}}}],
-          {useNativeDriver: false},
-        )}> */}
-      {/* Input Fields  */}
 
-      {/* </ScrollView> */}
-      {/* <FlatList
-        data={formatData(data, numColumns)}
-        renderItem={renderItem}
-        numColumns={numColumns}
-        scrollEnabled
-        ListHeaderComponent={
-          <View
-            style={{
-              width: '95%',
-              padding: 10,
-              left: 10,
-              justifyContent: 'flex-start',
-              flexDirection: 'column',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-              }}>
-              <Ionicons
-                name="md-mail"
-                color="#B01125"
-                size={20}
-                style={{top: 0, right: 5}}
-              />
-              <AppText
-                nol={2}
-                textAlign="left"
-                family="Poppins-Regular"
-                size={hp('1.7%')}
-                color="black"
-                Label={userReducer?.data?.user_email}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-              }}>
-              <Ionicons
-                name="home"
-                color="#B01125"
-                size={20}
-                style={{top: 0, right: 5}}
-              />
-              <AppText
-                nol={2}
-                textAlign="left"
-                family="Poppins-Regular"
-                size={hp('1.7%')}
-                color="black"
-                Label={`Lives in ${userReducer?.data?.user_lives}`}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-              }}>
-              <Ionicons
-                name="ios-heart-sharp"
-                color="#B01125"
-                size={20}
-                style={{top: 0, right: 5}}
-              />
-              <AppText
-                nol={2}
-                textAlign="left"
-                family="Poppins-Regular"
-                size={hp('1.7%')}
-                color="black"
-                Label={userReducer?.data?.user_relation}
-              />
-            </View>
-            
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-              }}>
-              <Ionicons
-                name="ios-information-circle"
-                color="#B01125"
-                size={20}
-                style={{top: 0, right: 5}}
-              />
-              <AppText
-                nol={3}
-                textAlign="left"
-                family="Poppins-Regular"
-                size={hp('1.7%')}
-                color="black"
-                Label={userReducer?.data?.user_bio}
-              />
-            </View>
-          </View>
-        }
-        scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: AnimatedHeaderValue}}}],
-          {useNativeDriver: false},
-        )}
-        showsVerticalScrollIndicator={false}
-        columnWrapperStyle={{width: '90%', alignSelf: 'center'}}
-      /> */}
-      <View style={{height: '37%'}} />
+
+        </View>
+            <View style={{height: 100}}></View>
+      </ScrollView>
+  
+      {/* <View style={{height: '37%'}} /> */}
     </SafeAreaView>
   );
 };

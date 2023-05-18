@@ -2,8 +2,8 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {colors} from '../constant';
 import Icon from '../../../components/Icons';
-import { responsiveScreenFontSize } from 'react-native-responsive-dimensions';
-
+import {responsiveScreenFontSize} from 'react-native-responsive-dimensions';
+import {CommonActions} from '@react-navigation/native';
 const DrawerItem = ({
   label,
   onPress,
@@ -20,10 +20,12 @@ const DrawerItem = ({
       onPress={onPress}
       testID={tabBarTestID}
       accessibilityRole="button"
-      style={[styles.drawerItem, ]}>
+      style={[styles.drawerItem]}>
       <View style={styles.row}>
         <Icon type={type} name={name} color={'white'} />
-        <Text style={[styles.label, {fontSize:responsiveScreenFontSize(2.4)}]}>{label}</Text>
+        <Text style={[styles.label, {fontSize: responsiveScreenFontSize(2.4)}]}>
+          {label}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -41,8 +43,24 @@ const DrawerItemList = ({state, descriptors, navigation, styles}) => {
             type: 'tabPress',
             target: route.key,
           });
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+          // console.log(isFocused, "isFocused");
+
+          // navigation.dispatch(resetAction);
+          if (!event.defaultPrevented) {
+            // alert(route.name)
+            if (route.name == 'home') {
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [{name: 'home'}],
+                }),
+              );
+              // navigation.dispatch(resetAction);
+            } else {
+              navigation.navigate(route.name);
+            }
+
+            // navigation.navigate(route.name);
           }
         };
         {
@@ -53,20 +71,22 @@ const DrawerItemList = ({state, descriptors, navigation, styles}) => {
         const color = isFocused ? colors.dark : colors.darkGray;
         const activeItemColor = isFocused ? colors.primary : null;
 
-        return (
-          <DrawerItem
-            key={index}
-            label={drawerItem.label}
-            tabBarTestID={options.tabBarTestID}
-            onPress={onPress}
-            name={drawerItem.icon}
-            type={drawerItem.type}
-            notification={drawerItem.notification}
-            color={color}
-            activeItemColor={activeItemColor}
-            styles={styles}
-          />
-        );
+        if (route.name != 'ProceedToPay') {
+          return (
+            <DrawerItem
+              key={index}
+              label={drawerItem.label}
+              tabBarTestID={options.tabBarTestID}
+              onPress={onPress}
+              name={drawerItem.icon}
+              type={drawerItem.type}
+              notification={drawerItem.notification}
+              color={color}
+              activeItemColor={activeItemColor}
+              styles={styles}
+            />
+          );
+        }
       })}
     </View>
   );

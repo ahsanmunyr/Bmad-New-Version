@@ -1,84 +1,114 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   Image,
+  Dimensions,
+  Animated,
   StyleSheet,
-  Platform,Dimensions
+  ImageBackground,
+  ScrollView,
 } from 'react-native';
-import { responsiveWidth } from 'react-native-responsive-dimensions';
+import {
+  responsiveWidth,
+  responsiveScreenHeight,
+  responsiveFontSize,
+  responsiveScreenFontSize,
+} from 'react-native-responsive-dimensions';
+
 const {width, height} = Dimensions.get('window');
+const SPACING = 10;
+const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.99 : width * 0.99;
 
-export default Preview = ({
-item
-}) => {
-  // console.log(item, "IMAGE");
+export default Preview = ({item, scrollX, index}) => {
+  const inputRange = [
+    (index - 2) * ITEM_SIZE,
+    (index - 1) * ITEM_SIZE,
+    index * ITEM_SIZE,
+  ];
+
+  const translateY = scrollX.interpolate({
+    inputRange,
+    outputRange: [40, 30, 20],
+    extrapolate: 'clamp',
+  });
+
   return (
-    <View style={styles.videoContainer}>
-      <View style={[styles.imageContainer, styles.shadow]}>
-       
-      {
-        item ?
+    <View style={styles.main}>
+      <View style={[styles.animatedView]}>
         <Image
-          // resizeMethod="cover"
-          style={styles.videoPreview}
+          style={styles.posterImage}
+          resizeMode="contain"
           source={{uri: item}}
-          resizeMode='contain'
-        />:
-        <Image
-        // resizeMethod="cover"
-        style={styles.videoPreview}
-        source={{uri: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"}}
-        resizeMode='contain'
-      />
-
-      }
-        
-       
+        />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  videoContainer: {
-    justifyContent: 'center',
+  loadingContainer: {
+    flex: 1,
     alignItems: 'center',
-    // backgroundColor:'white'
-  },
-  videoPreview: {
-    width: 350,
-    height: height * 0.25,
-    // borderRadius: 8,
-    // margin: width * 0.022,
-  },
-  desc: {
-    fontSize: 14,
-    letterSpacing: 0,
-    lineHeight: 24,
-    marginTop: 18,
-  },
-  imageContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+  },
+  paragraph: {
+    margin: 24,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  posterImage: {
+    width: '100%',
+    height: responsiveScreenHeight(40),
+    resizeMode: 'cover',
+    borderRadius: responsiveScreenFontSize(1),
 
-    
+    backgroundColor: 'white',
+    // marginBottom: 30,
   },
-  shadow: {
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: {width: 0, height: 1},
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-        backgroundColor: 'white'
-      },
-      android: {
-        elevation: 5,
-        backgroundColor: 'white'
-      },
-    
-    }),
+  content: {
+    // height: responsiveScreenHeight(12),
+    width: '100%',
+    backgroundColor: 'white',
+    paddingHorizontal: responsiveScreenFontSize(1),
+    paddingVertical: responsiveScreenFontSize(0.1),
+    borderBottomRightRadius: responsiveScreenFontSize(1),
+    borderBottomLeftRadius: responsiveScreenFontSize(1),
+  },
+  imageView: {
+    alignSelf: 'center',
+    left: 0,
+    borderTopRightRadius: responsiveScreenFontSize(3),
+    borderBottomRightRadius: responsiveScreenFontSize(3),
+    // height: responsiveScreenHeight(5),
+    backgroundColor: '#592dfa',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    position: 'absolute',
+    top: responsiveScreenHeight(2),
+    paddingHorizontal: responsiveScreenFontSize(1),
+    paddingVertical: responsiveScreenFontSize(1),
+  },
+  name: {
+    color: 'white',
+    fontSize: responsiveScreenFontSize(1.8),
+    fontWeight: '500',
+  },
+  animatedView: {
+    marginHorizontal: SPACING,
+    borderRadius: responsiveScreenHeight(1),
+  },
+  main: {
+    width: ITEM_SIZE,
+    height: responsiveScreenHeight(40),
+  },
+  foodPolicy: {
+    color: 'black',
+    fontWeight: '400',
+    fontSize: responsiveScreenFontSize(1.5),
   },
 });

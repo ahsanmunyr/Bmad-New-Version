@@ -32,6 +32,7 @@ import LottieView from 'lottie-react-native';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 import {imageUrl} from '../../Config/Apis.json';
 import {themeRed} from '../../Assets/Colors/Colors';
+import { responsiveHeight, responsiveScreenFontSize } from 'react-native-responsive-dimensions';
 
 const {width, height} = Dimensions.get('window');
 
@@ -66,12 +67,12 @@ const OfferADrink = ({
     setLoading(false);
   };
 
-  console.log(NEARME_USERDATA)
+ 
   return (
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
-      <View style={{top: height * -0.2}}>
-        <AppText
+    
+      <AppText
           nol={1}
           textAlign="left"
           family="Poppins-SemiBold"
@@ -79,8 +80,10 @@ const OfferADrink = ({
           color="white"
           Label={'Cheers!'}
         />
-      </View>
+      <View style={{height: responsiveHeight(60), width: '100%',alignSelf:'center',justifyContent:'flex-start',alignItems:'center'}}>
+      <View style={{height: 100}}></View>
       <View style={styles.contentContainer}>
+        
         <View style={styles.userInfoContainer}>
           <View style={styles.imageContainer}>
             <Image
@@ -143,7 +146,7 @@ const OfferADrink = ({
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate('HOME')}
+            onPress={() => navigation.goBack()}
             style={[styles.touchableOpacity, {marginTop: height * 0.02}]}>
             <AppText
               nol={1}
@@ -156,6 +159,9 @@ const OfferADrink = ({
           </TouchableOpacity>
         </View>
       )}
+      </View>
+    
+    
     </View>
   );
 };
@@ -199,9 +205,9 @@ var styles = StyleSheet.create({
     position: 'absolute',
   },
   imageStyles: {
-    width: width * 0.44,
-    height: height * 0.24,
-    borderRadius: 100,
+    width: responsiveHeight(20),
+    height: responsiveHeight(20),
+    borderRadius: responsiveScreenFontSize(50),
     borderWidth: 1,
     borderColor: themeRed,
   },

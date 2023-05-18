@@ -1,5 +1,12 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {TouchableOpacity, View, Dimensions, StyleSheet} from 'react-native';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
+import {
+  TouchableOpacity,
+  View,
+  Dimensions,
+  StyleSheet,
+  Platform,
+  Animated,
+} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -17,8 +24,12 @@ import {imageUrl} from '../../Config/Apis.json';
 import moment from 'moment';
 import {connect} from 'react-redux';
 import {useRoute} from '@react-navigation/native';
+import { colors } from '../../src/screens/drawer/constant';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 
 const {width, height} = Dimensions.get('window');
+// const {width} = Dimensions.get('window');
+const ITEM_SIZE = Platform?.OS === 'ios' ? width * 0.99 : width * 0.99;
 //  heart heart-o FontAwesome
 // const Img = [
 //   {image: require('./../../Assets/Images/post1.png')},
@@ -37,17 +48,39 @@ const PostList = ({
   Navigation,
   likePost,
   userReducer,
+  index,
   _onPressHeart,
 }) => {
-
   const IMAGES = item?.post_url?.map(ele => `${imageUrl}/${ele}`);
 
   const route = useRoute();
   const routeName = route?.name;
-// console.log(IMAGES,"IMAGES",route?.name); 
+  const flatListRef = useRef(null);
+  const [ind, onChangeIndex] = useState(null)
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+  // console.log(IMAGES,"IMAGES",route?.name);
   // const isIos =
+
+  const onScroll = useCallback(({viewableItems}) => {
+    console.log(viewableItems[0]?.index);
+    onChangeIndex(viewableItems[0]?.index)
+    // onChangeIndex(viewableItems.changed[0]?.index)
+  }, []);
+
+  const renderItem = useCallback(
+    ({item, index}) => <Preview index={index} item={item} scrollX={scrollX} />,
+    [],
+  );
+
+  useEffect(() => {
+    if (ind != null) {
+       
+        flatListRef?.current?.scrollToIndex({ animated: true, index: ind })
+    }
+}, [ind])
+
   return (
-    <View style={styles.postContainer}>
+    <View key={index} style={styles.postContainer}>
       {/* Post Info View */}
       <View style={styles.postInfoOuterView}>
         <View style={styles.postInfoInnerView}>
@@ -73,7 +106,7 @@ const PostList = ({
                 color="black"
                 Label={Name}
               />
-              
+
               <AppText
                 nol={1}
                 textAlign="left"
@@ -87,7 +120,9 @@ const PostList = ({
               style={{flexDirection: 'row', justifyContent: 'space-around'}}>
               <View style={{flexDirection: 'row'}}>
                 <View style={{paddingRight: 5}}>
-                  <TouchableOpacity onPress={() => _onPressHeart(item)} activeOpacity={0.9}>
+                  <TouchableOpacity
+                    onPress={() => _onPressHeart(item)}
+                    activeOpacity={0.9}>
                     {item?.is_like === 1 ? (
                       <Icon name="heart" size={18} color="#B01125" />
                     ) : (
@@ -175,20 +210,70 @@ const PostList = ({
       {/* Photos Slider  */}
       {/* {console.log(IMAGES, "000")} */}
       <View style={styles.photosView}>
-      <View style={{height: 30}} />
-        <FlatListSlider
+        <View style={{height: 30}} />
+        <Animated.FlatList
+          bounces={false}
+          decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
+          renderToHardwareTextureAndroid
+          contentContainerStyle={{alignItems: 'center'}}
+          snapToInterval={ITEM_SIZE}
+          snapToAlignment="start"
+          onEndReachedThreshold={0.2}
+          ListFooterComponentStyle={{
+            alignSelf: 'center',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}
+          horizontal
+          ref={flatListRef}
+          pagingEnabled={true}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {x: scrollX}}}],
+            {useNativeDriver: false},
+          )}
+          scrollEventThrottle={16}
+          showsHorizontalScrollIndicator={false}
+          renderItem={renderItem}
+          viewabilityConfig={{
+            minimumViewTime: 1000,
+            itemVisiblePercentThreshold: 90,
+          }}
+          keyExtractor={(item, i) => i}
           data={IMAGES}
-          width={275}
-          autoscroll={false}
-          contentContainerStyle={{paddingHorizontal: 16}}
-          component={<Preview />}
-          // indicatorActiveWidth={30}
-          loop={false}
-          separatorWidth={10}
-          // contentContainerStyle={{paddingHorizontal: 0}}
-          animation={true}
+          onViewableItemsChanged={onScroll}
         />
         <View style={{height: 10}} />
+
+        <View style={{ width: '100%', flexDirection: 'row', height: responsiveFontSize(5), alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                        {
+                            IMAGES?.map((item, index) => {
+                               
+                                return (
+                                    <View style={{
+                                        width: '3%',
+                                        backgroundColor: 'white',
+                                        height: responsiveFontSize(1.5),
+                                        borderRadius: responsiveFontSize(100),
+                                        borderWidth: 1,
+                                        borderColor: colors.themeblue,
+                                        marginHorizontal: responsiveFontSize(0.5),
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}>
+                                        {
+                                            (index == ind || (ind == null && index == 0)) ?
+                                            <View style={{ backgroundColor: colors.themeblue, height: responsiveFontSize(0.7), width: '60%', borderRadius: responsiveFontSize(100) }} />:
+                                            <View style={{  height: responsiveFontSize(0.7), width: '60%', borderRadius: responsiveFontSize(100) }} />
+                                        }
+
+
+                                    </View>
+                                )
+                            })
+                        }
+                    </View>
+
         <View
           style={{
             width: width * 0.95,

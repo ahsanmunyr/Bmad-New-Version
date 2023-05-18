@@ -25,6 +25,7 @@ function NearMeStack({navigation}) {
             height: 110,
             backgroundColor:themeRed
           },
+          headerBackVisible: false,
           headerStatusBarHeight: 32,
           headerTitle: props => (
             <Text
@@ -59,6 +60,7 @@ function NearMeStack({navigation}) {
       <Stack.Screen
         name="profile"
         options={({route}) => ({
+          headerBackVisible: false,
           headerStyle: {
             borderBottomColor: themeRed,
             borderBottomWidth: 2,
@@ -95,7 +97,7 @@ function NearMeStack({navigation}) {
         component={ProfileScreen}
       />
       <Stack.Screen
-        name="offerADrink"
+        name="OfferADrink"
         options={{headerShown: false}}
         component={OfferADrink}
       />

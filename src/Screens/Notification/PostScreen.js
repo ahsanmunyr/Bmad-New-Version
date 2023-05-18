@@ -25,6 +25,7 @@ import moment from 'moment';
 import LottieView from 'lottie-react-native';
 import {useRoute} from '@react-navigation/native';
 import {imageUrl} from '../../Config/Apis.json';
+import { dateInDays } from '../../Utils/times';
 
 const {height, width} = Dimensions.get('window');
 
@@ -56,8 +57,8 @@ const PostScreen = ({
   const getPostData = async () => {
     setIsLoading(true);
     await getPostById(postId, userId);
-    await getAllCommentsOfPost(postId).then(() => {
-      setPostComments(postsReducer?.postComments);
+    await getAllCommentsOfPost(postId).then((res) => {
+      setPostComments(res);
     });
     setIsLoading(false);
   };
@@ -72,13 +73,7 @@ const PostScreen = ({
   // console.log(postData, 'post data');
   // console.log(postsReducer?.postComments, 'post comments');
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => {
-      getAllCommentsOfPost(postId).then(() => {
-        setPostComments(postsReducer?.postComments);
-      });
-      setRefreshing(false);
-    });
+
   }, []);
 
   const _onPressComment = async () => {
@@ -94,8 +89,8 @@ const PostScreen = ({
   const onSuccess = () => {
     setIsCommenting(false);
     setCommentText('');
-    getAllCommentsOfPost(postId).then(() => {
-      setPostComments(postsReducer?.postComments);
+    getAllCommentsOfPost(postId).then((res) => {
+      setPostComments(res);
     });
   };
 
@@ -111,10 +106,8 @@ const PostScreen = ({
     }
   }, [postsReducer?.post]);
 
-  useEffect(() => {
-    setPostComments(postsReducer?.postComments);
-  }, [postsReducer?.postComments]);
-  console.log(userReducer?.data?.user_image, '--');
+
+  // console.log(userReducer?.data?.user_image, '--');
   return (
     <View style={styles.container}>
       <FlatList
@@ -203,7 +196,9 @@ const PostScreen = ({
               item={item}
               img={item?.user_image || item?.user?.user_image}
               name={item?.user_name || item?.user?.user_name}
-              time={moment(item?.created_at).fromNow()}
+              time={moment(item?.created_at).format('lll')}
+          
+           
               message={item?.comment}
             />
           );

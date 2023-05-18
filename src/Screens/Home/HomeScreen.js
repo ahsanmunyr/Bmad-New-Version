@@ -27,8 +27,8 @@ import * as actions from '../../Store/Actions';
 import {connect} from 'react-redux';
 import {themeRed} from '../../Assets/Colors/Colors';
 import {useIsFocused} from '@react-navigation/native';
-import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
-import { responsiveScreenFontSize } from 'react-native-responsive-dimensions';
+import {backgroundColor} from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import {responsiveScreenFontSize} from 'react-native-responsive-dimensions';
 
 const {width, height} = Dimensions.get('window');
 
@@ -49,11 +49,8 @@ const HomeScreen = ({
   updateLocation,
 }) => {
   const USER_ID = userReducer?.data?.user_id;
-  const [posts, setPosts] = useState(postsReducer?.feedPosts);
   const [refreshing, setRefreshing] = React.useState(false);
-  const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
-  const [nearmeUsers, setNearmeUsers] = useState([]);
 
   const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -70,53 +67,53 @@ const HomeScreen = ({
     });
   }, []);
 
-  useEffect(() => {
-    if (Platform.OS === 'android') {
-      LocationServicesDialogBox.checkLocationServicesIsEnabled({
-        message:
-          "<div style='background-color: #f5fcff; border-radius: 100px;'> <h3 style='font-color:#31a4de'>This App access to your Location</h3>This App wants to change your device settings:<br/><br/>Use GPS for Location<br/></div>",
-        ok: 'YES',
-        cancel: 'NO',
-        enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => GPS OR NETWORK PROVIDER
-        showDialog: true, // false => Opens the Location access page directly
-        openLocationServices: true, // false => Directly catch method is called if location services are turned off
-        preventOutSideTouch: false, //true => To prevent the location services popup from closing when it is clicked outside
-        preventBackClick: false, //true => To prevent the location services popup from closing when it is clicked back button
-        providerListener: true, // true ==> Trigger "locationProviderStatusChange" listener when the location state changes
-      })
-        .then(
-          function (success) {
-            if (!loading) {
-              getOneTimeLocation();
-            }
-          }.bind(this),
-        )
-        .catch(error => {
-          console.log(error.message);
-        });
+  // useEffect(() => {
+  //   if (Platform.OS === 'android') {
+  //     LocationServicesDialogBox.checkLocationServicesIsEnabled({
+  //       message:
+  //         "<div style='background-color: #f5fcff; border-radius: 100px;'> <h3 style='font-color:#31a4de'>This App access to your Location</h3>This App wants to change your device settings:<br/><br/>Use GPS for Location<br/></div>",
+  //       ok: 'YES',
+  //       cancel: 'NO',
+  //       enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => GPS OR NETWORK PROVIDER
+  //       showDialog: true, // false => Opens the Location access page directly
+  //       openLocationServices: true, // false => Directly catch method is called if location services are turned off
+  //       preventOutSideTouch: false, //true => To prevent the location services popup from closing when it is clicked outside
+  //       preventBackClick: false, //true => To prevent the location services popup from closing when it is clicked back button
+  //       providerListener: true, // true ==> Trigger "locationProviderStatusChange" listener when the location state changes
+  //     })
+  //       .then(
+  //         function (success) {
+  //           if (!loading) {
+  //             getOneTimeLocation();
+  //           }
+  //         }.bind(this),
+  //       )
+  //       .catch(error => {
+  //         console.log(error.message);
+  //       });
 
-      BackHandler.addEventListener('hardwareBackPress', () => {
-        LocationServicesDialogBox.forceCloseDialog();
-      });
+  //     BackHandler.addEventListener('hardwareBackPress', () => {
+  //       LocationServicesDialogBox.forceCloseDialog();
+  //     });
 
-      DeviceEventEmitter.addListener(
-        'locationProviderStatusChange',
-        function (status) {
-          console.log(status);
-        },
-      );
-    } else {
-      if (!loading) {
-        getOneTimeLocation();
-      }
-    }
-    if (Platform.OS === 'android') {
-      return () => {
-        // Anything in here is fired on component unmount.
-        LocationServicesDialogBox.stopListener();
-      };
-    }
-  }, []);
+  //     DeviceEventEmitter.addListener(
+  //       'locationProviderStatusChange',
+  //       function (status) {
+  //         console.log(status);
+  //       },
+  //     );
+  //   } else {
+  //     if (!loading) {
+  //       getOneTimeLocation();
+  //     }
+  //   }
+  //   if (Platform.OS === 'android') {
+  //     return () => {
+  //       // Anything in here is fired on component unmount.
+  //       LocationServicesDialogBox.stopListener();
+  //     };
+  //   }
+  // }, []);
 
   // Getting Location
   const getOneTimeLocation = async () => {
@@ -157,10 +154,10 @@ const HomeScreen = ({
   };
 
   useEffect(() => {
-    if (isFocused && !loading) {
+    if (!loading) {
       getOneTimeLocation();
     }
-  }, [isFocused]);
+  }, []);
   // useEffect(() => {
   //   if (userCoordsReducer?.lat !== null && userCoordsReducer?.long !== null) {
   //     nearMeUsers(userCoordsReducer?.lat, userCoordsReducer?.long, USER_ID);
@@ -171,18 +168,14 @@ const HomeScreen = ({
   //   }
   // }, [userReducer?.data?.id,userCoordsReducer]);
 
-  useEffect(() => {
-    const arr = usersNearmeReducer?.allUsers?.sort(
-      (a, b) =>
-        (a?.distance * 1000).toPrecision(2) -
-        (b?.distance * 1000).toPrecision(2),
-    );
-    setNearmeUsers(arr);
-  }, [usersNearmeReducer?.allUsers, isFocused]);
-
-  useEffect(() => {
-    setPosts(postsReducer?.feedPosts);
-  }, [postsReducer?.feedPosts, isFocused]);
+  // useEffect(() => {
+  //   const arr = usersNearmeReducer?.allUsers?.sort(
+  //     (a, b) =>
+  //       (a?.distance * 1000).toPrecision(2) -
+  //       (b?.distance * 1000).toPrecision(2),
+  //   );
+  //   setNearmeUsers(arr);
+  // }, [usersNearmeReducer?.allUsers]);
 
   // Liking Any Post Function
   const _onPressHeart = item => {
@@ -221,7 +214,7 @@ const HomeScreen = ({
             }
             scrollEnabled
             showsVerticalScrollIndicator={false}
-            data={posts}
+            data={postsReducer?.feedPosts}
             contentContainerStyle={{paddingBottom: 100}}
             ListFooterComponentStyle={{
               justifyContent: 'center',
@@ -229,7 +222,7 @@ const HomeScreen = ({
             }}
             // !!!! Will Be Viewed When No Posts To Show !!!!
             ListFooterComponent={() =>
-              posts?.length === 0 && (
+              postsReducer?.feedPosts?.length === 0 && (
                 <>
                   <View style={{height: 30}}></View>
                   <View
@@ -289,7 +282,7 @@ const HomeScreen = ({
             stickyHeaderIndices={[0]}
             // !!!! Header Showing Near Users !!!!
             ListHeaderComponent={
-              nearmeUsers?.length > 0 ? (
+              usersNearmeReducer?.allUsers?.length > 0 ? (
                 <View
                   style={[
                     styles.cardContainer,
@@ -314,9 +307,8 @@ const HomeScreen = ({
                   <FlatList
                     // contentContainerStyle={styles.innerFlatlistContentStyle}
                     showsHorizontalScrollIndicator={false}
-                    data={nearmeUsers}
+                    data={usersNearmeReducer?.allUsers}
                     horizontal
-             
                     keyExtractor={(item, index) => index}
                     renderItem={({item, index}) => {
                       // console.log(`${imageUrl}/${item?.user_image}`)
@@ -326,7 +318,6 @@ const HomeScreen = ({
                           style={[
                             styles.cardHeaderStyle,
                             isIos && {marginTop: 5},
-                         
                           ]}
                           onPress={() => {
                             navigation.navigate('profile', {userData: item});
@@ -418,6 +409,7 @@ const HomeScreen = ({
             renderItem={({item, index}) => {
               return (
                 <PostList
+                  index={index}
                   item={item}
                   Img={item?.post_url}
                   Name={item?.user_id?.user_name}

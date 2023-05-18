@@ -211,7 +211,7 @@ const NearMeScreen = ({
               />
             )}
           </Marker>
-          <MapView.Circle
+          {/* <MapView.Circle
             key={(
               parseFloat(state?.region?.latitude) +
               parseFloat(state?.region?.longitude)
@@ -222,7 +222,7 @@ const NearMeScreen = ({
             strokeColor={themeRed}
             fillColor={'rgba(176,17,37,0.2)'}
           />
-          {/* Maps Users Location on Map  */}
+     
           {state?.users?.map((marker, index) => {
             const scaleStyle = {
               transform: [
@@ -240,35 +240,10 @@ const NearMeScreen = ({
                 }}
                 title={marker.user_name}
                 onPress={e => onMarkerPress(e)}>
-                {/* <Animated.View style={styles.markerWrap}>
-                  <Animated.View
-                    style={{
-                      borderColor: '#EA2C2E',
-                      borderRadius: 50,
-                      padding: 0,
-                      alignItems: 'center',
-                      // width: width *0.02,
-                      // height: '100%',
-                      justifyContent: 'center',
-                    }}>
-                    {marker?.user_image ? (
-                      <Animated.Image
-                        source={{uri: `${imageUrl}/${marker?.user_image}`}}
-                        style={[styles.marker, scaleStyle]}
-                        resizeMode="cover"
-                      />
-                    ) : (
-                      <Animated.Image
-                        source={require('./../../Assets/Images/maroon-dp2.jpeg')}
-                        style={[styles.marker, scaleStyle]}
-                        resizeMode="cover"
-                      />
-                    )}
-                  </Animated.View>
-                </Animated.View> */}
+              
               </MapView.Marker>
             );
-          })}
+          })} */}
         </MapView>
 
         {/* Users Near Me Cards  */}

@@ -227,15 +227,16 @@ const ProfileScreen = ({
               color="white"
               Label={nearMeUserData?.user_name?.substring(0, 20)}
             />
-            <AppText
+
+            {/* <AppText
               nol={1}
               textAlign="left"
               family="Poppins-SemiBold"
               size={hp('2%')}
               color="white"
               // Label={'26'}
-              Label={nearMeUserData?.user_gender[0]}
-            />
+              Label={nearMeUserData?.user_gender[0] || 'Female'}
+            /> */}
           </View>
           <View style={{marginLeft: width * 0.05}}>
             {/* <AppText

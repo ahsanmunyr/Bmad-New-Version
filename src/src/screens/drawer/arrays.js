@@ -35,6 +35,14 @@ export const ScreensArray2 = [
     component: MyProfileScreen,
     notification: 0,
   },
+  {
+    route: 'ProceedToPay',
+    label: 'ProceedToPay',
+    type: Icons.Feather,
+    icon: 'user',
+    component: ProceedToPay,
+    notification: 0,
+  },
   // {
   //   route: 'OfferADrink',
   //   label: 'Offer a drink',

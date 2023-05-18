@@ -17,6 +17,7 @@ function NotificationStack({navigation}) {
       <Stack.Screen
         name="notification"
         options={({route}) => ({
+          headerBackVisible: false,
           headerStyle: {
             borderBottomColor: 'grey',
             borderBottomWidth: 0.7,
@@ -56,6 +57,7 @@ function NotificationStack({navigation}) {
       <Stack.Screen
         name="post"
         options={({route}) => ({
+          headerBackVisible: false,
           headerStyle: {
             borderBottomColor: 'grey',
             borderBottomWidth: 0.7,
@@ -70,13 +72,14 @@ function NotificationStack({navigation}) {
                 fontSize: 18,
                 color: 'white',
                 fontFamily: 'Poppins-SemiBold',
+                left: 30
               }}>
               Post
             </Text>
           ),
           headerTransparent: false,
           headerLeft: () => (
-            <View style={{left: 20}}>
+            <View style={{left: 0}}>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('notification', {

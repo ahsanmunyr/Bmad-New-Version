@@ -158,13 +158,19 @@ const SignupScreen = ({
       return;
     }
     if (emailRegex.test(email)) {
-      if (usernameRegex.test(username)) {
-        if (value.length > 5) {
+      let testName = usernameRegex.test(username);
+      if (testName && username.length >= 3) {
+        if (value.length >= 7) {
           const mobileNumber = value;
           onChangePhone(mobileNumber);
           if (password === confirmPassword) {
             // Otp(null, mobileNumber, fadeChange);
-            fadeChange();
+            if(password.length > 7){
+              fadeChange();
+            }else{
+              onChangeError('The length of the password is too short.');
+              setValidation(true);
+            }
           } else {
             onChangeError('Password not match');
             setValidation(true);
@@ -254,6 +260,7 @@ const SignupScreen = ({
                       onChangeText={text => {
                         setUsername(text);
                       }}
+                      maxLength={30}
                       value={username}
                       selectionColor="white"
                       secureTextEntry={false}
@@ -313,21 +320,26 @@ const SignupScreen = ({
                       defaultCode="PK"
                       layout="first"
                       onChangeText={text => {
-                        setValue(text);
-                        console.log(text)
+                        if (text.length <= 15) {
+                          // console.log(text.length, 'text');
+                          // console.log(text, 'text');
+                          setValue(text);
+                        }
                       }}
                       onChangeFormattedText={text => {
-                        setFormattedValue(text);
+                        if (text.length <= 18) {
+                          // console.log(text, 'texttexttexttext');
+                          setFormattedValue(text);
+                        }
                       }}
                       placeholder=""
                       containerStyle={{
                         backgroundColor: 'rgba(52, 52, 52, 0.1)',
                         height: hp('6%'),
-                        
                       }}
                       textInputProps={{
-                        selectionColor:'white',
-                        placeholderTextColor:'white'
+                        selectionColor: 'white',
+                        placeholderTextColor: 'white',
                       }}
                       textContainerStyle={{
                         backgroundColor: 'rgba(52, 52, 52, 0.1)',
@@ -345,7 +357,6 @@ const SignupScreen = ({
                       }}
                       flagButtonStyle={{color: 'white'}}
                       countryPickerButtonStyle={{color: 'white'}}
-                      
                       // withShadow
                       // withDarkTheme
                       disableArrowIcon="false"
@@ -377,6 +388,7 @@ const SignupScreen = ({
                       value={password}
                       selectionColor="white"
                       secureTextEntry={true}
+                      maxLength={32}
                       // textAlign='center'
                       textAlignVertical="bottom"
                     />
@@ -399,6 +411,7 @@ const SignupScreen = ({
                       placeholder="Confirm Password"
                       placeholderTextColor="white"
                       style={styles.input2}
+                      maxLength={32}
                       onChangeText={text => {
                         onChangeConfirmPassword(text);
                       }}
@@ -500,10 +513,11 @@ const SignupScreen = ({
                 <View style={{flexDirection: 'column', height: hp('110%')}}>
                   <Logo />
 
-                  {!modalVisible ? (
-                   null
-                  ) : (
-                <Heading passedStyle={{color: 'white', textAlign:'center'}} title="Interested in" />
+                  {!modalVisible ? null : (
+                    <Heading
+                      passedStyle={{color: 'white', textAlign: 'center'}}
+                      title="Interested in"
+                    />
                   )}
                   {!modalVisible ? (
                     <TextSample Label="Kindly Select Your Gender" />
@@ -611,7 +625,7 @@ const SignupScreen = ({
           {/* </KeyboardAvoidingView> */}
 
           {/* User Interested In Modal  */}
-    
+
           <Modal
             animationType="fade"
             transparent={true}
@@ -621,7 +635,6 @@ const SignupScreen = ({
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-           
                 <View
                   style={{
                     justifyContent: 'center',

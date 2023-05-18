@@ -22,6 +22,9 @@ import {imageUrl} from '../../Config/Apis.json';
 import {connect} from 'react-redux';
 import * as actions from '../../Store/Actions/index';
 import {showMessage} from 'react-native-flash-message';
+import { ActivityIndicator } from 'react-native-paper';
+import { responsiveScreenFontSize } from 'react-native-responsive-dimensions';
+import Colors from '../../src/constants/Colors';
 const {width, height} = Dimensions.get('window');
 
 const wait = timeout => {
@@ -36,23 +39,17 @@ const MainPost = ({
   navigation,
   route,
 }) => {
+
   const [commentText, setCommentText] = useState('');
   const [refreshing, setRefreshing] = React.useState(false);
   const postId = route?.params?.item?.post_id;
   const [isCommenting, setIsCommenting] = useState(false);
+  const [loader, onChangeLoader] = useState(false)
   const userId = userReducer?.data?.user_id;
   const [postComments, setPostComments] = useState([]);
   const isIOS = Platform.OS === 'ios';
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => {
-      getAllCommentsOfPost(postId).then(() => {
-        setPostComments(postsReducer?.postComments);
-      });
-      setRefreshing(false);
-    });
-  }, []);
+
 
   const _onPressComment = async () => {
     if (commentText.length > 0) {
@@ -74,26 +71,36 @@ const MainPost = ({
   const onSuccess = () => {
     setIsCommenting(false);
     setCommentText('');
-    getAllCommentsOfPost(postId).then(() => {
-      setPostComments(postsReducer?.postComments);
+    getAllCommentsOfPost(route?.params?.item?.post_id).then((res) => {
+      // console.log(res, "========================");
+      setPostComments(res)
     });
   };
 
   useEffect(() => {
-    getAllCommentsOfPost(postId).then(() => {
-      setPostComments(postsReducer?.postComments);
+    onChangeLoader(true)
+    getAllCommentsOfPost(route?.params?.item?.post_id).then((res) => {
+      // console.log(res, "========================");
+      setPostComments(res)
+      onChangeLoader(false)
     });
   }, []);
 
-  useEffect(() => {
-    setPostComments(postsReducer?.postComments);
-  }, [postsReducer?.postComments]);
+  if(loader){
+    return(
+      <View style={{flex: 1, justifyContent:'center',alignItems:'center'}}>
+        <ActivityIndicator size={responsiveScreenFontSize(3)} color={Colors.themeColor} />
+      </View>
+    )
+  }
+
+
   return (
     <View style={styles.mainContainer}>
       <FlatList
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        // refreshControl={
+        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        // }
         // ListHeaderComponentStyle={{width: width,}}
         ListHeaderComponent={
           <>
@@ -217,12 +224,13 @@ const MainPost = ({
         data={postComments}
         keyExtractor={(item, index) => index}
         renderItem={({item, index}) => {
+          
           return (
             <Comment
               item={item}
               img={item?.user?.user_image}
               name={item?.user?.user_name}
-              time={moment(item?.created_at).fromNow()}
+              time={moment(item?.created_at).format('lll')}
               message={item?.comment}
             />
           );

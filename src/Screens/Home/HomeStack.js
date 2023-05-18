@@ -68,6 +68,7 @@ function HomeStack({navigation}) {
       <Stack.Screen
         name="mainpost"
         options={({route}) => ({
+          headerBackVisible:false,
           headerStyle: {
             borderBottomColor: 'grey',
             borderBottomWidth: 0.7,
