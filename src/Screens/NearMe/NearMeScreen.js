@@ -186,7 +186,7 @@ const NearMeScreen = ({
           
           initialRegion={state?.region}
           style={{flex: 1}}
-          provider={Platform.OS == 'android' ? PROVIDER_GOOGLE : null}>
+          provider={Platform.OS == 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}>
           <Marker
             stopPropagation={false}
             style={{position: 'absolute'}}
