@@ -97,12 +97,12 @@ export function userReducer(state = INITIAL_USER_DATA, action) {
       };
 
     case DEDUCT_DRINK:
-      console.log(
-        'DRINKS NOW DEDUCTED: from',
-        Number(state?.data?.coins),
-        ' to ',
-        Number(state?.data?.coins) - 1,
-      );
+      // console.log(
+      //   'DRINKS NOW DEDUCTED: from',
+      //   Number(state?.data?.coins),
+      //   ' to ',
+      //   Number(state?.data?.coins) - 1,
+      // );
       return {
         ...state,
         data: {
@@ -154,10 +154,10 @@ export function usersNearmeReducer(state = iNITIAL_NEAR_ME, action) {
       };
 
     case SAVE_NEAR_ME_USER_DATA:
-      console.log(
-        action.payload?.status,
-        '+++++++++++++++++++++++++++++++ from reducer',
-      );
+      // console.log(
+      //   action.payload?.status,
+      //   '+++++++++++++++++++++++++++++++ from reducer',
+      // );
       return {
         ...state,
         user: action.payload,
@@ -175,7 +175,7 @@ export function usersNearmeReducer(state = iNITIAL_NEAR_ME, action) {
 
     case AFTER_SENDING_REQ_FROM_PROFILE:
       // console.log('near me user ak dataaaaaaa');
-      console.log(state.user);
+      // console.log(state.user);
       return {
         ...state,
         user: {

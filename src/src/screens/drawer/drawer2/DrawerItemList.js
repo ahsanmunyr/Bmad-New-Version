@@ -71,7 +71,7 @@ const DrawerItemList = ({state, descriptors, navigation, styles}) => {
         const color = isFocused ? colors.dark : colors.darkGray;
         const activeItemColor = isFocused ? colors.primary : null;
 
-        if (route.name != 'ProceedToPay') {
+        if (route.name != 'ProceedToPay' && route.name != "Chats") {
           return (
             <DrawerItem
               key={index}

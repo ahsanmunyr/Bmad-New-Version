@@ -29,12 +29,13 @@ import PhoneInput from 'react-native-phone-number-input';
 import * as actions from '../../../Store/Actions';
 import {imageUrl} from '../../../Config/Apis.json';
 import {connect} from 'react-redux';
-import CountryPicker from 'react-native-country-picker-modal';
+import CountryPicker, {FlagButton} from 'react-native-country-picker-modal';
 import {themeRed} from '../../../Assets/Colors/Colors';
 import {CountryCode, Country} from './src/types';
 import ImagePicker from 'react-native-image-crop-picker';
 import IconComp from '../../../Components/IconComp';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { responsiveScreenWidth } from 'react-native-responsive-dimensions';
 
 const {width, height} = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
@@ -235,8 +236,10 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
         user_lives: country,
         user_image: userReducer?.data?.user_image,
         imageObj: imageObject,
-        country_code: countryCode ? countryCode : userReducer?.data?.country_code ,
-        user_phoneCountryCode: countryCodeForPhone
+        country_code: countryCode
+          ? countryCode
+          : userReducer?.data?.country_code,
+        user_phoneCountryCode: countryCodeForPhone,
       };
 
       if (username && country && phone_no) {
@@ -265,11 +268,11 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
     }
   };
   const _onSuccess = () => {
-    // setLoading(false);
+    setLoading(false);
     ImagePicker.clean().then(() => {
       // console.log('removed all tmp images from tmp directory');
     });
-    // navigation.goBack();
+    navigation.goBack();
   };
 
   const _onFailed = () => {
@@ -287,13 +290,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
   return (
     <SafeAreaView style={styles.container}>
       {/* <StatusBar translucent backgroundColor="transparent" /> */}
-      <View style={{height: STATUS_BAR_HEIGHT, backgroundColor: themeRed}}>
-        {/* <StatusBar
-          translucent
-          // backgroundColor={themeRed}
-          barStyle="light-content"
-        /> */}
-      </View>
+
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         scrollEventThrottle={16}
@@ -324,60 +321,60 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
             <MaterialIcons name="edit-3" color="white" size={25} style={{}} />
           </TouchableOpacity>
         </View>
-
-        <View
-          style={[
-            styles.imagebackground,
-            {
-              height: isIOS ? height * 0.45 : height * 0.5,
-            },
-          ]}>
+        <TouchableOpacity onPress={openGallery}>
+          <View
+            style={[
+              styles.imagebackground,
+              {
+                height: isIOS ? height * 0.45 : height * 0.5,
+              },
+            ]}>
             <View style={{}} />
-          {image !== null || userReducer?.data?.user_image ? (
-            <Image
-              style={[
-                styles.imagebackground,
-                {
-                  height: isIOS ? height * 0.45 : height * 0.5,
-                  // backgroundColor: animatedHeaderBgColor,
-                },
-              ]}
-              resizeMode="cover"
-              source={{
-                uri: image
-                  ? image
-                  : `${imageUrl}/${userReducer?.data?.user_image}`,
-              }}
-            />
-          ) : (
-            <Image
-              style={[
-                styles.imagebackground,
-                {
-                  height: isIOS ? height * 0.45 : height * 0.5,
-                  // backgroundColor: animatedHeaderBgColor,
-                },
-              ]}
-              resizeMode="cover"
-              source={require('../../../Assets/Images/test.png')}
-            />
-          )}
-          <View style={[styles.textContainer, isIOS && {top: height * 0.33}]}>
-            <Text style={styles.nameStyles}>{`${
-              username?.length > 17
-                ? `${username?.substring(0, 17)}...`
-                : username
-            }`}</Text>
-            <Text
-              style={[
-                styles.emailStyles,
-                isIOS && {marginTop: height * 0.007},
-              ]}>
-              {userReducer?.data?.user_email}
-            </Text>
+            {image !== null || userReducer?.data?.user_image ? (
+              <Image
+                style={[
+                  styles.imagebackground,
+                  {
+                    height: isIOS ? height * 0.45 : height * 0.5,
+                    // backgroundColor: animatedHeaderBgColor,
+                  },
+                ]}
+                resizeMode="cover"
+                source={{
+                  uri: image
+                    ? image
+                    : `${imageUrl}/${userReducer?.data?.user_image}`,
+                }}
+              />
+            ) : (
+              <Image
+                style={[
+                  styles.imagebackground,
+                  {
+                    height: isIOS ? height * 0.45 : height * 0.5,
+                    // backgroundColor: animatedHeaderBgColor,
+                  },
+                ]}
+                resizeMode="cover"
+                source={require('../../../Assets/Images/test.png')}
+              />
+            )}
+            <View style={[styles.textContainer, isIOS && {top: height * 0.33}]}>
+              <Text style={styles.nameStyles}>{`${
+                username?.length > 17
+                  ? `${username?.substring(0, 17)}...`
+                  : username
+              }`}</Text>
+              <Text
+                style={[
+                  styles.emailStyles,
+                  isIOS && {marginTop: height * 0.007},
+                ]}>
+                {userReducer?.data?.user_email}
+              </Text>
+            </View>
           </View>
-        </View>
-  
+        </TouchableOpacity>
         <View style={styles.formView}>
           <Text style={styles.formLabelStyle}>Username</Text>
           <TextInput
@@ -412,12 +409,15 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
 
           <Text style={styles.formLabelStyle}>Country</Text>
 
-          <CountryPicker
+          {/* <CountryPicker
             containerButtonStyle={[
               styles.textInputLabel,
               {padding: height * 0.02, color: 'black'},
             ]}
-            {...{
+            
+            visible
+          /> */}
+          {/* {...{
               countryCode,
               withFilter,
               withFlag,
@@ -425,27 +425,60 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
               withAlphaFilter,
               withCallingCode,
               withEmoji,
-            }}
+            }} */}
+
+          <CountryPicker
+            containerButtonStyle={[
+              styles.textInputLabel,
+              { color: 'white',    zIndex: 9999},
+            ]}
+            withFilter={true}
+            withFlag={true}
             visible={false}
+            withCallingCode
+            withAlphaFilter
+            withCloseButton
+            withCountryNameButton
+            withEmoji
+            withCurrency
+            withFlagButton
+            withModal
+            withCallingCodeButton
+            withCurrencyButton
+            placeholder={''}
             onSelect={t => {
-              // console.log("T",t, "==============")
+              console.log("T",t.flag, "==============")
               setFlagName(t.flag);
               setCountryCode(t.cca2);
               setCountry(t.name);
             }}
           />
-
-          <Text
+          <View
             style={{
-              width: width * 0.7,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '90%',
+            
+              alignSelf:'center',
               marginTop: isIOS ? height * -0.055 : height * -0.056,
-              marginLeft: width * 0.24,
-              color: 'black',
-              fontSize: width * 0.04,
-              fontFamily: 'Poppins-Medium',
+           
             }}>
-            {country}
-          </Text>
+          
+            <FlagButton withEmoji={true} countryCode={countryCode} />
+            <Text
+              style={{
+                // width: width * 0.7,
+                // marginTop: isIOS ? height * -0.055 : height * -0.056,
+                // marginLeft: width * 0.28,
+                color: 'black',
+                fontSize: width * 0.04,
+                fontFamily: 'Poppins-Medium',
+              }}>
+              {country}
+            </Text>
+            <View style={{width: responsiveScreenWidth(10)}} />
+          </View>
 
           <AntDesign
             name="caretdown"
@@ -459,7 +492,6 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
               fontFamily: 'Poppins-Medium',
             }}
           />
-     
 
           {loading ? (
             <View style={styles.updateBtnStyle}>
@@ -473,12 +505,10 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
               <Text style={styles.btnTxt}>Update</Text>
             </TouchableOpacity>
           )}
-
-
         </View>
-            <View style={{height: 100}}></View>
+        <View style={{height: 100}}></View>
       </ScrollView>
-  
+
       {/* <View style={{height: '37%'}} /> */}
     </SafeAreaView>
   );
@@ -493,7 +523,7 @@ var styles = StyleSheet.create({
   iconContainer: {
     position: 'absolute',
     width: width * 0.95,
-    top: height * 0.03,
+    top: height * 0.06,
     alignSelf: 'center',
     // right: width * 0.03,
     flexDirection: 'row',

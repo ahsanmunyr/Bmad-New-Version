@@ -91,7 +91,7 @@ const ProfileScreen = ({
   const _onPressMessageButton = async () => {
     //below two lines tab tak k liye hen jb tk profile se messages kr rahe hen phr hatadnaa
     saveCurrentChatObject(nearMeUserData);
-    navigation.navigate('chats');
+    navigation.navigate('Chats');
 
     // const apiData = {
     //   sender: LOGGED_IN_USER,
@@ -120,7 +120,7 @@ const ProfileScreen = ({
       user: LOGGED_IN_USER,
       friend: nearMeUserData?.user_id,
     };
-    console.log(data, 'Ignore data');
+    // console.log(data, 'Ignore data');
     await ignoreInviteFromProfile(data, _onSuccessOfAction);
   };
 
@@ -129,7 +129,7 @@ const ProfileScreen = ({
       user: LOGGED_IN_USER,
       friend: nearMeUserData?.user_id,
     };
-    console.log(data, 'accept data');
+    // console.log(data, 'accept data');
     await acceptInviteFromProfile(data, _onSuccessOfAction);
   };
 
@@ -163,7 +163,7 @@ const ProfileScreen = ({
     }
   }, [isFocused]);
 
-  console.log(nearMeUserData?.status,nearMeUserData?.sendBy)
+  console.log(nearMeUserData?.status, nearMeUserData?.sendBy);
   if (loading) {
     return (
       <View style={styles.loaderView}>
@@ -192,6 +192,7 @@ const ProfileScreen = ({
         <StatusBar translucent backgroundColor="transparent" />
 
         {/* User Profile Section  */}
+
         {nearMeUserData?.user_image === undefined ||
         nearMeUserData?.user_image == null ? (
           <Image
@@ -254,7 +255,11 @@ const ProfileScreen = ({
               family="Poppins-SemiBold"
               size={width * 0.037}
               color="white"
-              Label={nearMeUserData?.user_lives ? `${nearMeUserData?.user_lives}`: ""}
+              Label={
+                nearMeUserData?.user_lives
+                  ? `${nearMeUserData?.user_lives}`
+                  : ''
+              }
             />
           </View>
           {/* Profession View  */}

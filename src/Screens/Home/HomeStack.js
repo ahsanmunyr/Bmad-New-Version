@@ -18,6 +18,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {themeRed} from '../../Assets/Colors/Colors';
 import ProfileScreen from '../NearMe/ProfileScreen';
 import Icon2 from 'react-native-vector-icons/Ionicons';
+import OfferADrink from '../Offer/OfferADrink';
+import OutOfDrink from '../Offer/OutOfDrink';
 LogBox.ignoreAllLogs([
   'Non-serializable values were found in the navigation state',
 ]);
@@ -68,7 +70,7 @@ function HomeStack({navigation}) {
       <Stack.Screen
         name="mainpost"
         options={({route}) => ({
-          headerBackVisible:false,
+          headerBackVisible: false,
           headerStyle: {
             borderBottomColor: 'grey',
             borderBottomWidth: 0.7,
@@ -109,6 +111,7 @@ function HomeStack({navigation}) {
       <Stack.Screen
         name="profile"
         options={({route}) => ({
+          headerBackVisible: false,
           headerStyle: {
             borderBottomColor: themeRed,
             borderBottomWidth: 2,
@@ -143,6 +146,16 @@ function HomeStack({navigation}) {
           headerRight: () => <MessageIcon1 navigation={navigation} />,
         })}
         component={ProfileScreen}
+      />
+      <Stack.Screen
+        name="OfferADrink"
+        options={{headerShown: false}}
+        component={OfferADrink}
+      />
+      <Stack.Screen
+        name="outOfDrink"
+        options={{headerShown: false}}
+        component={OutOfDrink}
       />
     </Stack.Navigator>
   );

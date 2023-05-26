@@ -55,6 +55,7 @@ const OfferADrink = ({
       friend: NEARME_USERDATA?.user_id,
     };
     await connectUser(apiData, onSuccess, NEARME_USERDATA, _onRequestFialed);
+    setLoading(false)
   };
 
   const onSuccess = () => {

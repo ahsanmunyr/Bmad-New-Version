@@ -94,10 +94,7 @@ const ProceedToPay = ({navigation}) => {
               <TouchableOpacity
                 onPress={() => {
                   // navigation.navigate('nearme');
-                  navigation.navigate('nearme', {
-                    screen: 'nearme',
-                    initial: false,
-                  });
+                  navigation.goBack()
                 }}
                 style={styles.touchableOpacity}>
                 <AppText

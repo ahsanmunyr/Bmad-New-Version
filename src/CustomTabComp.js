@@ -23,7 +23,7 @@ import {useState} from 'react';
 function CustomTabBar({dataProps, state, descriptors, navigation}) {
   const [change, onChange] = useState(false);
   function renderIcon(route, isFocues) {
-    console.log(route, 'route');
+    // console.log(route, 'route');
     switch (route) {
       case 'HOME':
         return (
@@ -88,7 +88,7 @@ function CustomTabBar({dataProps, state, descriptors, navigation}) {
         if (route.name == 'Home') {
           if (isFocused) {
             onChange(true);
-            console.log('================================');
+            // console.log('================================');
           } else {
             onChange(false);
           }

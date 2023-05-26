@@ -3,7 +3,7 @@ import {Dimensions, TouchableOpacity, Text, View, Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 // import {createStackNavigator} from '@react-navigation/stack';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
+import ChatStack from '../Chat/ChatStack';
 import NearMeScreen from './NearMeScreen';
 import MessageIcon from '../../Components/MessageIcon';
 import MessageIcon1 from './../../Components/MessageIcon1';
@@ -106,6 +106,11 @@ function NearMeStack({navigation}) {
         options={{headerShown: false}}
         component={OutOfDrink}
       />
+        {/* <Stack.Screen
+        name="chat"
+        options={{headerShown: false}}
+        component={ChatStack}
+      /> */}
       {/* {props => <ProfileScreen {...props} navigation={navigation} />}
                 </Stack.Screen> */}
     </Stack.Navigator>

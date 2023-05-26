@@ -103,7 +103,7 @@ const AuthRootStackScreen = ({
           headerRight: () => (
             <TouchableOpacity
               onPress={() => {
-                console.log(userInterest?.length);
+                // console.log(userInterest?.length);
                 if (userInterest == undefined || userInterest?.length == 0) {
                   showMessage({
                     message: 'Please select atleast one interest!',

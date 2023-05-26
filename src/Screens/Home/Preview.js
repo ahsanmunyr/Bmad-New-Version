@@ -34,9 +34,10 @@ export default Preview = ({item, scrollX, index}) => {
   });
 
   return (
-    <View style={styles.main}>
-      <View style={[styles.animatedView]}>
+    <View key={index} style={styles.main}>
+      <View key={index} style={[styles.animatedView]}>
         <Image
+          key={index}
           style={styles.posterImage}
           resizeMode="contain"
           source={{uri: item}}

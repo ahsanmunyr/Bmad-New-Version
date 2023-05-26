@@ -33,7 +33,7 @@ const MyTabs = ({
   const Tab = createBottomTabNavigator();
   const [hasNewRequests, setHasNewRequests] = useState(false);
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed';
-  console.log(routeName, 'sdsadsasadsadssdadas');
+  // console.log(routeName, 'sdsadsasadsadssdadas');
   useEffect(() => {
     if (notificationsReducer?.unreadNoti > 0) {
       setHasNewRequests(true);

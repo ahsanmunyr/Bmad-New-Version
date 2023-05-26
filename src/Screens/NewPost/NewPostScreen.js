@@ -92,6 +92,7 @@ const NewPostScreen = ({
       .then(response => {
         var ImageArray = [];
         for (var i = 0; i < response.length; i++) {
+          // console.log(response[i].size, 'SIZE');
           let showImage = {
             uri: 'data:image/jpeg;base64,' + response[i].data,
             path: response[i].path,
@@ -231,30 +232,37 @@ const NewPostScreen = ({
                           width: 210,
                           // borderWidth: 1, borderColor:'grey'
                         }}>
-                        <TouchableOpacity key={index} style={{
-                                zIndex: 99,
-                        }} onPress={()=>{
-                          
-                         let val =  filePath.filter((x, i) => i !== index);
-                         setFilePath(val)
-                      
-                          // alert('asd')
-                        }}>
-                        <View
+                        <TouchableOpacity
+                          key={index}
                           style={{
-                            height: 30,
-                            width: 30,
-                            backgroundColor: colors.themeblue,
-                            borderRadius: responsiveScreenFontSize(50),
-                            position: 'absolute',
-                            left: -5,
                             zIndex: 99,
-                            top: -10,
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                          }}
+                          onPress={() => {
+                            let val = filePath.filter((x, i) => i !== index);
+                            setFilePath(val);
+
+                            // alert('asd')
                           }}>
-                          <Entypo name="cross" size={responsiveScreenFontSize(3)} color="white" />
-                        </View>
+                          <View
+                            key={index}
+                            style={{
+                              height: 30,
+                              width: 30,
+                              backgroundColor: colors.themeblue,
+                              borderRadius: responsiveScreenFontSize(50),
+                              position: 'absolute',
+                              left: -5,
+                              zIndex: 99,
+                              top: -10,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}>
+                            <Entypo
+                              name="cross"
+                              size={responsiveScreenFontSize(3)}
+                              color="white"
+                            />
+                          </View>
                         </TouchableOpacity>
                         <Image
                           resizeMode="cover"

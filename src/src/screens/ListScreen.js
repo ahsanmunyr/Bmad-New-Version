@@ -47,9 +47,9 @@ export default function ListScreen({ route, navigation }) {
 
   const viewRef = useRef(null);
   const animation = Animations[Math.floor(Math.random() * Animations.length)]
-  console.log('====================================');
-  console.log(Math.floor(Math.random() * Animations.length), Math.random() * Animations.length, Animations.length);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log(Math.floor(Math.random() * Animations.length), Math.random() * Animations.length, Animations.length);
+  // console.log('====================================');
 
   const renderItem = ({ item, index }) => (
     <ListItem item={item} index={index} animation={animation} navigation={navigation} />)

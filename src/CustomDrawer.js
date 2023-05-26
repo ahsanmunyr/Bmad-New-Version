@@ -277,7 +277,7 @@ const CustomDrawer = (
     connectionsReducer,
   },
 ) => {
-  console.log(props?.SignOut, "SignOut");
+  // console.log(props?.SignOut, "SignOut");
   const scrollRef = useRef(null);
   const [hasNewRequests, setHasNewRequests] = useState(false);
   const drawerProgress = useDrawerProgress();

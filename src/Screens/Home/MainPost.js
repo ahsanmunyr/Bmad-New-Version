@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -9,6 +9,8 @@ import {
   TextInput,
   RefreshControl,
   TouchableWithoutFeedback,
+  Animated,
+  ScrollView,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -18,15 +20,22 @@ import Avatar from '../../Components/Avatar';
 import AppText from '../../Components/AppText';
 import moment from 'moment';
 import Comment from './Comments';
-import {imageUrl} from '../../Config/Apis.json';
 import {connect} from 'react-redux';
 import * as actions from '../../Store/Actions/index';
 import {showMessage} from 'react-native-flash-message';
-import { ActivityIndicator } from 'react-native-paper';
-import { responsiveScreenFontSize } from 'react-native-responsive-dimensions';
+import {ActivityIndicator} from 'react-native-paper';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveScreenFontSize,
+} from 'react-native-responsive-dimensions';
 import Colors from '../../src/constants/Colors';
+import Preview from './Preview';
+import {imageUrl} from '../../Config/Apis.json';
+import {colors} from '../../src/screens/drawer/constant';
 const {width, height} = Dimensions.get('window');
-
+// const {width} = Dimensions.get('window');
+const ITEM_SIZE = Platform?.OS === 'ios' ? width * 0.99 : width * 0.99;
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
@@ -39,17 +48,39 @@ const MainPost = ({
   navigation,
   route,
 }) => {
-
+  console.log(route?.params?.post_url, 'route');
+  // const IMAGES = item?.post_url?.map(ele => `${imageUrl}/${ele}`);
   const [commentText, setCommentText] = useState('');
   const [refreshing, setRefreshing] = React.useState(false);
   const postId = route?.params?.item?.post_id;
   const [isCommenting, setIsCommenting] = useState(false);
-  const [loader, onChangeLoader] = useState(false)
+  const [loader, onChangeLoader] = useState(false);
   const userId = userReducer?.data?.user_id;
   const [postComments, setPostComments] = useState([]);
   const isIOS = Platform.OS === 'ios';
 
+  const flatListRef = useRef(null);
+  const [ind, onChangeIndex] = useState(null);
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+  // console.log(IMAGES,"IMAGES",route?.name);
+  // const isIos =
 
+  const onScroll = useCallback(({viewableItems}) => {
+    console.log(viewableItems[0]?.index);
+    onChangeIndex(viewableItems[0]?.index);
+    // onChangeIndex(viewableItems.changed[0]?.index)
+  }, []);
+
+  const renderItem = useCallback(
+    ({item, index}) => <Preview index={index} item={item} scrollX={scrollX} />,
+    [],
+  );
+
+  useEffect(() => {
+    if (ind != null) {
+      flatListRef?.current?.scrollToIndex({animated: true, index: ind});
+    }
+  }, [ind]);
 
   const _onPressComment = async () => {
     if (commentText.length > 0) {
@@ -71,160 +102,255 @@ const MainPost = ({
   const onSuccess = () => {
     setIsCommenting(false);
     setCommentText('');
-    getAllCommentsOfPost(route?.params?.item?.post_id).then((res) => {
+    getAllCommentsOfPost(route?.params?.item?.post_id).then(res => {
       // console.log(res, "========================");
-      setPostComments(res)
+      setPostComments(res);
     });
   };
 
   useEffect(() => {
-    onChangeLoader(true)
-    getAllCommentsOfPost(route?.params?.item?.post_id).then((res) => {
+    onChangeLoader(true);
+    getAllCommentsOfPost(route?.params?.item?.post_id).then(res => {
       // console.log(res, "========================");
-      setPostComments(res)
-      onChangeLoader(false)
+      setPostComments(res);
+      onChangeLoader(false);
     });
   }, []);
 
-  if(loader){
-    return(
-      <View style={{flex: 1, justifyContent:'center',alignItems:'center'}}>
-        <ActivityIndicator size={responsiveScreenFontSize(3)} color={Colors.themeColor} />
+  if (loader) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator
+          size={responsiveScreenFontSize(3)}
+          color={Colors.themeColor}
+        />
       </View>
-    )
+    );
   }
 
-
   return (
-    <View style={styles.mainContainer}>
-      <FlatList
-        // refreshControl={
-        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        // }
-        // ListHeaderComponentStyle={{width: width,}}
-        ListHeaderComponent={
-          <>
-            <View style={styles.outerInfoView}>
-              <View style={styles.innerInfoView}>
-                <Avatar
-                  size="medium"
-                  source={
-                    route?.params?.profileImg
-                      ? {
-                          uri: `${imageUrl}/${route?.params?.profileImg}`,
-                        }
-                      : require('../../Assets/Images/maroon-dp.png')
-                  }
-                />
-                <View style={styles.textView}>
-                  <View style={styles.innerTextView}>
-                    <AppText
-                      nol={1}
-                      textAlign="left"
-                      family="Poppins-SemiBold"
-                      size={hp('1.9%')}
-                      color="black"
-                      Label={route.params.name}
-                    />
-                    <AppText
-                      nol={1}
-                      textAlign="left"
-                      family="Poppins-SemiBold"
-                      size={hp('1.5%')}
-                      color="black"
-                      Label={moment(route.params.uploadTime).fromNow()}
-                    />
-                  </View>
+    <ScrollView>
+      <View style={styles.mainContainer}>
+        <>
+          <View style={styles.outerInfoView}>
+            <View style={styles.innerInfoView}>
+              <Avatar
+                size="medium"
+                source={
+                  route?.params?.profileImg
+                    ? {
+                        uri: `${imageUrl}/${route?.params?.profileImg}`,
+                      }
+                    : require('../../Assets/Images/maroon-dp.png')
+                }
+              />
+              <View style={styles.textView}>
+                <View style={styles.innerTextView}>
+                  <AppText
+                    nol={1}
+                    textAlign="left"
+                    family="Poppins-SemiBold"
+                    size={hp('1.9%')}
+                    color="black"
+                    Label={route.params.name}
+                  />
+                  <AppText
+                    nol={1}
+                    textAlign="left"
+                    family="Poppins-SemiBold"
+                    size={hp('1.5%')}
+                    color="black"
+                    Label={moment(route.params.uploadTime).calendar()}
+                  />
                 </View>
               </View>
-              <View style={styles.descripView}>
-                <AppText
-                  nol={12}
-                  textAlign="left"
-                  family="Poppins-Regular"
-                  size={hp('1.9%')}
-                  color="black"
-                  Label={route.params.description}
-                />
-              </View>
             </View>
-
-            <View style={styles.shadowContainerForIos}>
-              <View style={styles.commentBoxContainer}>
-                <Avatar
-                  size="small"
-                  source={
-                    route?.params?.profileImg
-                      ? {
-                          uri: `${imageUrl}/${route?.params?.profileImg}`,
-                        }
-                      : require('../../Assets/Images/maroon-dp2.jpeg')
-                  }
-                />
-                <TouchableWithoutFeedback>
-                  <TextInput
-                    placeholder="Add a comment"
-                    numberOfLines={5}
-                    placeholderTextColor="grey"
-                    multiline={true}
-                    onChangeText={e => {
-                      setCommentText(e);
-                    }}
-                    textAlignVertical="top"
-                    value={commentText}
-                    style={styles.textInputStyles}
-                  />
-                </TouchableWithoutFeedback>
-              </View>
+            <View style={styles.descripView}>
+              <AppText
+                nol={12}
+                textAlign="left"
+                family="Poppins-Regular"
+                size={hp('1.9%')}
+                color="black"
+                Label={route.params.description}
+              />
             </View>
-            {isCommenting ? (
-              // <LottieView
-              //   style={{
-              //     width: width * 0.2,
-              //     height: height * 0.1,
-              //     marginLeft: width * 0.38,
-              //   }}
-              //   source={require('../../Assets/Lottie/red-loader.json')}
-              //   autoPlay
-              //   loop
-              // />
+          </View>
+        </>
+        <View style={styles.photosView}>
+          {/* <View style={{height: 30}} /> */}
 
-              <View
-                style={[
-                  styles.commentBtn,
-                  isCommenting && isIOS && {width: width * 0.35},
-                ]}>
-                <AppText
-                  nol={1}
-                  family="Poppins-SemiBold"
-                  size={hp('1.7%')}
-                  color="white"
-                  Label={'Commenting...'}
-                />
-              </View>
-            ) : (
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.commentBtn}
-                onPress={_onPressComment}>
-                <AppText
-                  nol={1}
-                  family="Poppins-SemiBold"
-                  size={hp('1.7%')}
-                  color="white"
-                  Label={'Comment'}
-                />
-              </TouchableOpacity>
+          <Animated.FlatList
+            bounces={false}
+            decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
+            renderToHardwareTextureAndroid
+            contentContainerStyle={{alignItems: 'center'}}
+            snapToInterval={ITEM_SIZE}
+            snapToAlignment="start"
+            onEndReachedThreshold={0.2}
+            ListFooterComponentStyle={{
+              alignSelf: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+            }}
+            horizontal
+            ref={flatListRef}
+            pagingEnabled={true}
+            onScroll={Animated.event(
+              [{nativeEvent: {contentOffset: {x: scrollX}}}],
+              {useNativeDriver: false},
             )}
-          </>
-        }
+            scrollEventThrottle={16}
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItem}
+            viewabilityConfig={{
+              minimumViewTime: 1000,
+              itemVisiblePercentThreshold: 90,
+            }}
+            keyExtractor={(item, i) => i}
+            data={route?.params?.post_url}
+            onViewableItemsChanged={onScroll}
+          />
+
+          <View style={{height: 10}} />
+
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              height: responsiveFontSize(5),
+              alignSelf: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {route?.params?.post_url?.map((item, index) => {
+              return (
+                <View
+                  style={{
+                    width: '3%',
+                    backgroundColor: 'white',
+                    height: responsiveFontSize(1.5),
+                    borderRadius: responsiveFontSize(100),
+                    borderWidth: 1,
+                    borderColor: colors.themeblue,
+                    marginHorizontal: responsiveFontSize(0.5),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  {index == ind || (ind == null && index == 0) ? (
+                    <View
+                      style={{
+                        backgroundColor: colors.themeblue,
+                        height: responsiveFontSize(0.7),
+                        width: '60%',
+                        borderRadius: responsiveFontSize(100),
+                      }}
+                    />
+                  ) : (
+                    <View
+                      style={{
+                        height: responsiveFontSize(0.7),
+                        width: '60%',
+                        borderRadius: responsiveFontSize(100),
+                      }}
+                    />
+                  )}
+                </View>
+              );
+            })}
+          </View>
+
+          <View
+            style={{
+              width: width * 0.95,
+              height: 0.4,
+              backgroundColor: 'silver',
+              top: -3,
+            }}
+          />
+        </View>
+        <View style={{
+          height:responsiveHeight(25), marginVertical:responsiveFontSize(5), 
+          paddingVertical:responsiveFontSize(2),
+          
+        }}>
+        <View style={styles.shadowContainerForIos}>
+          <View style={styles.commentBoxContainer}>
+            <Avatar
+              size="small"
+              source={
+                route?.params?.profileImg
+                  ? {
+                      uri: `${imageUrl}/${route?.params?.profileImg}`,
+                    }
+                  : require('../../Assets/Images/maroon-dp2.jpeg')
+              }
+            />
+            <TouchableWithoutFeedback>
+              <TextInput
+                placeholder="Add a comment"
+                numberOfLines={5}
+                placeholderTextColor="grey"
+                multiline={true}
+                onChangeText={e => {
+                  setCommentText(e);
+                }}
+                textAlignVertical="top"
+                value={commentText}
+                style={styles.textInputStyles}
+              />
+            </TouchableWithoutFeedback>
+          </View>
+        </View>
+        {isCommenting ? (
+          // <LottieView
+          //   style={{
+          //     width: width * 0.2,
+          //     height: height * 0.1,
+          //     marginLeft: width * 0.38,
+          //   }}
+          //   source={require('../../Assets/Lottie/red-loader.json')}
+          //   autoPlay
+          //   loop
+          // />
+
+          <View
+            style={[
+              styles.commentBtn,
+              isCommenting && isIOS && {width: width * 0.35},
+            ]}>
+            <AppText
+              nol={1}
+              family="Poppins-SemiBold"
+              size={hp('1.7%')}
+              color="white"
+              Label={'Commenting...'}
+            />
+          </View>
+        ) : (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.commentBtn}
+            onPress={_onPressComment}>
+            <AppText
+              nol={1}
+              family="Poppins-SemiBold"
+              size={hp('1.7%')}
+              color="white"
+              Label={'Comment'}
+            />
+          </TouchableOpacity>
+        )}
+        </View>
+      </View>
+      <FlatList
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: height * 0.14}}
         data={postComments}
         keyExtractor={(item, index) => index}
         renderItem={({item, index}) => {
-          
           return (
             <Comment
               item={item}
@@ -236,7 +362,7 @@ const MainPost = ({
           );
         }}
       />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -264,7 +390,7 @@ const styles = StyleSheet.create({
   },
   textView: {
     flexDirection: 'row',
-    padding: 4,
+    // padding: 4,
     justifyContent: 'space-between',
     alignContent: 'center',
     left: 5,
@@ -307,7 +433,7 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontSize: hp('1.9%'),
     minHeight: height * 0.07,
-    height:height * 0.1
+    height: height * 0.1,
   },
   commentBtn: {
     borderRadius: width * 0.03,
@@ -320,18 +446,29 @@ const styles = StyleSheet.create({
     // marginRight: width * 0.01,
     marginTop: height * 0.01,
     marginBottom: height * 0.01,
-    marginRight:width * 0.05,
+    marginRight: width * 0.05,
   },
   outerInfoView: {
     justifyContent: 'flex-start',
     flexDirection: 'column',
     width: width * 0.9,
-    paddingHorizontal: width * 0.05,
-
+    // paddingHorizontal: width * 0.05,
   },
   innerInfoView: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     marginVertical: height * 0.01,
+  },
+  photosView: {
+    justifyContent: 'center',
+    flexDirection: 'column',
+    top: height * 0.022,
+    width: width,
+    alignItems: 'center',
+    alignSelf: 'center',
+    // height: height * 0.32,
+    // marginVertical: 10,
+    // marginBottom: 10,
+    // backgroundColor:'red',
   },
 });

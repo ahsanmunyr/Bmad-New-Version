@@ -24,8 +24,8 @@ import {imageUrl} from '../../Config/Apis.json';
 import moment from 'moment';
 import {connect} from 'react-redux';
 import {useRoute} from '@react-navigation/native';
-import { colors } from '../../src/screens/drawer/constant';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import {colors} from '../../src/screens/drawer/constant';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
 const {width, height} = Dimensions.get('window');
 // const {width} = Dimensions.get('window');
@@ -56,14 +56,14 @@ const PostList = ({
   const route = useRoute();
   const routeName = route?.name;
   const flatListRef = useRef(null);
-  const [ind, onChangeIndex] = useState(null)
+  const [ind, onChangeIndex] = useState(null);
   const scrollX = React.useRef(new Animated.Value(0)).current;
   // console.log(IMAGES,"IMAGES",route?.name);
   // const isIos =
 
   const onScroll = useCallback(({viewableItems}) => {
     console.log(viewableItems[0]?.index);
-    onChangeIndex(viewableItems[0]?.index)
+    onChangeIndex(viewableItems[0]?.index);
     // onChangeIndex(viewableItems.changed[0]?.index)
   }, []);
 
@@ -74,216 +74,253 @@ const PostList = ({
 
   useEffect(() => {
     if (ind != null) {
-       
-        flatListRef?.current?.scrollToIndex({ animated: true, index: ind })
+      flatListRef?.current?.scrollToIndex({animated: true, index: ind});
     }
-}, [ind])
+  }, [ind]);
 
   return (
-    <View key={index} style={styles.postContainer}>
-      {/* Post Info View */}
-      <View style={styles.postInfoOuterView}>
-        <View style={styles.postInfoInnerView}>
-          <Avatar
-            size="medium"
-            source={
-              ProfileImg
-                ? {
-                    uri: `${imageUrl}/${ProfileImg}`,
-                  }
-                : require('../../Assets/Images/placeholderImage.png')
-            }
-          />
+    <TouchableOpacity
+      onPress={() => {
+        if (routeName === 'post') {
+          return;
+        }
+        Navigation.navigate('mainpost', {
+          name: Name,
+          description: Description,
+          profileImg: ProfileImg,
+          uploadTime: UploadTime,
+          totalLike: TotalLike,
+          comment: Comment,
+          img: Img,
+          item: item,
+          post_url: IMAGES,
+        });
+      }}>
+      <View key={index} style={styles.postContainer}>
+        {/* Post Info View */}
 
-          {/* Username Time And Like Comment View  */}
-          <View style={styles.nameDateIconsView}>
-            <View style={styles.nameAndDateView}>
-              <AppText
-                nol={1}
-                textAlign="left"
-                family="Poppins-SemiBold"
-                size={hp('1.9%')}
-                color="black"
-                Label={Name}
-              />
-
-              <AppText
-                nol={1}
-                textAlign="left"
-                family="Poppins-Regular"
-                size={hp('1.5%')}
-                color="black"
-                Label={moment(UploadTime).fromNow()}
-              />
-            </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{paddingRight: 5}}>
-                  <TouchableOpacity
-                    onPress={() => _onPressHeart(item)}
-                    activeOpacity={0.9}>
-                    {item?.is_like === 1 ? (
-                      <Icon name="heart" size={18} color="#B01125" />
-                    ) : (
-                      <Icon name="heart-o" size={18} color="#B01125" />
-                    )}
-                  </TouchableOpacity>
-                </View>
-                <AppText
-                  nol={1}
-                  textAlign="left"
-                  family="Poppins-Regular"
-                  size={hp('1.5%')}
-                  color="black"
-                  Label={TotalLike}
-                />
-              </View>
-              <TouchableOpacity
-                style={{flexDirection: 'row', left: 5}}
-                activeOpacity={0.9}
-                onPress={() => {
-                  if (routeName === 'post') {
-                    return;
-                  }
-                  Navigation.navigate('mainpost', {
-                    name: Name,
-                    description: Description,
-                    profileImg: ProfileImg,
-                    uploadTime: UploadTime,
-                    totalLike: TotalLike,
-                    comment: Comment,
-                    img: Img,
-                    item: item,
-                  });
-                }}>
-                <View style={{paddingRight: 5}}>
-                  <Icon1 name="message-outline" size={18} color="#B01125" />
-                </View>
-                <AppText
-                  nol={1}
-                  textAlign="left"
-                  family="Poppins-Regular"
-                  size={hp('1.5%')}
-                  color="black"
-                  Label={Comment}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        {/* Post Description View */}
-        <TouchableOpacity
-          onPress={() => {
-            if (routeName === 'post') {
-              return;
-            }
-            Navigation.navigate('mainpost', {
-              name: Name,
-              description: Description,
-              profileImg: ProfileImg,
-              uploadTime: UploadTime,
-              totalLike: TotalLike,
-              comment: Comment,
-              img: Img,
-              item: item,
-            });
-          }}>
-          <View style={styles.descriptionView}>
-            <AppText
-              nol={12}
-              textAlign="left"
-              family="Poppins-Regular"
-              size={hp('1.9%')}
-              color="black"
-              Label={
-                Description?.length > 100
-                  ? `${Description?.substring(0, 100)}...`
-                  : Description
+        <View style={styles.postInfoOuterView}>
+          <View style={styles.postInfoInnerView}>
+            <Avatar
+              size="medium"
+              source={
+                ProfileImg
+                  ? {
+                      uri: `${imageUrl}/${ProfileImg}`,
+                    }
+                  : require('../../Assets/Images/placeholderImage.png')
               }
             />
+
+            {/* Username Time And Like Comment View  */}
+            <View style={styles.nameDateIconsView}>
+              <View style={styles.nameAndDateView}>
+                <AppText
+                  nol={1}
+                  textAlign="left"
+                  family="Poppins-SemiBold"
+                  size={hp('1.9%')}
+                  color="black"
+                  Label={Name}
+                />
+
+                <AppText
+                  nol={1}
+                  textAlign="left"
+                  family="Poppins-Regular"
+                  size={hp('1.5%')}
+                  color="black"
+                  Label={moment(UploadTime).calendar()}
+                />
+              </View>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{paddingRight: 5}}>
+                    <TouchableOpacity
+                      onPress={() => _onPressHeart(item)}
+                      activeOpacity={0.9}>
+                      {item?.is_like === 1 ? (
+                        <Icon name="heart" size={18} color="#B01125" />
+                      ) : (
+                        <Icon name="heart-o" size={18} color="#B01125" />
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <AppText
+                    nol={1}
+                    textAlign="left"
+                    family="Poppins-Regular"
+                    size={hp('1.5%')}
+                    color="black"
+                    Label={TotalLike}
+                  />
+                </View>
+                <TouchableOpacity
+                  style={{flexDirection: 'row', left: 5}}
+                  activeOpacity={0.9}
+                  // onPress={() => {
+                  //   if (routeName === 'post') {
+                  //     return;
+                  //   }
+                  //   Navigation.navigate('mainpost', {
+                  //     name: Name,
+                  //     description: Description,
+                  //     profileImg: ProfileImg,
+                  //     uploadTime: UploadTime,
+                  //     totalLike: TotalLike,
+                  //     comment: Comment,
+                  //     img: Img,
+                  //     item: item,
+                  //   });
+                  // }}
+                >
+                  <View style={{paddingRight: 5}}>
+                    <Icon1 name="message-outline" size={18} color="#B01125" />
+                  </View>
+                  <AppText
+                    nol={1}
+                    textAlign="left"
+                    family="Poppins-Regular"
+                    size={hp('1.5%')}
+                    color="black"
+                    Label={Comment}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </TouchableOpacity>
+
+          {/* Post Description View */}
+          <TouchableOpacity
+            onPress={() => {
+              if (routeName === 'post') {
+                return;
+              }
+              Navigation.navigate('mainpost', {
+                name: Name,
+                description: Description,
+                profileImg: ProfileImg,
+                uploadTime: UploadTime,
+                totalLike: TotalLike,
+                comment: Comment,
+                img: Img,
+                item: item,
+              });
+            }}>
+            <View style={styles.descriptionView}>
+              <AppText
+                nol={12}
+                textAlign="left"
+                family="Poppins-Regular"
+                size={hp('1.9%')}
+                color="black"
+                Label={
+                  Description?.length > 100
+                    ? `${Description?.substring(0, 100)}...`
+                    : Description
+                }
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* Photos Slider  */}
+        {/* {console.log(IMAGES, "000")} */}
+        <View style={styles.photosView}>
+          <View style={{height: 30}} />
+          <Animated.FlatList
+            key={index}
+            bounces={false}
+            decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
+            renderToHardwareTextureAndroid
+            contentContainerStyle={{alignItems: 'center'}}
+            snapToInterval={ITEM_SIZE}
+            snapToAlignment="start"
+            onEndReachedThreshold={0.2}
+            ListFooterComponentStyle={{
+              alignSelf: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+            }}
+            horizontal
+            ref={flatListRef}
+            pagingEnabled={true}
+            onScroll={Animated.event(
+              [{nativeEvent: {contentOffset: {x: scrollX}}}],
+              {useNativeDriver: false},
+            )}
+            scrollEventThrottle={16}
+            showsHorizontalScrollIndicator={false}
+            renderItem={renderItem}
+            viewabilityConfig={{
+              minimumViewTime: 1000,
+              itemVisiblePercentThreshold: 90,
+            }}
+            keyExtractor={(item, i) => i}
+            data={IMAGES}
+            onViewableItemsChanged={onScroll}
+          />
+          <View style={{height: 10}} />
+
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              height: responsiveFontSize(5),
+              alignSelf: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {IMAGES?.map((item, index) => {
+              return (
+                <View
+                  style={{
+                    width: '3%',
+                    backgroundColor: 'white',
+                    height: responsiveFontSize(1.5),
+                    borderRadius: responsiveFontSize(100),
+                    borderWidth: 1,
+                    borderColor: colors.themeblue,
+                    marginHorizontal: responsiveFontSize(0.5),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  {index == ind || (ind == null && index == 0) ? (
+                    <View
+                      style={{
+                        backgroundColor: colors.themeblue,
+                        height: responsiveFontSize(0.7),
+                        width: '60%',
+                        borderRadius: responsiveFontSize(100),
+                      }}
+                    />
+                  ) : (
+                    <View
+                      style={{
+                        height: responsiveFontSize(0.7),
+                        width: '60%',
+                        borderRadius: responsiveFontSize(100),
+                      }}
+                    />
+                  )}
+                </View>
+              );
+            })}
+          </View>
+
+          <View
+            style={{
+              width: width * 0.95,
+              height: 0.4,
+              backgroundColor: 'silver',
+              top: -3,
+            }}
+          />
+        </View>
       </View>
-
-      {/* Photos Slider  */}
-      {/* {console.log(IMAGES, "000")} */}
-      <View style={styles.photosView}>
-        <View style={{height: 30}} />
-        <Animated.FlatList
-          bounces={false}
-          decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
-          renderToHardwareTextureAndroid
-          contentContainerStyle={{alignItems: 'center'}}
-          snapToInterval={ITEM_SIZE}
-          snapToAlignment="start"
-          onEndReachedThreshold={0.2}
-          ListFooterComponentStyle={{
-            alignSelf: 'center',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}
-          horizontal
-          ref={flatListRef}
-          pagingEnabled={true}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {x: scrollX}}}],
-            {useNativeDriver: false},
-          )}
-          scrollEventThrottle={16}
-          showsHorizontalScrollIndicator={false}
-          renderItem={renderItem}
-          viewabilityConfig={{
-            minimumViewTime: 1000,
-            itemVisiblePercentThreshold: 90,
-          }}
-          keyExtractor={(item, i) => i}
-          data={IMAGES}
-          onViewableItemsChanged={onScroll}
-        />
-        <View style={{height: 10}} />
-
-        <View style={{ width: '100%', flexDirection: 'row', height: responsiveFontSize(5), alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                        {
-                            IMAGES?.map((item, index) => {
-                               
-                                return (
-                                    <View style={{
-                                        width: '3%',
-                                        backgroundColor: 'white',
-                                        height: responsiveFontSize(1.5),
-                                        borderRadius: responsiveFontSize(100),
-                                        borderWidth: 1,
-                                        borderColor: colors.themeblue,
-                                        marginHorizontal: responsiveFontSize(0.5),
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}>
-                                        {
-                                            (index == ind || (ind == null && index == 0)) ?
-                                            <View style={{ backgroundColor: colors.themeblue, height: responsiveFontSize(0.7), width: '60%', borderRadius: responsiveFontSize(100) }} />:
-                                            <View style={{  height: responsiveFontSize(0.7), width: '60%', borderRadius: responsiveFontSize(100) }} />
-                                        }
-
-
-                                    </View>
-                                )
-                            })
-                        }
-                    </View>
-
-        <View
-          style={{
-            width: width * 0.95,
-            height: 0.4,
-            backgroundColor: 'silver',
-            top: -3,
-          }}
-        />
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -329,7 +366,7 @@ const styles = StyleSheet.create({
     width: width,
     alignItems: 'center',
     alignSelf: 'center',
-    height: height * 0.32,
+    // height: height * 0.32,
     // marginVertical: 10,
     // marginBottom: 10,
     // backgroundColor:'red',

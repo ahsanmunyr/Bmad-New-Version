@@ -16,10 +16,11 @@ import {imageUrl} from '../../Config/Apis.json';
 import {connect} from 'react-redux';
 import Chat from './Chat';
 import {themeRed} from '../../Assets/Colors/Colors';
+import { responsiveHeight, responsiveScreenFontSize } from 'react-native-responsive-dimensions';
 
 const {width, height} = Dimensions.get('window');
 
-function ChatStack({navigation, messagesReducer}) {
+function ChatStack({nav, messagesReducer}) {
   const Stack = createNativeStackNavigator();
   const isIos = Platform.OS === 'ios';
   const IMAGE_USER = messagesReducer?.currentChat?.chatPerson?.user_image;
@@ -29,6 +30,7 @@ function ChatStack({navigation, messagesReducer}) {
       <Stack.Screen
         name="chat"
         options={({navigation, route}) => ({
+          headerBackVisible: false,
           headerStyle: {
             borderBottomColor: 'grey',
             borderBottomWidth: 0.7,
@@ -49,16 +51,17 @@ function ChatStack({navigation, messagesReducer}) {
           headerLeft: () => (
             <TouchableOpacity
               activeOpacity={0.6}
-              onPress={() => navigation.goBack()}
-              style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Entypo name="chevron-small-left" size={35} color="white" />
+              onPress={() => navigation.openDrawer()}
+              style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 10}}>
+              {/* <Entypo name="chevron-small-left" size={35} color="white" /> */}
               {/* <View style={{padding: 10, top: 3}}> */}
               <Image
                 // resizeMode="contain"
                 style={{
-                  height: height * 0.055,
-                  width: isIos ? width * 0.12 : width * 0.1,
-                  borderRadius: width * 0.1,
+                  height: responsiveHeight(6),
+                  width: responsiveHeight(6),
+                  borderRadius: responsiveScreenFontSize(50),
+                  backgroundColor:'grey'
                 }}
                 source={
                   IMAGE_USER !== null &&

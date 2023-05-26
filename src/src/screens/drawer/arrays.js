@@ -43,6 +43,14 @@ export const ScreensArray2 = [
     component: ProceedToPay,
     notification: 0,
   },
+  {
+    route: 'Chats',
+    label: 'Chats',
+    type: Icons.Feather,
+    icon: 'user',
+    component: ChatStack,
+    notification: 0,
+  },
   // {
   //   route: 'OfferADrink',
   //   label: 'Offer a drink',

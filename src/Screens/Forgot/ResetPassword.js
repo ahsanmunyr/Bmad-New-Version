@@ -17,6 +17,7 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import Logo from './../../Components/Logo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TextInputFeild from './../../Components/TextFeild';
@@ -81,6 +82,7 @@ const ResetPassword = ({navigation, resetPassword, route}) => {
                   size={20}
                 />
                 <TextInputFeild
+                  maxLength={32}
                   placeholder="New Password"
                   value={newPassword}
                   onchange={onChangeNewPassword}
@@ -105,6 +107,7 @@ const ResetPassword = ({navigation, resetPassword, route}) => {
                   size={20}
                 />
                 <TextInputFeild
+                  maxLength={32}
                   placeholder="Confirm Password"
                   value={confirmPass}
                   onchange={onChangeNewConfirmPassword}
@@ -130,14 +133,28 @@ const ResetPassword = ({navigation, resetPassword, route}) => {
           }}>
           <TouchableOpacityBtn
             onPress={() => {
-              resetPassword(
-                {
-                  user_email: email,
-                  user_password: newPassword,
-                  confirm_user_password: confirmPass,
-                },
-                onSuccess,
-              );
+              if (newPassword === confirmPass) {
+                if (newPassword.length > 7) {
+                  resetPassword(
+                    {
+                      user_email: email,
+                      user_password: newPassword,
+                      confirm_user_password: confirmPass,
+                    },
+                    onSuccess,
+                  );
+                } else {
+                  showMessage({
+                    message: 'The length of the password is too short.',
+                    type: 'danger',
+                  });
+                }
+              } else {
+                showMessage({
+                  message: 'Password not match',
+                  type: 'danger',
+                });
+              }
             }}
             title="Reset"
           />

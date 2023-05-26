@@ -9,9 +9,9 @@ import messaging from '@react-native-firebase/messaging';
 export const postAction =
   (caption, images, id, navigation, clearAllStates, _onPostFailed) =>
   async dispatch => {
-    console.log({
-      id,
-    });
+    // console.log({
+    //   id,
+    // });
     var bodyFormData = new FormData();
 
     if (images) {
@@ -42,7 +42,7 @@ export const postAction =
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res, '===============================');
+        // console.log(res, '===============================');
         if (res.success) {
           showMessage({
             message: 'Posted!',
@@ -169,9 +169,9 @@ export const nearMeUsers = (latitude, longitude, userId) => async dispatch => {
 };
 
 export const loginUser = (email, password, onLoginFailed) => async dispatch => {
-  console.log(email, password);
+  // console.log(email, password);
   try {
-    console.log(`${api}/api/auth/login`);
+    // console.log(`${api}/api/auth/login`);
     const response = await axios.post(`${api}/api/auth/login`, {
       email: email,
       password: password,
@@ -203,16 +203,16 @@ export const loginUser = (email, password, onLoginFailed) => async dispatch => {
       danger: 'error',
     });
     console.log('Login Failed', error);
-    console.log('Login Failed', error.message);
+    // console.log('Login Failed', error.message);
   }
 };
 
 export const forgotPassword = (data, onSuccess) => async dispatch => {
   try {
     const URL = `${api}/api/auth/forgotpassword`;
-    console.log(URL, data);
+    // console.log(URL, data);
     const response = await axios.post(URL, data);
-    console.log(response.data, '==========');
+    // console.log(response.data, '==========');
     if (response.data.success) {
       showMessage({
         message: 'Success!',
@@ -241,9 +241,9 @@ export const forgotPassword = (data, onSuccess) => async dispatch => {
 export const verfifyForgotCode = (data, onSuccess) => async dispatch => {
   try {
     const URL = `${api}/api/auth/verifyToken`;
-    console.log(URL, data);
+    // console.log(URL, data);
     const response = await axios.post(URL, data);
-    console.log(response.data, '==========');
+    // console.log(response.data, '==========');
 
     if (response.data.success) {
       showMessage({
@@ -272,7 +272,7 @@ export const verfifyForgotCode = (data, onSuccess) => async dispatch => {
 export const resetPassword = (data, onSuccess) => async dispatch => {
   try {
     const URL = `${api}/api/auth/resetPassword`;
-    console.log(URL, data);
+    // console.log(URL, data);
     const response = await axios.post(URL, data);
 
     if (response.data.status || response.data.success) {
@@ -325,7 +325,7 @@ export const Otp = (otp, number, fadeChange) => async dispatch => {
         // alert("error")
       }
     } else {
-      console.log(number, 'ACTION');
+      // console.log(number, 'ACTION');
       // let payload = { phonenumber: number, channel: 'sms' };
       const response = await axios.get(`${api}/api/auth/otp`, {
         params: {
@@ -333,7 +333,7 @@ export const Otp = (otp, number, fadeChange) => async dispatch => {
           channel: 'sms',
         },
       });
-      console.log('OTP API RESPONSE');
+      // console.log('OTP API RESPONSE');
       if (response.data.message === 'Verification is sent!!') {
         // console.log(response.data.message)
         fadeChange();
@@ -369,20 +369,20 @@ export const SignUpStepOne =
     long,
   ) =>
   async dispatch => {
-    console.log(
-      'From Actions :::: ',
-      username,
-      email,
-      phoneNumber,
-      password,
-      obj,
-      gender,
-      otp,
-      'lat:',
-      lat,
-      'long:',
-      long,
-    );
+    // console.log(
+    //   'From Actions :::: ',
+    //   username,
+    //   email,
+    //   phoneNumber,
+    //   password,
+    //   obj,
+    //   gender,
+    //   otp,
+    //   'lat:',
+    //   lat,
+    //   'long:',
+    //   long,
+    // );
     try {
       const data = {
         user_name: username,
@@ -541,7 +541,7 @@ export const SignupAll =
         social_login: 'USER_AUTH',
       };
       const URL = `${api}/api/auth/register`;
-      console.log(URL);
+      // console.log(URL);
       const response = await axios.post(URL, apiData);
       if (response.data.success) {
         dispatch({
@@ -580,7 +580,7 @@ export const likePost = data => async dispatch => {
   try {
     const response = await axios.post(`${api}/api/post/like`, data);
     if (response.data.status) {
-      console.log(response.data);
+      // console.log(response.data);
       dispatch({
         type: types.LIKE_UNLIKE_POST,
         payload: {
@@ -607,11 +607,11 @@ export const likePost = data => async dispatch => {
 };
 
 export const likePostFromScreen = data => async dispatch => {
-  console.log('dffsf======');
+
   try {
     const response = await axios.post(`${api}/api/post/like`, data);
     if (response.data.success) {
-      console.log(response.data, 'Liked from Screeen!!!');
+      // console.log(response.data, 'Liked from Screeen!!!');
       dispatch({
         type: types.LIKE_POST_FROM_SCREEN,
         payload: {
@@ -625,7 +625,7 @@ export const likePostFromScreen = data => async dispatch => {
         description: 'Can not like post, try again.',
         danger: 'error',
       });
-      console.log('fail');
+      // console.log('fail');
     }
   } catch (error) {
     showMessage({
@@ -704,12 +704,12 @@ export const saveSocketRef = socketRef => dispatch => {
 export const getUserData = (userId, friendId) => async dispatch => {
   try {
     const url = `${api}/api/post/friendData?user_id=${userId}&friend_id=${friendId}`;
-    console.log(url);
+    // console.log(url);
     // const url = `${api}/api/auth/userInfo?user_id=${id}`;
 
     const response = await axios.get(url);
 
-    console.log(response?.data, 'Response of user data ');
+    // console.log(response?.data, 'Response of user data ');
     if (response?.data?.success === true) {
       dispatch({
         type: types.SAVE_NEAR_ME_USER_DATA,
@@ -734,9 +734,9 @@ export const connectUser =
         `${api}/api/friends/friendRequest`,
         data,
       );
-      console.log(response.data, 'Response of sending request');
+      // console.log(response.data, 'Response of sending request');
       if (response?.data?.success === true) {
-        console.log('Request Sent');
+        // console.log('Request Sent');
         showMessage({
           message: 'Offer requested, Wait for his/her approval.',
           type: 'success',
@@ -782,7 +782,7 @@ export const deductDrinksAfterRequestSent = () => dispatch => {
 export const getAllConnections = userId => async dispatch => {
   try {
     const URL = `${api}/api/friends/friendList/${userId}`;
-    console.log(URL);
+    // console.log(URL);
     const response = await axios.get(URL);
     if (response.data.success) {
       console.log('Connnections Retrieved!!!');
@@ -855,7 +855,7 @@ export const getInvites = userId => async dispatch => {
     const response = await axios.get(
       `${api}/api/friends/pendingList/${userId}`,
     );
-    console.log(response.data);
+    // console.log(response.data);
     if (response.data.success) {
       // console.log(response.data.status, 'Invitations Retrieved!!!');
       // console.log('Total Invitations: ', response.data.data);
@@ -883,9 +883,9 @@ export const getInvites = userId => async dispatch => {
 export const acceptInvite = data => async dispatch => {
   try {
     const response = await axios.post(`${api}/api/friends/acceptFriend`, data);
-    console.log(response.data);
+    // console.log(response.data);
     if (response.data.success) {
-      console.log(response.data);
+      // console.log(response.data);
       dispatch({
         type: types.ACCEPT_FRIEND,
         payload: data,
@@ -915,7 +915,7 @@ export const ignoreInvite = data => async dispatch => {
   try {
     const response = await axios.post(`${api}/api/friends/rejectFriend`, data);
     if (response.data.status) {
-      console.log(response.data);
+      // console.log(response.data);
       dispatch({
         type: types.REJECT_FRIEND,
         payload: data,
@@ -939,7 +939,7 @@ export const ignoreInvite = data => async dispatch => {
 
 export const unfriendUserFromProfile =
   (data, _onSuccessOfAction) => async dispatch => {
-    console.log(data, ' api data of unfriend');
+    // console.log(data, ' api data of unfriend');
     try {
       const response = await axios.post(`${api}/api/friends/unFriend`, data);
       if (response.data.status) {
@@ -969,7 +969,7 @@ export const unfriendUser = data => async dispatch => {
   try {
     const response = await axios.post(`${api}/api/friends/unFriend`, data);
     if (response.data.status) {
-      console.log(response.data);
+      // console.log(response.data);
       dispatch({
         type: types.UNFRIEND,
         payload: data,
@@ -993,7 +993,7 @@ export const unfriendUser = data => async dispatch => {
 
 export const cancelOfferFromProfile =
   (data, _onSuccessOfAction) => async dispatch => {
-    console.log(data);
+    // console.log(data);
     try {
       const response = await axios.post(
         `${api}/api/friends/cancelRequest`,
@@ -1030,7 +1030,7 @@ export const cancelMyRequestSent = data => async dispatch => {
   try {
     const response = await axios.post(`${api}/api/friends/cancelRequest`, data);
     if (response.data.status) {
-      console.log(response.data);
+      // console.log(response.data);
       dispatch({
         type: types.CANCEL_REQUEST_SENT,
         payload: data,
@@ -1055,9 +1055,9 @@ export const cancelMyRequestSent = data => async dispatch => {
 export const buyMoreDrinks = (data, _closeStripeModal) => async dispatch => {
   try {
     const response = await axios.post(`${api}/api/checout/create`, data);
-    console.log(response);
+    // console.log(response);
     if (response.data.success) {
-      console.log(response.data, 'Bought Drinks!!!!!!!');
+      // console.log(response.data, 'Bought Drinks!!!!!!!');
       dispatch({
         type: types.BUY_DRINKS,
         payload: data.coins,
@@ -1107,8 +1107,8 @@ export const getNotifications = userId => async dispatch => {
       `${api}/api/post/getNotification?user_id=${userId}`,
     );
     if (response.data.status) {
-      console.log(response.data.status, 'Notifications Retrieved!!!');
-      console.log('Total Notifications: ', response.data.data.length);
+      // console.log(response.data.status, 'Notifications Retrieved!!!');
+      // console.log('Total Notifications: ', response.data.data.length);
       dispatch({
         type: types.GET_NOTIFICATIONS,
         payload: response.data.data,
@@ -1137,7 +1137,7 @@ export const getPostById = (postId, userId) => async dispatch => {
     );
     // console.log(JSON.stringify(response.data,null,2));
     if (response.data.success) {
-      console.log(response.data, 'Post Retrieved!!!');
+      // console.log(response.data, 'Post Retrieved!!!');
 
       dispatch({
         type: types.GET_POST,
@@ -1163,7 +1163,7 @@ export const getPostById = (postId, userId) => async dispatch => {
 export const sendMessage = (message, onSuccess) => async dispatch => {
   const url = `${api}/api/messages/addMessage`;
   const response = await axios.post(url, message);
-  console.log(response.data);
+  // console.log(response.data);
   try {
     if (response.data.success) {
       console.log('Messages Sent!!!');
@@ -1211,7 +1211,7 @@ export const getMessages = (data, currentChat) => async dispatch => {
   // const url = `${api}/api/messages/${messageId}`;
   // console.log(url, ':url');
   const response = await axios.get(url);
-  console.log('Messages Retrieved!!!', response.data.data.length);
+  // console.log('Messages Retrieved!!!', response.data.data.length);
   try {
     if (response.data.success) {
       dispatch({
@@ -1242,7 +1242,7 @@ export const getMessages = (data, currentChat) => async dispatch => {
 export const getAllConversations = userId => async dispatch => {
   try {
     const URL = `${api}/api/conversation/${userId}`;
-    console.log(URL);
+    // console.log(URL);
     const response = await axios.get(URL);
     if (response.data.success) {
       console.log('Conversations Retrieved!!!');
@@ -1285,7 +1285,7 @@ export const createConversation =
             chatPerson: chatPerson,
           },
         });
-        console.log('Conversation created!!!');
+        // console.log('Conversation created!!!');
         _onSuccess();
       } else {
         showMessage({
@@ -1307,7 +1307,7 @@ export const createConversation =
 
 export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
   try {
-    console.log(data.imageObj, 'data.imageObjdata.imageObjdata.imageObj');
+    // console.log(data.imageObj, 'data.imageObjdata.imageObjdata.imageObj');
     var formData = new FormData();
     if (data?.imageObj !== null) {
       formData.append('post_file', {
@@ -1316,14 +1316,14 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
         type: data.imageObj.mime,
       });
     } else {
-      console.log('Old image going in api');
+      // console.log('Old image going in api');
     }
 
     formData.append('user_id', data.user_id);
     formData.append('user_name', data.user_name);
     formData.append('user_contact', data.user_contact);
     formData.append('user_lives', data.user_lives);
-    formData.append('country_code', '+92');
+    formData.append('country_code', data.country_code);
 
 
     const URL = `${api}/api/post/editProfile`;
@@ -1337,8 +1337,9 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res, '===============================');
+      
         if (res.status) {
+
           dispatch({
             type: types.UPDATE_PROFILE,
             payload: {
@@ -1416,14 +1417,14 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
     //   });
     // }
   } catch (error) {
-    console.log(error, 'error');
+    // console.log(error, 'error');
     _onFailed();
     showMessage({
       message: 'Failed to update!, Network Error',
       danger: 'error',
     });
     console.log('Network Error', error.message);
-    console.log('Network Error', error.response.data);
+    // console.log('Network Error', error.response.data);
   }
 };
 

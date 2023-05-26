@@ -41,7 +41,7 @@ const FavouriteList = ({Name, Value, Images, Id, Favourite}) => {
     Favourite(favourites);
     // console.log(interests)
   };
-  console.log(Name.indexOf(' '));
+  // console.log(Name.indexOf(' '));
   return (
     <View
       style={{
