@@ -56,6 +56,7 @@ const ConnectionStack = ({navigation}) => {
       <Stack.Screen
         name="profile"
         options={({route}) => ({
+          headerBackVisible: false,
           headerStyle: {
             borderBottomColor: themeRed,
             borderBottomWidth: 2,

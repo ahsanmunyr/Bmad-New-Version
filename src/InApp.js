@@ -66,14 +66,14 @@ const MainAppScreens = ({
   appendDataToNotifications,
 }) => {
  
-  const socket = useRef();
+  // const socket = useRef();
   const USER_ID = userReducer?.data?.user_id;
 
   useEffect(() => {
     // @ts-ignore
-    socket.current = io('https://46a9-110-93-244-255.ap.ngrok.io');
+    // socket.current = io('https://46a9-110-93-244-255.ap.ngrok.io');
     // console.log("=================",socket.current)
-    saveSocketRef(socket.current);
+    // saveSocketRef(socket.current);
     // registerAppWithFCM()
     messaging()
       .subscribeToTopic('bmad' + userReducer?.data?.user_id?.toString())

@@ -27,7 +27,7 @@ const {width, height} = Dimensions.get('window');
 
 function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
   const isFocused = useIsFocused();
-  const socket = useRef();
+  // const socket = useRef();
   const [text, setText] = useState('');
   const userId = userReducer?.data?.user_id;
   const [messages, setMessages] = useState([]);
@@ -42,66 +42,29 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
     sender: userId,
     receiver: CURRENT_CHAT?.chatPerson?.user_id,
   };
-  const socketRef = userReducer?.socket;
-  // const [socketRef, setSocketRef] = useState()
-
-  // socketRef = io('http://webprojectmockup.com:9444');
+  // const socketRef = userReducer?.socket;
 
   // useEffect(() => {
+ 
   //   socketRef.emit('addUser', userId);
-  //   // socketRef.on('getusers', users => console.log(users));
-  // }, [userId]);
+  //   let id = socketRef.emit('addUser', userId);
+  //   socketRef.on('getMessage', data => {
+  //     console.log(data, 'Text Recieved========');
+  //     setarrivalMessage({
+  //       _id: data?.id,
+  //       text: data?.text,
+  //       createdAt: new Date(),
+  //       user: {
+  //         _id: chatPersonId,
+  //         name: CURRENT_CHAT?.chatPerson?.user_name,
+  //         avatar: `${imageUrl}/${CURRENT_CHAT?.chatPerson?.user_image}`,
+  //       },
+  //     });
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    console.log(userId, "userId",  socketRef.emit('addUser', userId));
-    socketRef.emit('addUser', userId);
-    let id = socketRef.emit('addUser', userId)
-    console.log(id.id, "=========================");
-    socketRef.on('getMessage', data => {
-      console.log(data, 'Text Recieved========');
-      setarrivalMessage({
-        _id: data?.id,
-        text: data?.text,
-        createdAt: new Date(),
-        user: {
-          _id: chatPersonId,
-          name: CURRENT_CHAT?.chatPerson?.user_name,
-          avatar: `${imageUrl}/${CURRENT_CHAT?.chatPerson?.user_image}`,
-        },
-      });
-    });
-    // });
-    // return () => {
-    //   console.log('Socket Disconnected.');
 
-    // };
-  }, []);
-
-  // useEffect(() => {
-  //   if (isFocused === false) {
-  //     setMessages([]);
-  //     socketRef.disconnect();
-  //     console.log('Socket disconnected');
-  //   }
-  // }, [isFocused]);
-  // useEffect(() => {
-  //   socketRef = io('http://webprojectmockup.com:9444');
-
-  //   socketRef.emit('addUser', userId);
-  // }, [userId]);
-
-  // const getDuplicates = key => {
-  //   const keys = messages.map(item => item[key]);
-  //   return keys.filter(key => keys.indexOf(key) !== keys.lastIndexOf(key));
-  // };
-
-  // useEffect(async () => {
-  //   if (isFocused && conversationId !== null && conversationId !== undefined) {
-  //     await getMessages(conversationId);
-  //   }
-  // }, [isFocused, conversationId]);
-  // console.log(JSON.stringify(messages, null, 2));
-  useEffect(async () => {
+  async function getMessageIsFocused(isFocused) {
     if (
       isFocused &&
       userId !== null &&
@@ -113,14 +76,25 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
     }
     if (isFocused === false) {
       setMessages([]);
+      // socketRef.disconnect();
+      // socketRef.off('disconnect');
     }
+  }
+
+  useEffect(() => {
+    getMessageIsFocused(isFocused);
+
+    return () => {
+      // socketRef.disconnect();
+      // socketRef.off('disconnect');
+    };
   }, [isFocused]);
 
   useEffect(() => {
     setMessages(messagesReducer?.messages);
   }, [messagesReducer?.messages]);
 
-  const handlesend = useCallback(async () => {
+  async function callBack(){
     const messageToBeSend = {
       receiver: chatPersonId,
       sender: userId,
@@ -130,9 +104,11 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
     setSaveText(text);
     console.log(messageToBeSend);
     await sendMessage(messageToBeSend, onSucces);
+  }
 
-    // getMessages(apiData,CURRENT_CHAT);
-  });
+  const handlesend = useCallback(() => {
+    callBack()
+  },[]);
 
   useEffect(() => {
     if (id !== null) {
@@ -147,12 +123,12 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
           name: userReducer?.data?.user_name,
         },
       };
-      socketRef.emit('sendMessage', {
-        receiverId: chatPersonId,
-        senderId: userId,
-        text: saveText,
-        id: id,
-      });
+      // socketRef.emit('sendMessage', {
+      //   receiverId: chatPersonId,
+      //   senderId: userId,
+      //   text: saveText,
+      //   id: id,
+      // });
       console.log(messageToAppend, 'message To Append');
       setMessages(prev => [messageToAppend, ...prev]);
       // setText('');
@@ -268,7 +244,8 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
                     // },
                     // shadowOpacity: 0.41,
                     // shadowRadius: 9.11,
-                    borderWidth:1, borderColor:'silver'
+                    borderWidth: 1,
+                    borderColor: 'silver',
                     // elevation: 14,
                   },
                 }}

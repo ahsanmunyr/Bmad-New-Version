@@ -12,6 +12,7 @@ import {imageUrl} from '../../Config/Apis.json';
 import {themeRed} from '../../Assets/Colors/Colors';
 import * as actions from '../../Store/Actions/index';
 import {connect} from 'react-redux';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 
 const {width, height} = Dimensions.get('window');
 
@@ -66,9 +67,9 @@ const ConnectionsMapper = ({
               : {uri: `${imageUrl}/${item.user_image}`}
           }
           style={{
-            width: isIOS ? width * 0.19 : width * 0.16,
-            height: height * 0.09,
-            borderRadius: width * 0.1,
+            width: responsiveFontSize(8),
+            height: responsiveFontSize(8),
+            borderRadius: responsiveFontSize(50),
           }}
         />
       </TouchableOpacity>

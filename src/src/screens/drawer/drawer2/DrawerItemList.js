@@ -43,11 +43,8 @@ const DrawerItemList = ({state, descriptors, navigation, styles}) => {
             type: 'tabPress',
             target: route.key,
           });
-          // console.log(isFocused, "isFocused");
 
-          // navigation.dispatch(resetAction);
           if (!event.defaultPrevented) {
-            // alert(route.name)
             if (route.name == 'home') {
               navigation.dispatch(
                 CommonActions.reset({
@@ -55,12 +52,24 @@ const DrawerItemList = ({state, descriptors, navigation, styles}) => {
                   routes: [{name: 'home'}],
                 }),
               );
-              // navigation.dispatch(resetAction);
+            } else if(route.name == 'profile'){
+              console.log(route.name, "route.name========================================================================");
+              navigation.navigate(route.name);
             } else {
               navigation.navigate(route.name);
             }
 
-            // navigation.navigate(route.name);
+            // if (route.name == 'home') {
+            //   navigation.dispatch(
+            //     CommonActions.reset({
+            //       index: 1,
+            //       routes: [{name: 'home'}],
+            //     }),
+            //   );
+            // } else {
+            //   navigation.navigate(route.name);
+            // }
+
           }
         };
         {
