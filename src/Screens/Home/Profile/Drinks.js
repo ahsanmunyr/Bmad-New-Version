@@ -34,10 +34,13 @@ const Drinks = ({navigation, userReducer, buyMoreDrinks}) => {
   console.log(route.name);
 
   const _onPressBuyDrinks = async () => {
+
+    let drinkConvert = Math.round(drinks)
+
     const apiData = {
       user_id: userReducer?.data?.user_id,
-      coins: Number(drinks),
-      amount: Number(drinks),
+      coins: Number(drinkConvert),
+      amount: Number(drinkConvert),
       token: stripeGeneratedKey,
     };
     console.log(apiData);

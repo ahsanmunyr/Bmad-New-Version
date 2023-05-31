@@ -57,11 +57,11 @@ const BuyDrinksModal = ({
             backgroundColor: 'white',
             width: width * 0.55,
             paddingHorizontal: width * 0.03,
-            paddingBottom:height * 0.007,
+            paddingBottom: height * 0.007,
             marginVertical: height * 0.02,
             fontFamily: 'Poppins-Medium',
             borderRadius: width * 0.008,
-            fontSize: width * 0.030,
+            fontSize: width * 0.03,
           }}
           onChangeText={e => {
             if (Number(e) <= 5) {
@@ -78,7 +78,7 @@ const BuyDrinksModal = ({
           color="white"
           Label={'Maximum drinks: 05'}
         />
-        <View style={{flexDirection:'row',}}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
@@ -106,8 +106,8 @@ const BuyDrinksModal = ({
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
-              setDrinks("")
-              setIsModalVisible(false)
+              setDrinks('');
+              setIsModalVisible(false);
             }}
             style={{
               marginTop: height * 0.03,
@@ -115,7 +115,7 @@ const BuyDrinksModal = ({
               width: width * 0.38,
               paddingVertical: height * 0.015,
               borderRadius: width * 0.1,
-              marginLeft:10
+              marginLeft: 10,
             }}>
             <AppText
               nol={2}

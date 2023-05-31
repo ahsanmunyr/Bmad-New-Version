@@ -1,6 +1,6 @@
 // @ts-nocheck
 import axios from 'axios';
-import {api, deploy_API} from '../../Config/Apis.json';
+import {api} from '../../Config/Apis.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as types from './actionType';
 import {showMessage, hideMessage} from 'react-native-flash-message';

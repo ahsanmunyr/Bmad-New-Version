@@ -28,6 +28,7 @@ import {
   launchImageLibrary,
   launchCamera,
 } from 'react-native-image-picker';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import ImagePickerMultiple from 'react-native-image-crop-picker';
 import AppText from '../../Components/AppText';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -112,17 +113,32 @@ const NewPostScreen = ({
   };
 
   const newPost = async () => {
-    if (caption && filePath) {
-      setLoading(true);
-      await postAction(
-        // tags,
-        caption,
-        filePath,
-        userReducer?.data?.user_id,
-        navigation,
-        clearAllStates,
-        _onPostFailed,
-      );
+
+    if(caption.length > 0){
+      if (caption && filePath) {
+        setLoading(true);
+        await postAction(
+          // tags,
+          caption,
+          filePath,
+          userReducer?.data?.user_id,
+          navigation,
+          clearAllStates,
+          _onPostFailed,
+        );
+      }else{
+        showMessage({
+          message: 'Please select the image',
+          // description: '',
+          danger: 'error',
+        });
+      }
+    } else{
+      showMessage({
+        message: 'Description require',
+        // description: '',
+        danger: 'error',
+      });
     }
     // getNotifications(7)
   };
@@ -177,9 +193,9 @@ const NewPostScreen = ({
               style={{
                 backgroundColor: 'white',
                 borderRadius: 3,
-                // elevation: 9,
+       
                 zIndex: 199,
-                // flex: 1,
+           
                 shadowColor: '#000',
                 shadowOffset: {
                   width: 0,
@@ -189,13 +205,11 @@ const NewPostScreen = ({
                 shadowRadius: 3.84,
 
                 elevation: 5,
-                height: responsiveHeight(24),
-                width: 190,
+                height: responsiveHeight(30),
+                width: responsiveWidth(50),
                 justifyContent: 'center',
                 alignContent: 'center',
-                marginLeft: 20,
-                marginTop: 10,
-                marginRight: 20,
+                margin: responsiveScreenFontSize(1.5),
               }}>
               <View
                 style={{
@@ -228,8 +242,10 @@ const NewPostScreen = ({
                           alignItems: 'flex-start',
                           alignContent: 'center',
                           // padding: 12,
-                          height: responsiveHeight(30),
-                          width: 210,
+                          // backgroundColor:'red',
+                          paddingHorizontal: 10,
+                          height: responsiveHeight(31),
+                          // width: responsiveWidth(50),
                           // borderWidth: 1, borderColor:'grey'
                         }}>
                         <TouchableOpacity
@@ -265,12 +281,12 @@ const NewPostScreen = ({
                           </View>
                         </TouchableOpacity>
                         <Image
-                          resizeMode="cover"
+                          resizeMode='cover'
                           key={index}
                           source={item}
                           style={{
-                            width: 180,
-                            height: 200,
+                            height: responsiveHeight(30.5),
+                            width: responsiveWidth(50),
                             marginHorizontal: 3,
                             // top: 8,
 

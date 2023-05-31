@@ -30,7 +30,7 @@ import * as actions from '../../Store/Actions';
 import UserProfileMarker from './../../Components/UserProfileMarker';
 import YourImage from './../../Assets/Images/pic5.png';
 import {Avatar} from 'react-native-elements';
-import {googleMapKey, deploy_API} from './../../Config/Apis.json';
+import {googleMapKey} from './../../Config/Apis.json';
 import LottieView from 'lottie-react-native';
 import {themeRed} from '../../Assets/Colors/Colors';
 import {useIsFocused} from '@react-navigation/native';

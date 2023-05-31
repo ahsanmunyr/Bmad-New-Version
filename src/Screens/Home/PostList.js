@@ -77,9 +77,10 @@ const PostList = ({
       flatListRef?.current?.scrollToIndex({animated: true, index: ind});
     }
   }, [ind]);
-
+  console.log(item?.post_id, 'item?.id');
   return (
     <TouchableOpacity
+      key={item?.post_id}
       onPress={() => {
         if (routeName === 'post') {
           return;
@@ -96,7 +97,7 @@ const PostList = ({
           post_url: IMAGES,
         });
       }}>
-      <View key={index} style={styles.postContainer}>
+      <View       key={item?.post_id} style={styles.postContainer}>
         {/* Post Info View */}
 
         <View style={styles.postInfoOuterView}>
@@ -210,7 +211,7 @@ const PostList = ({
             }}>
             <View style={styles.descriptionView}>
               <AppText
-                nol={12}
+                nol={3}
                 textAlign="left"
                 family="Poppins-Regular"
                 size={hp('1.9%')}
@@ -227,10 +228,10 @@ const PostList = ({
 
         {/* Photos Slider  */}
         {/* {console.log(IMAGES, "000")} */}
-        <View style={styles.photosView}>
+        <View key={item?.post_id} style={styles.photosView}>
           <View style={{height: 30}} />
           <Animated.FlatList
-            key={index}
+            key={item?.post_id}
             bounces={false}
             decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
             renderToHardwareTextureAndroid
@@ -258,7 +259,7 @@ const PostList = ({
               minimumViewTime: 1000,
               itemVisiblePercentThreshold: 90,
             }}
-            keyExtractor={(item, i) => i}
+            keyExtractor={(item, i) => i.toString()}
             data={IMAGES}
             onViewableItemsChanged={onScroll}
           />
@@ -374,13 +375,14 @@ const styles = StyleSheet.create({
   nameAndDateView: {
     justifyContent: 'flex-start',
     flexDirection: 'column',
-    // backgroundColor:'red'
+    // backgroundColor:'red',
   },
   postInfoInnerView: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
+    alignItems: 'center',
     // backgroundColor: 'green',
-    width: width * 0.93,
+    // width: width * 0.93,
   },
 });
 export default connect(mapStateToProps, actions)(PostList);

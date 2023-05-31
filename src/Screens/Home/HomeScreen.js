@@ -305,13 +305,13 @@ const HomeScreen = ({
                   /> */}
                   </View>
                   <FlatList
-                    // contentContainerStyle={styles.innerFlatlistContentStyle}
+                
                     showsHorizontalScrollIndicator={false}
                     data={usersNearmeReducer?.allUsers}
                     horizontal
                     keyExtractor={(item, index) => index}
                     renderItem={({item, index}) => {
-                      // console.log(`${imageUrl}/${item?.user_image}`)
+                    
                       return (
                         <TouchableOpacity
                           key={index}

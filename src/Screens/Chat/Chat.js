@@ -53,8 +53,10 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
   // }, [userId]);
 
   useEffect(() => {
+    console.log(userId, "userId",  socketRef.emit('addUser', userId));
     socketRef.emit('addUser', userId);
-
+    let id = socketRef.emit('addUser', userId)
+    console.log(id.id, "=========================");
     socketRef.on('getMessage', data => {
       console.log(data, 'Text Recieved========');
       setarrivalMessage({
