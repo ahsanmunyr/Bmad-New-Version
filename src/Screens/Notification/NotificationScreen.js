@@ -72,6 +72,7 @@ const NotificationScreen = ({
       />
     );
   };
+  
 
   useEffect(() => {
     setNotifications([

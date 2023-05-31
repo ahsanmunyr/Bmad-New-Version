@@ -9,6 +9,7 @@ import Location from 'react-native-vector-icons/MaterialIcons';
 import Notification from 'react-native-vector-icons/Ionicons';
 import {colors} from './src/screens/drawer/constant';
 import NotificationStack from './Screens/Notification/NotificationStack';
+import {connect} from 'react-redux';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -20,8 +21,26 @@ import ReportIcon from 'react-native-vector-icons/Feather';
 import {useEffect} from 'react';
 import {useState} from 'react';
 
-function CustomTabBar({dataProps, state, descriptors, navigation}) {
+function CustomTabBar({
+  dataProps,
+  state,
+  descriptors,
+  navigation,
+  userReducer,
+  notificationsReducer,
+}) {
+  console.log(notificationsReducer?.unreadNoti, 'unreadNoti');
   const [change, onChange] = useState(false);
+  const [hasNewRequests, setHasNewRequests] = useState(false);
+
+  useEffect(() => {
+    if (notificationsReducer?.unreadNoti > 0) {
+      setHasNewRequests(true);
+    } else {
+      setHasNewRequests(false);
+    }
+  }, [notificationsReducer?.unreadNoti]);
+
   function renderIcon(route, isFocues) {
     // console.log(route, 'route');
     switch (route) {
@@ -51,11 +70,30 @@ function CustomTabBar({dataProps, state, descriptors, navigation}) {
         );
       case 'notification':
         return (
-          <Notification
-            name="notifications-outline"
-            size={responsiveFontSize(2.75)}
-            color={isFocues ? colors.themeblue : colors.lightGray}
-          />
+          <>
+            {hasNewRequests && (
+              <View
+                style={{
+                  width: responsiveFontSize(1.5),
+                  height: responsiveFontSize(1.5),
+                  backgroundColor: colors.themeblue,
+                  borderRadius: responsiveFontSize(50),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  position: 'absolute',
+                  top: 10,
+                  right: responsiveScreenFontSize(3.1),
+                  zIndex: 9999,
+                }}
+              />
+            )}
+
+            <Notification
+              name="notifications-outline"
+              size={responsiveFontSize(2.75)}
+              color={isFocues ? colors.themeblue : colors.lightGray}
+            />
+          </>
         );
 
       case 'BMAD':
@@ -110,7 +148,15 @@ function CustomTabBar({dataProps, state, descriptors, navigation}) {
         borderBottomRightRadius: responsiveFontSize(2),
         position: 'absolute',
         bottom: 10,
-        elevation: 0, // <-- this is the solution
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
       }}>
       {state.routes.map((route, index) => {
         if (false) {
@@ -224,8 +270,14 @@ function CustomTabBar({dataProps, state, descriptors, navigation}) {
     </View>
   );
 }
+function mapStateToProps({userReducer, notificationsReducer}) {
+  return {
+    userReducer,
+    notificationsReducer,
+  };
+}
 
-export default CustomTabBar;
+export default connect(mapStateToProps, null)(CustomTabBar);
 
 {
   /* <TouchableOpacity

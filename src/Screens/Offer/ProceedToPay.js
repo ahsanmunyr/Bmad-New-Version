@@ -24,6 +24,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {CommonActions} from '@react-navigation/native';
 
 const ProceedToPay = ({navigation}) => {
   return (
@@ -94,7 +95,13 @@ const ProceedToPay = ({navigation}) => {
               <TouchableOpacity
                 onPress={() => {
                   // navigation.navigate('nearme');
-                  navigation.goBack()
+                  // navigation.goBack()
+                  navigation.dispatch(
+                    CommonActions.reset({
+                      index: 1,
+                      routes: [{name: 'home'}],
+                    }),
+                  );
                 }}
                 style={styles.touchableOpacity}>
                 <AppText
