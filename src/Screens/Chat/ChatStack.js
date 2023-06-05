@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import {
   Dimensions,
   TouchableOpacity,
@@ -7,29 +7,30 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 // import {createStackNavigator} from '@react-navigation/stack';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {imageUrl} from '../../Config/Apis.json';
-import {connect} from 'react-redux';
+import { imageUrl } from '../../Config/Apis.json';
+import { connect } from 'react-redux';
 import Chat from './Chat';
-import {themeRed} from '../../Assets/Colors/Colors';
+import { themeRed } from '../../Assets/Colors/Colors';
 import { responsiveHeight, responsiveScreenFontSize } from 'react-native-responsive-dimensions';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-function ChatStack({nav, messagesReducer}) {
+function ChatStack({ nav, messagesReducer }) {
   const Stack = createNativeStackNavigator();
   const isIos = Platform.OS === 'ios';
   const IMAGE_USER = messagesReducer?.currentChat?.chatPerson?.user_image;
-
+  const Nav = useNavigation()
   return (
     <Stack.Navigator initialRouteName="chatStack">
       <Stack.Screen
         name="chat"
-        options={({navigation, route}) => ({
+        options={({ navigation, route }) => ({
           headerBackVisible: false,
           headerStyle: {
             borderBottomColor: 'grey',
@@ -50,10 +51,11 @@ function ChatStack({nav, messagesReducer}) {
           headerTransparent: false,
           headerLeft: () => (
             <TouchableOpacity
+              // disabled={true}
               activeOpacity={0.6}
-              onPress={() => navigation.openDrawer()}
-              style={{flexDirection: 'row', alignItems: 'center', paddingVertical: 10}}>
-              {/* <Entypo name="chevron-small-left" size={35} color="white" /> */}
+              onPress={() => navigation?.goBack()}
+              style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}>
+              <Entypo name="chevron-small-left" size={35} color="white" />
               {/* <View style={{padding: 10, top: 3}}> */}
               <Image
                 // resizeMode="contain"
@@ -61,13 +63,13 @@ function ChatStack({nav, messagesReducer}) {
                   height: responsiveHeight(6),
                   width: responsiveHeight(6),
                   borderRadius: responsiveScreenFontSize(50),
-                  backgroundColor:'grey'
+                  backgroundColor: 'grey'
                 }}
                 source={
                   IMAGE_USER !== null &&
-                  IMAGE_USER !== '' &&
-                  IMAGE_USER !== undefined
-                    ? {uri: `${imageUrl}/${IMAGE_USER}`}
+                    IMAGE_USER !== '' &&
+                    IMAGE_USER !== undefined
+                    ? { uri: `${imageUrl}/${IMAGE_USER}` }
                     : require('./../../Assets/Images/dp.png')
                 }
               />
@@ -96,8 +98,8 @@ function ChatStack({nav, messagesReducer}) {
     </Stack.Navigator>
   );
 }
-const mapStateToProps = ({messagesReducer}) => {
-  return {messagesReducer};
+const mapStateToProps = ({ messagesReducer }) => {
+  return { messagesReducer };
 };
 
 export default connect(mapStateToProps, null)(ChatStack);

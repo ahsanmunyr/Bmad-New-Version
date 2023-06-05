@@ -1,133 +1,138 @@
 // @ts-nocheck
 import axios from 'axios';
-import {api} from '../../Config/Apis.json';
+import { api } from '../../Config/Apis.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as types from './actionType';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import messaging from '@react-native-firebase/messaging';
 
 export const postAction =
   (caption, images, id, navigation, clearAllStates, _onPostFailed) =>
-  async dispatch => {
-    // console.log({
-    //   id,
-    // });
-    var bodyFormData = new FormData();
+    async dispatch => {
+      // console.log({
+      //   id,
+      // });
+      var bodyFormData = new FormData();
 
-    if (images) {
-      images.forEach((item, i) => {
-        bodyFormData.append('post_file', {
-          uri: item.path,
-          type: item.type,
-          name: item.filename || `filename.jpg`,
-        });
-      });
-    }
-
-    // bodyFormData.append('post_file', null)
-
-    bodyFormData.append('user_id', id);
-    bodyFormData.append('post_desc', caption);
-    bodyFormData.append('post_title', 'Test Title');
-
-    let url = `${api}/api/post/createpost`;
-    // console.log(url, "URL");
-    fetch(url, {
-      method: 'POST',
-      body: bodyFormData,
-      headers: {
-        Accept: 'application/json, application/xml, text/plain, text/html, *.*',
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then(res => res.json())
-      .then(res => {
-        // console.log(res, '===============================');
-        if (res.success) {
-          showMessage({
-            message: 'Posted!',
-            description: '',
-            type: 'success',
+      if (images) {
+        images.forEach((item, i) => {
+          bodyFormData.append('post_file', {
+            uri: item.path,
+            type: item.type,
+            name: item.filename || `filename.jpg`,
           });
-          clearAllStates();
-        } else {
-          _onPostFailed();
-        }
-        // clearAllStates()
+        });
+      }
+
+      // bodyFormData.append('post_file', null)
+
+      bodyFormData.append('user_id', id);
+      bodyFormData.append('post_desc', caption);
+      bodyFormData.append('post_title', 'Test Title');
+
+      let url = `${api}/api/post/createpost`;
+      // console.log(url, "URL");
+      fetch(url, {
+        method: 'POST',
+        body: bodyFormData,
+        headers: {
+          Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'multipart/form-data',
+        },
       })
-      .catch(err => {
-        console.log(err, 'ERROR');
-        _onPostFailed();
-      });
+        .then(res => res.json())
+        .then(res => {
+          console.log(res, '===============================');
+          if (res.success) {
+            showMessage({
+              message: 'Posted!',
+              description: '',
+              type: 'success',
+            });
+            clearAllStates();
+          } else {
+            _onPostFailed();
+            showMessage({
+              message: res?.msg,
+              description: '',
+              danger: 'error',
+            });
+          }
+          // clearAllStates()
+        })
+        .catch(err => {
+          console.log(err, 'ERROR');
+          _onPostFailed();
+        });
 
-    // axios({
-    //   method: 'POST',
-    //   url: `https://e95c-110-93-244-255.ngrok-free.app/api/post/createpost`,
-    //   data: bodyFormData,
-    //   headers: {
-    //     Accept: 'application/json, application/xml, text/plain, text/html, *.*',
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    // })
-    //   .then(res => {
-    //     console.log(res.data);
-    //     if (res.data.success) {
-    //       clearAllStates();
+      // axios({
+      //   method: 'POST',
+      //   url: `https://e95c-110-93-244-255.ngrok-free.app/api/post/createpost`,
+      //   data: bodyFormData,
+      //   headers: {
+      //     Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // })
+      //   .then(res => {
+      //     console.log(res.data);
+      //     if (res.data.success) {
+      //       clearAllStates();
 
-    //       showMessage({
-    //         message: 'Posted!',
-    //         description: '',
-    //         type: 'success',
-    //       });
-    //     } else {
-    //       showMessage({
-    //         message: 'Failed to Post!',
-    //         description: '',
-    //         type: 'success',
-    //       });
-    //       _onPostFailed();
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err, 'ERROR');
-    //     _onPostFailed();
-    //   });
+      //       showMessage({
+      //         message: 'Posted!',
+      //         description: '',
+      //         type: 'success',
+      //       });
+      //     } else {
+      //       showMessage({
+      //         message: 'Failed to Post!',
+      //         description: '',
+      //         type: 'success',
+      //       });
+      //       _onPostFailed();
+      //     }
+      //   })
+      //   .catch(err => {
+      //     console.log(err, 'ERROR');
+      //     _onPostFailed();
+      //   });
 
-    // try {
+      // try {
 
-    //   const response = await axios({
-    //     method: 'post',
-    //     url: `${api}/api/post/createpost`,
-    //     data: bodyFormData,
-    //     headers: {
+      //   const response = await axios({
+      //     method: 'post',
+      //     url: `${api}/api/post/createpost`,
+      //     data: bodyFormData,
+      //     headers: {
 
-    //       Accept: 'application/json',
-    //     },
-    //   });
-    //   console.log(response.data, "response.dataresponse.data");
-    //   if (response.data.success) {
-    //     clearAllStates();
+      //       Accept: 'application/json',
+      //     },
+      //   });
+      //   console.log(response.data, "response.dataresponse.data");
+      //   if (response.data.success) {
+      //     clearAllStates();
 
-    //     showMessage({
-    //       message: 'Posted!',
-    //       description: '',
-    //       type: 'success',
-    //     });
-    //   } else {
-    //     showMessage({
-    //       message: 'Failed to Post!',
-    //       description: '',
-    //       type: 'success',
-    //     });
-    //     _onPostFailed();
-    //   }
-    // } catch (err) {
-    //   _onPostFailed();
-    //   console.log('Cannot Post Now, Something went wrong.');
-    //   console.log(err.message, "MESSAGE");
-    //   // console.log(err.response.data);
-    // }
-  };
+      //     showMessage({
+      //       message: 'Posted!',
+      //       description: '',
+      //       type: 'success',
+      //     });
+      //   } else {
+      //     showMessage({
+      //       message: 'Failed to Post!',
+      //       description: '',
+      //       type: 'success',
+      //     });
+      //     _onPostFailed();
+      //   }
+      // } catch (err) {
+      //   _onPostFailed();
+      //   console.log('Cannot Post Now, Something went wrong.');
+      //   console.log(err.message, "MESSAGE");
+      //   // console.log(err.response.data);
+      // }
+    };
 
 export const nearMeUsers = (latitude, longitude, userId) => async dispatch => {
   // console.log('FETCHING NEAR ME USERS !!!!!!!!!!!!!!!!!!!!!!');
@@ -368,48 +373,48 @@ export const SignUpStepOne =
     lat,
     long,
   ) =>
-  async dispatch => {
-    // console.log(
-    //   'From Actions :::: ',
-    //   username,
-    //   email,
-    //   phoneNumber,
-    //   password,
-    //   obj,
-    //   gender,
-    //   otp,
-    //   'lat:',
-    //   lat,
-    //   'long:',
-    //   long,
-    // );
-    try {
-      const data = {
-        user_name: username,
-        user_email: email,
-        user_password: password,
-        user_contact: phoneNumber,
-        user_reg_verify_code: otp,
-        user_gender: gender,
-        user_gender_interest: obj,
-        user_latitude: lat,
-        user_longitude: long,
-      };
+    async dispatch => {
+      // console.log(
+      //   'From Actions :::: ',
+      //   username,
+      //   email,
+      //   phoneNumber,
+      //   password,
+      //   obj,
+      //   gender,
+      //   otp,
+      //   'lat:',
+      //   lat,
+      //   'long:',
+      //   long,
+      // );
+      try {
+        const data = {
+          user_name: username,
+          user_email: email,
+          user_password: password,
+          user_contact: phoneNumber,
+          user_reg_verify_code: otp,
+          user_gender: gender,
+          user_gender_interest: obj,
+          user_latitude: lat,
+          user_longitude: long,
+        };
 
-      navigation.navigate('YourInterests');
-      dispatch({
-        type: types.AUTH_SIGNUP,
-        payload: data,
-      });
-    } catch (error) {
-      showMessage({
-        message: 'Error',
-        description: 'Failed',
-        danger: 'error',
-      });
-      console.log(error);
-    }
-  };
+        navigation.navigate('YourInterests');
+        dispatch({
+          type: types.AUTH_SIGNUP,
+          payload: data,
+        });
+      } catch (error) {
+        showMessage({
+          message: 'Error',
+          description: 'Failed',
+          danger: 'error',
+        });
+        console.log(error);
+      }
+    };
 
 export const SignOut = id => async dispatch => {
   try {
@@ -522,59 +527,59 @@ export const coords = (lat, long) => async dispatch => {
 
 export const SignupAll =
   (userSignup, userFavourite, userInterest, _onSignUpFailed) =>
-  async dispatch => {
-    try {
-      const apiData = {
-        user_name: userSignup?.user_name,
-        user_email: userSignup?.user_email,
-        user_password: userSignup?.user_password,
-        user_contact: userSignup?.user_contact,
-        user_latitude: userSignup.user_latitude?.toString(),
-        user_longitude: userSignup.user_longitude?.toString(),
-        // user_reg_verify_code: userSignup.user_reg_verify_code,
-        user_gender: [userSignup?.user_gender],
-        user_gender_interest: userSignup?.user_gender_interest?.filter(
-          e => e !== '',
-        ),
-        user_interest: userInterest,
-        user_favorite: userFavourite,
-        social_login: 'USER_AUTH',
-      };
-      const URL = `${api}/api/auth/register`;
-      // console.log(URL);
-      const response = await axios.post(URL, apiData);
-      if (response.data.success) {
-        dispatch({
-          type: types.USER_GET_INFO,
-          payload: {
-            isLogin: true,
-            data: response.data.data,
-          },
-        });
-      } else {
+    async dispatch => {
+      try {
+        const apiData = {
+          user_name: userSignup?.user_name,
+          user_email: userSignup?.user_email,
+          user_password: userSignup?.user_password,
+          user_contact: userSignup?.user_contact,
+          user_latitude: userSignup.user_latitude?.toString(),
+          user_longitude: userSignup.user_longitude?.toString(),
+          // user_reg_verify_code: userSignup.user_reg_verify_code,
+          user_gender: [userSignup?.user_gender],
+          user_gender_interest: userSignup?.user_gender_interest?.filter(
+            e => e !== '',
+          ),
+          user_interest: userInterest,
+          user_favorite: userFavourite,
+          social_login: 'USER_AUTH',
+        };
+        const URL = `${api}/api/auth/register`;
+        // console.log(URL);
+        const response = await axios.post(URL, apiData);
+        if (response.data.success) {
+          dispatch({
+            type: types.USER_GET_INFO,
+            payload: {
+              isLogin: true,
+              data: response.data.data,
+            },
+          });
+        } else {
+          _onSignUpFailed();
+          showMessage({
+            message: 'Signup Failed',
+            description: response.data.msg,
+            danger: 'error',
+          });
+        }
+        // dispatch({
+        //   type: types.USER_FAVOURITE,
+        //   payload: favourite,
+        // });
+      } catch (error) {
         _onSignUpFailed();
         showMessage({
           message: 'Signup Failed',
-          description: response.data.msg,
+          description: 'Network Error.',
           danger: 'error',
         });
+        console.log(error);
+        console.log(error.message);
+        console.log(error.response.data);
       }
-      // dispatch({
-      //   type: types.USER_FAVOURITE,
-      //   payload: favourite,
-      // });
-    } catch (error) {
-      _onSignUpFailed();
-      showMessage({
-        message: 'Signup Failed',
-        description: 'Network Error.',
-        danger: 'error',
-      });
-      console.log(error);
-      console.log(error.message);
-      console.log(error.response.data);
-    }
-  };
+    };
 
 export const likePost = data => async dispatch => {
   try {
@@ -1337,14 +1342,14 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
     })
       .then(res => res.json())
       .then(res => {
-      
+
         if (res.status) {
 
           dispatch({
             type: types.UPDATE_PROFILE,
             payload: {
               user_image:
-              res?.data?.data?.User_Images?.length > 0
+                res?.data?.data?.User_Images?.length > 0
                   ? res?.data?.data?.User_Images[0]
                   : data.user_image,
               user_contact: data.phone_no,

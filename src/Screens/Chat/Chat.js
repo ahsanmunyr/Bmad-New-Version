@@ -1,11 +1,11 @@
-import React, {useState, useRef, useCallback, useEffect} from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   GiftedChat,
   Bubble,
   InputToolbar,
   SendProps,
 } from 'react-native-gifted-chat';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import {
   Dimensions,
   Keyboard,
@@ -17,15 +17,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import * as actions from '../../Store/Actions/index';
-import {View} from 'react-native';
-import {themeRed} from '../../Assets/Colors/Colors';
-import {io} from 'socket.io-client';
-import {imageUrl} from '../../Config/Apis.json';
-import {api} from '../../Config/Apis.json';
-import {useIsFocused} from '@react-navigation/native';
-const {width, height} = Dimensions.get('window');
+import { View } from 'react-native';
+import { themeRed } from '../../Assets/Colors/Colors';
+import { io } from 'socket.io-client';
+import { imageUrl } from '../../Config/Apis.json';
+import { api } from '../../Config/Apis.json';
+import { useIsFocused } from '@react-navigation/native';
+const { width, height } = Dimensions.get('window');
 
-function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
+function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer }) {
   const isFocused = useIsFocused();
   // const socket = useRef();
   const [text, setText] = useState('');
@@ -45,7 +45,7 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
   // const socketRef = userReducer?.socket;
 
   // useEffect(() => {
- 
+
   //   socketRef.emit('addUser', userId);
   //   let id = socketRef.emit('addUser', userId);
   //   socketRef.on('getMessage', data => {
@@ -94,7 +94,7 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
     setMessages(messagesReducer?.messages);
   }, [messagesReducer?.messages]);
 
-  async function callBack(){
+  async function callBack() {
     const messageToBeSend = {
       receiver: chatPersonId,
       sender: userId,
@@ -108,7 +108,7 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
 
   const handlesend = useCallback(() => {
     callBack()
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (id !== null) {
@@ -150,122 +150,122 @@ function Chat({route, getMessages, messagesReducer, sendMessage, userReducer}) {
   // }, [messages]);
   return (
     <ImageBackground
-      style={{...StyleSheet.absoluteFillObject}}
+      style={{ ...StyleSheet.absoluteFillObject }}
       source={require('../../Assets/Images/white-bg.jpeg')}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <GiftedChat
-          keyboardShouldPersistTaps="always"
-          onInputTextChanged={text => setText(text)}
-          messages={messages}
-          // onSend={messages => onSend(messages)}
-          onSend={messages => {
-            // console.log(messages);
-            handlesend();
-          }}
-          // minInputToolbarHeight={70}
-          // renderInputToolbar={props => {
-          //   return (
-          //     <InputToolbar
-          //       {...props}
-          //       primaryStyle={{backgroundColor: 'white'}}
-          //       renderSend={props => (
-          //         text?.length > 0 && <TouchableOpacity onPress={handlesend}
-          //           style={{
-          //             backgroundColor: themeRed,
-          //             padding: 6,
-          //             paddingHorizontal:width * 0.03,
-          //             borderRadius: 5,
-          //             alignSelf:'center'
-          //           }}>
-          //           <Text style={{color: 'white', fontSize: width * 0.04}}>
-          //             Send
-          //           </Text>
-          //         </TouchableOpacity>
-          //       )}
-          //       containerStyle={{
-          //         backgroundColor: 'white',
-          //         borderTopColor: '#E8E8E8',
-          //         borderTopWidth: 1,
-          //         padding: 8,
-          //         shadowColor: '#000',
-          //         shadowOffset: {
-          //           width: 0,
-          //           height: 11,
-          //         },
-          //         shadowOpacity: 0.57,
-          //         shadowRadius: 15.19,
+      {/* <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}> */}
+      <GiftedChat
+        keyboardShouldPersistTaps="always"
+        onInputTextChanged={text => setText(text)}
+        messages={messages}
+        // onSend={messages => onSend(messages)}
+        onSend={messages => {
+          // console.log(messages);
+          handlesend();
+        }}
+        // minInputToolbarHeight={70}
+        // renderInputToolbar={props => {
+        //   return (
+        //     <InputToolbar
+        //       {...props}
+        //       primaryStyle={{backgroundColor: 'white'}}
+        //       renderSend={props => (
+        //         text?.length > 0 && <TouchableOpacity onPress={handlesend}
+        //           style={{
+        //             backgroundColor: themeRed,
+        //             padding: 6,
+        //             paddingHorizontal:width * 0.03,
+        //             borderRadius: 5,
+        //             alignSelf:'center'
+        //           }}>
+        //           <Text style={{color: 'white', fontSize: width * 0.04}}>
+        //             Send
+        //           </Text>
+        //         </TouchableOpacity>
+        //       )}
+        //       containerStyle={{
+        //         backgroundColor: 'white',
+        //         borderTopColor: '#E8E8E8',
+        //         borderTopWidth: 1,
+        //         padding: 8,
+        //         shadowColor: '#000',
+        //         shadowOffset: {
+        //           width: 0,
+        //           height: 11,
+        //         },
+        //         shadowOpacity: 0.57,
+        //         shadowRadius: 15.19,
 
-          //         elevation: 23,
-          //       }}
-          //     />
-          //   );
-          // }}
-          renderBubble={props => {
-            return (
-              <Bubble
-                {...props}
-                position={
-                  props?.currentMessage?.user?._id == userId ? 'right' : 'left'
-                }
-                textStyle={{
-                  right: {
-                    color: 'white',
-                    fontSize: width * 0.04,
-                  },
-                  left: {
-                    fontSize: width * 0.04,
-                  },
-                }}
-                wrapperStyle={{
-                  right: {
-                    color: 'white',
-                    backgroundColor: themeRed,
-                    marginRight: 5,
-                    marginVertical: 5,
-                    // shadowColor: '#000',
-                    // shadowOffset: {
-                    //   width: 0,
-                    //   height: 7,
-                    // },
-                    // shadowOpacity: 0.41,
-                    // shadowRadius: 9.11,
+        //         elevation: 23,
+        //       }}
+        //     />
+        //   );
+        // }}
+        renderBubble={props => {
+          return (
+            <Bubble
+              {...props}
+              position={
+                props?.currentMessage?.user?._id == userId ? 'right' : 'left'
+              }
+              textStyle={{
+                right: {
+                  color: 'white',
+                  fontSize: width * 0.04,
+                },
+                left: {
+                  fontSize: width * 0.04,
+                },
+              }}
+              wrapperStyle={{
+                right: {
+                  color: 'white',
+                  backgroundColor: themeRed,
+                  marginRight: 5,
+                  marginVertical: 5,
+                  // shadowColor: '#000',
+                  // shadowOffset: {
+                  //   width: 0,
+                  //   height: 7,
+                  // },
+                  // shadowOpacity: 0.41,
+                  // shadowRadius: 9.11,
 
-                    // elevation: 14,
-                    // borderWidth:1, borderColor:'grey'
-                  },
-                  left: {
-                    color: 'white',
-                    backgroundColor: 'white',
-                    marginVertical: 5,
-                    // shadowColor: '#000',
-                    // shadowOffset: {
-                    //   width: 0,
-                    //   height: 7,
-                    // },
-                    // shadowOpacity: 0.41,
-                    // shadowRadius: 9.11,
-                    borderWidth: 1,
-                    borderColor: 'silver',
-                    // elevation: 14,
-                  },
-                }}
-              />
-            );
-          }}
-          user={{
-            _id: userId,
-          }}
-        />
-        {/* <Image
+                  // elevation: 14,
+                  // borderWidth:1, borderColor:'grey'
+                },
+                left: {
+                  color: 'white',
+                  backgroundColor: 'white',
+                  marginVertical: 5,
+                  // shadowColor: '#000',
+                  // shadowOffset: {
+                  //   width: 0,
+                  //   height: 7,
+                  // },
+                  // shadowOpacity: 0.41,
+                  // shadowRadius: 9.11,
+                  borderWidth: 1,
+                  borderColor: 'silver',
+                  // elevation: 14,
+                },
+              }}
+            />
+          );
+        }}
+        user={{
+          _id: userId,
+        }}
+      />
+      {/* <Image
         style={{...StyleSheet.absoluteFillObject}}
         source={require('../../Assets/Images/bg.png')}
       /> */}
-      </TouchableWithoutFeedback>
+      {/* </TouchableWithoutFeedback> */}
     </ImageBackground>
   );
 }
 
-const mapStateToProps = ({messagesReducer, userReducer}) => {
-  return {messagesReducer, userReducer};
+const mapStateToProps = ({ messagesReducer, userReducer }) => {
+  return { messagesReducer, userReducer };
 };
 export default connect(mapStateToProps, actions)(Chat);
