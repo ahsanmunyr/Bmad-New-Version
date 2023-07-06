@@ -29,6 +29,7 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
   const isFocused = useIsFocused();
   // const socket = useRef();
   const [text, setText] = useState('');
+  console.log("=========================", text)
   const userId = userReducer?.data?.user_id;
   const [messages, setMessages] = useState([]);
   const [randNum, setRandNum] = useState(null);
@@ -94,21 +95,33 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
     setMessages(messagesReducer?.messages);
   }, [messagesReducer?.messages]);
 
-  async function callBack() {
+  // async function callBack() {
+  //   const messageToBeSend = {
+  //     receiver: chatPersonId,
+  //     sender: userId,
+  //     message: text,
+  //   };
+  //   console.log("text", text)
+  //   // console.log(messageToBeSend, 'message to send');
+  //   // setSaveText(text);
+  //   // console.log(messageToBeSend);
+  //   // await sendMessage(messageToBeSend, onSucces);
+  // }
+  const handlesend = async () => {
     const messageToBeSend = {
       receiver: chatPersonId,
       sender: userId,
       message: text,
     };
+    console.log("text", text)
     console.log(messageToBeSend, 'message to send');
     setSaveText(text);
     console.log(messageToBeSend);
     await sendMessage(messageToBeSend, onSucces);
   }
-
-  const handlesend = useCallback(() => {
-    callBack()
-  }, []);
+  // const handlesend = useCallback(() => {
+  //   callBack()
+  // }, []);
 
   useEffect(() => {
     if (id !== null) {
@@ -155,7 +168,8 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
       {/* <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}> */}
       <GiftedChat
         keyboardShouldPersistTaps="always"
-        onInputTextChanged={text => setText(text)}
+        // onInputTextChanged={text => setText(text)}
+        onInputTextChanged={setText}
         messages={messages}
         // onSend={messages => onSend(messages)}
         onSend={messages => {
