@@ -43,6 +43,43 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
     sender: userId,
     receiver: CURRENT_CHAT?.chatPerson?.user_id,
   };
+  const socket = io(api);
+  // const socket = io("ws://192.168.0.42:5001");
+  useEffect(() => {
+    socket.connect();
+    const eventData = {
+      userId: `${userId}`,
+
+    };
+    socket.emit('addUser', eventData);
+
+  }, [])
+  console.log(".sjlkdhslkahdlkhsalkhdlks", chatPersonId)
+  console.log("Messages", messages)
+  const mymessages = () => {
+    const eventName = 'sendMessage';
+    // Emit the event to the server
+    // const data = {
+    //   receiverId: chatPersonId,
+    //   senderId: userId,
+    //   text: saveText,
+    //   id: id,
+    // }
+    const eventData = {
+      receiverId: chatPersonId,
+      senderId: `${userId}`,
+      text: saveText,
+      id: id,
+
+    };
+    socket.emit(eventName, eventData)
+  }
+  useEffect(() => {
+    socket.on("getMessage", (data) => {
+      console.log("adkhksahgdkj", data)
+    })
+  }, [])
+
   // const socketRef = userReducer?.socket;
 
   // useEffect(() => {
@@ -118,6 +155,7 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
     setSaveText(text);
     console.log(messageToBeSend);
     await sendMessage(messageToBeSend, onSucces);
+    mymessages()
   }
   // const handlesend = useCallback(() => {
   //   callBack()

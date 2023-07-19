@@ -9,21 +9,21 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import AppText from '../../../Components/AppText';
 import Notification from 'react-native-vector-icons/Ionicons';
 import StripeModal from '../../../Components/StripeModal';
-import {themeRed} from '../../../Assets/Colors/Colors';
-import {connect} from 'react-redux';
+import { themeRed } from '../../../Assets/Colors/Colors';
+import { connect } from 'react-redux';
 import * as actions from '../../../Store/Actions/index';
 import BuyDrinksModal from '../../../Components/BuyDrinksModal';
-import {PUB_KEY_STRIPE} from '../../../Config/Apis.json';
-import {StripeProvider} from '@stripe/stripe-react-native';
-const {width, height} = Dimensions.get('window');
-import {useRoute} from '@react-navigation/native';
+import { PUB_KEY_STRIPE } from '../../../Config/Apis.json';
+import { StripeProvider } from '@stripe/stripe-react-native';
+const { width, height } = Dimensions.get('window');
+import { useRoute } from '@react-navigation/native';
 import Heading from '../../../Components/Heading';
 
-const Drinks = ({navigation, userReducer, buyMoreDrinks}) => {
+const Drinks = ({ navigation, userReducer, buyMoreDrinks }) => {
   const [isStripeModalVisible, setIsStripeModalVisible] = useState(false);
   const [stripeGeneratedKey, setStripeGeneratedKey] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -51,9 +51,9 @@ const Drinks = ({navigation, userReducer, buyMoreDrinks}) => {
   React.useLayoutEffect(() => {
     const routeName = route.name;
     if (routeName === 'Drinks') {
-      navigation.setOptions({tabBarStyle: {display: 'none'}});
+      navigation.setOptions({ tabBarStyle: { display: 'none' } });
     } else {
-      navigation.setOptions({tabBarStyle: {display: 'flex'}});
+      navigation.setOptions({ tabBarStyle: { display: 'flex' } });
     }
   }, [navigation, route]);
   // useEffect(() => [
@@ -123,7 +123,7 @@ const Drinks = ({navigation, userReducer, buyMoreDrinks}) => {
               activeOpacity={0.8}>
               <Heading
                 title="Buy Drinks"
-                passedStyle={{color: 'white', fontSize: width * 0.045}}
+                passedStyle={{ color: 'white', fontSize: width * 0.045 }}
                 fontType="medium"
               />
             </TouchableOpacity>
@@ -153,7 +153,7 @@ const Drinks = ({navigation, userReducer, buyMoreDrinks}) => {
   );
 };
 
-const mapStateToProps = ({userReducer}) => {
+const mapStateToProps = ({ userReducer }) => {
   return {
     userReducer,
   };
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  crateTextStyle:{
+  crateTextStyle: {
     color: 'white',
     fontSize: width * 0.05,
   }

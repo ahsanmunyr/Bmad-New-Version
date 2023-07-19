@@ -676,11 +676,12 @@ export const getAllCommentsOfPost = postId => async dispatch => {
       `${api}/api/post/comments?post_id=${postId}`,
     );
     if (response.data.status) {
+      console.log("________________+++++", response)
       dispatch({
         type: types.GET_POST_COMMENTS,
         payload: response.data.data,
       });
-      return response.data.data
+      return response.data.data.reverse()
     } else {
       showMessage({
         message: 'Oh Snap!',
@@ -756,7 +757,8 @@ export const connectUser =
 
         showMessage({
           message: 'Ohhh Snap!',
-          description: 'Cann not offer drink at the moment, try again.',
+          // description: 'Cann not offer drink at the moment, try again.',
+          description: 'Cann not offer drink .You already offered the drink!.',
           danger: 'error',
         });
         console.log('fail');

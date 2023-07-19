@@ -10,11 +10,11 @@ import {
   TouchableWithoutFeedback,
   Platform,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PostList from '../Home/PostList';
 import Comment from '../Home/Comments';
 import * as actions from '../../Store/Actions/index';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Avatar from '../../Components/Avatar';
 import {
   widthPercentageToDP as wp,
@@ -23,11 +23,11 @@ import {
 import AppText from '../../Components/AppText';
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
-import {useRoute} from '@react-navigation/native';
-import {imageUrl} from '../../Config/Apis.json';
+import { useRoute } from '@react-navigation/native';
+import { imageUrl } from '../../Config/Apis.json';
 import { dateInDays } from '../../Utils/times';
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 const PostScreen = ({
   getPostById,
@@ -49,7 +49,7 @@ const PostScreen = ({
   const [commentText, setCommentText] = useState('');
   const [isCommenting, setIsCommenting] = useState(false);
   const [postComments, setPostComments] = useState([]);
-
+  // console.log("sbagdjfksagkjgdjkgskjdgksjag", postComments)
   const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   };
@@ -59,6 +59,7 @@ const PostScreen = ({
     await getPostById(postId, userId);
     await getAllCommentsOfPost(postId).then((res) => {
       setPostComments(res);
+      // console.log("comments ", res)
     });
     setIsLoading(false);
   };
@@ -135,8 +136,8 @@ const PostScreen = ({
                   source={
                     userReducer?.data?.user_image
                       ? {
-                          uri: `${imageUrl}/${userReducer?.data?.user_image}`,
-                        }
+                        uri: `${imageUrl}/${userReducer?.data?.user_image}`,
+                      }
                       : require('../../Assets/Images/maroon-dp2.jpeg')
                   }
                 />
@@ -160,7 +161,7 @@ const PostScreen = ({
               <View
                 style={[
                   styles.commentBtn,
-                  isCommenting && isIOS && {width: width * 0.35},
+                  isCommenting && isIOS && { width: width * 0.35 },
                 ]}>
                 <AppText
                   nol={1}
@@ -187,18 +188,20 @@ const PostScreen = ({
           </>
         }
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: height * 0.14}}
-        data={postComments}
+        contentContainerStyle={{ paddingBottom: height * 0.14 }}
+        data={postComments.reverse()}
         keyExtractor={(item, index) => index}
-        renderItem={({item, index}) => {
+        inverted={true}
+        renderItem={({ item, index }) => {
+
           return (
             <Comment
               item={item}
               img={item?.user_image || item?.user?.user_image}
               name={item?.user_name || item?.user?.user_name}
               time={moment(item?.created_at).format('lll')}
-          
-           
+
+
               message={item?.comment}
             />
           );
@@ -208,8 +211,8 @@ const PostScreen = ({
   );
 };
 
-const mapStateToProps = ({postsReducer, userReducer}) => {
-  return {postsReducer, userReducer};
+const mapStateToProps = ({ postsReducer, userReducer }) => {
+  return { postsReducer, userReducer };
 };
 
 export default connect(mapStateToProps, actions)(PostScreen);
@@ -255,13 +258,13 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontSize: hp('1.9%'),
     minHeight: height * 0.07,
-    height:height * 0.1
+    height: height * 0.1
   },
   shadowContainerForIos: {
     flex: 1,
     // No backgroundColor
     shadowColor: '#000',
-    shadowOffset: {width: 2, height: 2},
+    shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.4,
     shadowRadius: 7,
   },

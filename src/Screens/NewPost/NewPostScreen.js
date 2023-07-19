@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -28,7 +28,7 @@ import {
   launchImageLibrary,
   launchCamera,
 } from 'react-native-image-picker';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import ImagePickerMultiple from 'react-native-image-crop-picker';
 import AppText from '../../Components/AppText';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -37,15 +37,15 @@ import Icon1 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import TagInput from 'react-native-tags-input';
 import * as actions from '../../Store/Actions';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import {
   responsiveHeight,
   responsiveScreenFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {colors} from '../../src/screens/drawer/constant';
+import { colors } from '../../src/screens/drawer/constant';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const NewPostScreen = ({
   navigation,
@@ -114,7 +114,7 @@ const NewPostScreen = ({
 
   const newPost = async () => {
 
-    if(caption.length > 0){
+    if (caption.length > 0) {
       if (caption && filePath) {
         setLoading(true);
         await postAction(
@@ -126,14 +126,14 @@ const NewPostScreen = ({
           clearAllStates,
           _onPostFailed,
         );
-      }else{
+      } else {
         showMessage({
           message: 'Please select the image',
           // description: '',
           danger: 'error',
         });
       }
-    } else{
+    } else {
       showMessage({
         message: 'Description require',
         // description: '',
@@ -193,9 +193,9 @@ const NewPostScreen = ({
               style={{
                 backgroundColor: 'white',
                 borderRadius: 3,
-       
+
                 zIndex: 199,
-           
+
                 shadowColor: '#000',
                 shadowOffset: {
                   width: 0,
@@ -205,8 +205,8 @@ const NewPostScreen = ({
                 shadowRadius: 3.84,
 
                 elevation: 5,
-                height: responsiveHeight(30),
-                width: responsiveWidth(50),
+                height: responsiveHeight(25.5),
+                width: responsiveWidth(40),
                 justifyContent: 'center',
                 alignContent: 'center',
                 margin: responsiveScreenFontSize(1.5),
@@ -230,75 +230,75 @@ const NewPostScreen = ({
                 />
               </View>
             </TouchableOpacity>
-            <View style={{marginTop: 10, flexDirection: 'row'}}>
+            <View style={{ marginTop: 10, flexDirection: 'row' }}>
               {filePath != null
                 ? filePath.map((item, index) => {
-                    return (
-                      <View
+                  return (
+                    <View
+                      key={index}
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start',
+                        alignContent: 'center',
+                        // padding: 12,
+                        // backgroundColor:'red',
+                        paddingHorizontal: 10,
+                        height: responsiveHeight(31),
+                        // width: responsiveWidth(50),
+                        // borderWidth: 1, borderColor:'grey'
+                      }}>
+                      <TouchableOpacity
                         key={index}
                         style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-start',
-                          alignItems: 'flex-start',
-                          alignContent: 'center',
-                          // padding: 12,
-                          // backgroundColor:'red',
-                          paddingHorizontal: 10,
-                          height: responsiveHeight(31),
-                          // width: responsiveWidth(50),
-                          // borderWidth: 1, borderColor:'grey'
+                          zIndex: 99,
+                        }}
+                        onPress={() => {
+                          let val = filePath.filter((x, i) => i !== index);
+                          setFilePath(val);
+
+                          // alert('asd')
                         }}>
-                        <TouchableOpacity
+                        <View
                           key={index}
                           style={{
+                            height: 30,
+                            width: 30,
+                            backgroundColor: colors.themeblue,
+                            borderRadius: responsiveScreenFontSize(50),
+                            position: 'absolute',
+                            left: -5,
                             zIndex: 99,
-                          }}
-                          onPress={() => {
-                            let val = filePath.filter((x, i) => i !== index);
-                            setFilePath(val);
-
-                            // alert('asd')
+                            top: -10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
                           }}>
-                          <View
-                            key={index}
-                            style={{
-                              height: 30,
-                              width: 30,
-                              backgroundColor: colors.themeblue,
-                              borderRadius: responsiveScreenFontSize(50),
-                              position: 'absolute',
-                              left: -5,
-                              zIndex: 99,
-                              top: -10,
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                            }}>
-                            <Entypo
-                              name="cross"
-                              size={responsiveScreenFontSize(3)}
-                              color="white"
-                            />
-                          </View>
-                        </TouchableOpacity>
-                        <Image
-                          resizeMode='cover'
-                          key={index}
-                          source={item}
-                          style={{
-                            height: responsiveHeight(30.5),
-                            width: responsiveWidth(50),
-                            marginHorizontal: 3,
-                            // top: 8,
+                          <Entypo
+                            name="cross"
+                            size={responsiveScreenFontSize(3)}
+                            color="white"
+                          />
+                        </View>
+                      </TouchableOpacity>
+                      <Image
+                        resizeMode='cover'
+                        key={index}
+                        source={item}
+                        style={{
+                          height: responsiveHeight(25.5),
+                          width: responsiveWidth(40),
+                          marginHorizontal: 3,
+                          // top: 8,
 
-                            backgroundColor: 'white',
-                            borderWidth: 1,
-                            borderColor: '#e8e8e8',
-                            borderRadius: 3,
-                          }}
-                        />
-                      </View>
-                    );
-                  })
+                          backgroundColor: 'white',
+                          borderWidth: 1,
+                          borderColor: '#e8e8e8',
+                          borderRadius: 3,
+                        }}
+                      />
+                    </View>
+                  );
+                })
                 : null}
             </View>
           </ScrollView>
@@ -403,7 +403,7 @@ const NewPostScreen = ({
                 loop
               />
             )}
-            <View style={{height: 100}}></View>
+            <View style={{ height: 100 }}></View>
           </View>
         </ScrollView>
       </View>
@@ -411,8 +411,8 @@ const NewPostScreen = ({
   );
 };
 
-function mapStateToProps({userReducer}) {
-  return {userReducer};
+function mapStateToProps({ userReducer }) {
+  return { userReducer };
 }
 
 export default connect(mapStateToProps, actions)(NewPostScreen);
