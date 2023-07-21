@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 import React from 'react';
 import AppText from '../../Components/AppText';
-import {imageUrl} from '../../Config/Apis.json';
-import {themeRed} from '../../Assets/Colors/Colors';
+import { imageUrl } from '../../Config/Apis.json';
+import { themeRed } from '../../Assets/Colors/Colors';
 import * as actions from '../../Store/Actions/index';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ConnectionsMapper = ({
   item,
@@ -58,13 +58,13 @@ const ConnectionsMapper = ({
         activeOpacity={0.7}
         onPress={() => {
           // saveNearmeUserData(item);
-          navigation.navigate('profile', {userData: item});
+          navigation.navigate('profile', { userData: item });
         }}>
         <Image
           source={
             item.user_image == null || item.user_image == undefined
               ? require('../../Assets/Images/maroon-dp2.jpeg')
-              : {uri: `${imageUrl}/${item.user_image}`}
+              : { uri: `${imageUrl}/${item.user_image}` }
           }
           style={{
             width: responsiveFontSize(8),
@@ -73,7 +73,12 @@ const ConnectionsMapper = ({
           }}
         />
       </TouchableOpacity>
-      <View style={styles.textContainer}>
+      <TouchableOpacity
+        onPress={() => {
+          // saveNearmeUserData(item);
+          navigation.navigate('profile', { userData: item });
+        }}
+        style={styles.textContainer}>
         <AppText
           nol={1}
           textAlign="left"
@@ -98,7 +103,7 @@ const ConnectionsMapper = ({
           color={'black'}
           Label={item?.user_gender}
         />
-      </View>
+      </TouchableOpacity>
 
       {/* BUTTONS  */}
       {
@@ -174,8 +179,8 @@ const ConnectionsMapper = ({
   );
 };
 
-const mapStateToProps = ({userReducer}) => {
-  return {userReducer};
+const mapStateToProps = ({ userReducer }) => {
+  return { userReducer };
 };
 export default connect(mapStateToProps, actions)(ConnectionsMapper);
 

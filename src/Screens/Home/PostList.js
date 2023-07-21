@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useCallback} from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -16,18 +16,18 @@ import * as actions from '../../Store/Actions/index';
 import AppText from '../../Components/AppText';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
-import CarouselCardItem, {SLIDER_WIDTH, ITEM_WIDTH} from './CarouselCardItems';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {FlatListSlider} from 'react-native-flatlist-slider';
+import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from './CarouselCardItems';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { FlatListSlider } from 'react-native-flatlist-slider';
 import Preview from './Preview';
-import {imageUrl} from '../../Config/Apis.json';
+import { imageUrl } from '../../Config/Apis.json';
 import moment from 'moment';
-import {connect} from 'react-redux';
-import {useRoute} from '@react-navigation/native';
-import {colors} from '../../src/screens/drawer/constant';
-import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import { connect } from 'react-redux';
+import { useRoute } from '@react-navigation/native';
+import { colors } from '../../src/screens/drawer/constant';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 // const {width} = Dimensions.get('window');
 const ITEM_SIZE = Platform?.OS === 'ios' ? width * 0.99 : width * 0.99;
 //  heart heart-o FontAwesome
@@ -61,20 +61,20 @@ const PostList = ({
   // console.log(IMAGES,"IMAGES",route?.name);
   // const isIos =
 
-  const onScroll = useCallback(({viewableItems}) => {
+  const onScroll = useCallback(({ viewableItems }) => {
     console.log(viewableItems[0]?.index);
     onChangeIndex(viewableItems[0]?.index);
     // onChangeIndex(viewableItems.changed[0]?.index)
   }, []);
 
   const renderItem = useCallback(
-    ({item, index}) => <Preview index={index} item={item} scrollX={scrollX} />,
+    ({ item, index }) => <Preview index={index} item={item} scrollX={scrollX} />,
     [],
   );
 
   useEffect(() => {
     if (ind != null) {
-      flatListRef?.current?.scrollToIndex({animated: true, index: ind});
+      flatListRef?.current?.scrollToIndex({ animated: true, index: ind });
     }
   }, [ind]);
   console.log(item?.post_id, 'item?.id');
@@ -97,7 +97,7 @@ const PostList = ({
           post_url: IMAGES,
         });
       }}>
-      <View       key={item?.post_id} style={styles.postContainer}>
+      <View key={item?.post_id} style={styles.postContainer}>
         {/* Post Info View */}
 
         <View style={styles.postInfoOuterView}>
@@ -107,8 +107,8 @@ const PostList = ({
               source={
                 ProfileImg
                   ? {
-                      uri: `${imageUrl}/${ProfileImg}`,
-                    }
+                    uri: `${imageUrl}/${ProfileImg}`,
+                  }
                   : require('../../Assets/Images/placeholderImage.png')
               }
             />
@@ -135,9 +135,9 @@ const PostList = ({
                 />
               </View>
               <View
-                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{paddingRight: 5}}>
+                style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ paddingRight: 5 }}>
                     <TouchableOpacity
                       onPress={() => _onPressHeart(item)}
                       activeOpacity={0.9}>
@@ -158,7 +158,7 @@ const PostList = ({
                   />
                 </View>
                 <TouchableOpacity
-                  style={{flexDirection: 'row', left: 5}}
+                  style={{ flexDirection: 'row', left: 5 }}
                   activeOpacity={0.9}
                   // onPress={() => {
                   //   if (routeName === 'post') {
@@ -175,8 +175,25 @@ const PostList = ({
                   //     item: item,
                   //   });
                   // }}
+                  key={item?.post_id}
+                  onPress={() => {
+                    if (routeName === 'post') {
+                      return;
+                    }
+                    Navigation.navigate('mainpost', {
+                      name: Name,
+                      description: Description,
+                      profileImg: ProfileImg,
+                      uploadTime: UploadTime,
+                      totalLike: TotalLike,
+                      comment: Comment,
+                      img: Img,
+                      item: item,
+                      post_url: IMAGES,
+                    });
+                  }}
                 >
-                  <View style={{paddingRight: 5}}>
+                  <View style={{ paddingRight: 5 }}>
                     <Icon1 name="message-outline" size={18} color="#B01125" />
                   </View>
                   <AppText
@@ -229,13 +246,13 @@ const PostList = ({
         {/* Photos Slider  */}
         {/* {console.log(IMAGES, "000")} */}
         <View key={item?.post_id} style={styles.photosView}>
-          <View style={{height: 30}} />
+          <View style={{ height: 30 }} />
           <Animated.FlatList
             key={item?.post_id}
             bounces={false}
             decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
             renderToHardwareTextureAndroid
-            contentContainerStyle={{alignItems: 'center'}}
+            contentContainerStyle={{ alignItems: 'center' }}
             snapToInterval={ITEM_SIZE}
             snapToAlignment="start"
             onEndReachedThreshold={0.2}
@@ -249,8 +266,8 @@ const PostList = ({
             ref={flatListRef}
             pagingEnabled={true}
             onScroll={Animated.event(
-              [{nativeEvent: {contentOffset: {x: scrollX}}}],
-              {useNativeDriver: false},
+              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+              { useNativeDriver: false },
             )}
             scrollEventThrottle={16}
             showsHorizontalScrollIndicator={false}
@@ -263,7 +280,7 @@ const PostList = ({
             data={IMAGES}
             onViewableItemsChanged={onScroll}
           />
-          <View style={{height: 10}} />
+          <View style={{ height: 10 }} />
 
           <View
             style={{
@@ -325,8 +342,8 @@ const PostList = ({
   );
 };
 
-const mapStateToProps = ({userReducer}) => {
-  return {userReducer};
+const mapStateToProps = ({ userReducer }) => {
+  return { userReducer };
 };
 
 const styles = StyleSheet.create({

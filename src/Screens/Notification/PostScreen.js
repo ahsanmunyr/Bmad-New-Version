@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F7F3F2',
+    paddingBottom: 100
   },
   commentBoxContainer: {
     flexDirection: 'row',

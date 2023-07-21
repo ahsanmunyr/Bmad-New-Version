@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -30,21 +30,21 @@ import {
 } from 'react-native-responsive-screen';
 import PhoneInput from 'react-native-phone-number-input';
 import TextSample from './../../Components/Text';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import OTPTextView from 'react-native-otp-textinput';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 // import CustomRadio from './../../Components/CustomRadio'
 import DropDownPicker from 'react-native-dropdown-picker';
 import RNCheckboxCard from 'react-native-checkbox-card';
-import {isPortrait, isLandscape} from './../../Platform';
+import { isPortrait, isLandscape } from './../../Platform';
 import * as actions from '../../Store/Actions';
 import auth from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
-import {connect} from 'react-redux';
-import {trueFunc} from 'boolbase';
-import {color} from 'react-native-elements/dist/helpers';
+import { connect } from 'react-redux';
+import { trueFunc } from 'boolbase';
+import { color } from 'react-native-elements/dist/helpers';
 
-const {width, height} = Dimensions?.get('window');
+const { width, height } = Dimensions?.get('window');
 
 const SignupScreen = ({
   navigation,
@@ -62,6 +62,8 @@ const SignupScreen = ({
   const phoneInput = useRef(null);
   const [error, onChangeError] = React.useState('');
   const [username, setUsername] = React.useState('');
+  const [CCode, setCCode] = React.useState('PK');
+  const [CName, setCName] = React.useState('Pakistan');
   const [password, onChangePassword] = React.useState('');
   const [confirmPassword, onChangeConfirmPassword] = React.useState('');
   const [email, onChangeEmail] = React.useState('');
@@ -85,6 +87,8 @@ const SignupScreen = ({
   const [open, setOpen] = useState(false);
   const [gender, setGender] = useState(null);
   const [confirm, setConfirm] = useState(null);
+  const [country, setCountry] = useState();
+  console.log("country", country)
   const [items, setItems] = useState([
     {
       label: '    Male',
@@ -110,11 +114,11 @@ const SignupScreen = ({
   }, [userCoordsReducer, userSignup]);
 
   const getOneTimeLocation = () => {
-    // console.log('one time==================');
+
     Geolocation.getCurrentPosition(
       //Will give you the current location
       position => {
-        // setLocationStatus('You are Here');
+
         console.log('----------------- get onne time');
         coords(position.coords.latitude, position.coords.longitude);
 
@@ -130,28 +134,15 @@ const SignupScreen = ({
       },
     );
   };
-  // useEffect(() => {
-  //   getOneTimeLocation();
-  // }, []);
-  async function signInWithPhoneNumber(phoneNumber) {}
-  // useEffect(()=>{
 
-  //     try{
-  //       console.log(userOtp)
-  //     }catch(error){
-  //       console.log(error)
-  //     }
+  async function signInWithPhoneNumber(phoneNumber) { }
 
-  //   },[userOtp])
 
   const onSubmit = () => {
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     const usernameRegex = /^[a-zA-Z0-9]+$/;
-    // const mobileNumber = phoneInput.current.state.code + value
-    // onChangePhone(mobileNumber)
-    // Otp(null, mobileNumber,fadeChange)
-    // console.log(phoneInput.current.state.code)
+
     if (password?.length === 0 || confirmPassword.length === 0) {
       setValidation(true);
       onChangeError('Incomplete Data');
@@ -163,11 +154,12 @@ const SignupScreen = ({
         if (value.length >= 7) {
           const mobileNumber = value;
           onChangePhone(mobileNumber);
+          console.log("first", mobileNumber)
           if (password === confirmPassword) {
             // Otp(null, mobileNumber, fadeChange);
-            if(password.length > 7){
+            if (password.length > 7) {
               fadeChange();
-            }else{
+            } else {
               onChangeError('The length of the password is too short.');
               setValidation(true);
             }
@@ -243,16 +235,7 @@ const SignupScreen = ({
                 <View style={styles.textElement}>
                   <View style={styles.textField}>
                     <Feather name="user" color="white" size={20} />
-                    {/* <IconImage
-                    source={require('./../../Assets/Images/user.png')}
-                  /> */}
-                    {/* <TextInputFeild
-                    placeholder="Username"
-                    value={username}
-                    onchange={setUsername}
-                    keyboardType="default"
-                    secureTextEntry={false}
-                  /> */}
+
                     <TextInput
                       placeholder="Username"
                       placeholderTextColor="white"
@@ -264,7 +247,7 @@ const SignupScreen = ({
                       value={username}
                       selectionColor="white"
                       secureTextEntry={false}
-                      // textAlign='center'
+
                       textAlignVertical="bottom"
                     />
                   </View>
@@ -273,14 +256,6 @@ const SignupScreen = ({
                 <View style={styles.textElement}>
                   <View style={styles.textField}>
                     <Feather name="mail" color="white" size={20} />
-                    {/* <IconImage source={require('./../../Assets/Images/user.png')} /> */}
-                    {/* <TextInputFeild
-                    placeholder="Email"
-                    value={email}
-                    onchange={onChangeEmail}
-                    keyboardType="email-address"
-                    secureTextEntry={false}
-                  /> */}
                     <TextInput
                       placeholder="Email"
                       placeholderTextColor="white"
@@ -291,44 +266,38 @@ const SignupScreen = ({
                       value={email}
                       selectionColor="white"
                       secureTextEntry={false}
-                      // textAlign='center'
                       textAlignVertical="bottom"
                     />
                   </View>
                   <Underline />
                 </View>
-                {/* <View style={{ flexDirection: "column", justifyContent: 'center', margin: 15 }}>
-                                    <View style={styles.textField}>
-                                        <IconImage source={require('./../../Assets/Images/email.png')} />
-                                        <TextInputFeild
-                                            placeholder="Email"
-                                            value={email}
-                                            onchange={onChangeEmail}
-                                            keyboardType='email-address'
-                                            secureTextEntry={true}
-                                        />
-                                    </View>
-                                    <Underline />
-                                </View> */}
+
                 <View style={styles.textElement}>
                   <View style={styles.textField}>
-                    {/* <IconImage source={require('./../../Assets/Images/phone.png')} /> */}
+
                     <Feather name="phone" color="white" size={20} />
                     <PhoneInput
                       ref={phoneInput}
                       defaultValue={value}
+
+                      onChangeCountry={(i) => {
+                        console.log("code here .........", i)
+                        console.log("code here code  .........", i?.cca2)
+                        console.log("code here name.........", i?.name)
+                        setCCode(i?.cca2)
+                        setCName(i?.name)
+                      }}
                       defaultCode="PK"
                       layout="first"
                       onChangeText={text => {
                         if (text.length <= 15) {
-                          // console.log(text.length, 'text');
-                          // console.log(text, 'text');
+
                           setValue(text);
                         }
                       }}
                       onChangeFormattedText={text => {
                         if (text.length <= 18) {
-                          // console.log(text, 'texttexttexttext');
+
                           setFormattedValue(text);
                         }
                       }}
@@ -355,10 +324,9 @@ const SignupScreen = ({
                         textAlignVertical: 'bottom',
                         height: 45,
                       }}
-                      flagButtonStyle={{color: 'white'}}
-                      countryPickerButtonStyle={{color: 'white'}}
-                      // withShadow
-                      // withDarkTheme
+                      flagButtonStyle={{ color: 'white' }}
+                      countryPickerButtonStyle={{ color: 'white' }}
+
                       disableArrowIcon="false"
                     />
                   </View>
@@ -369,14 +337,7 @@ const SignupScreen = ({
                 <View style={styles.textElement}>
                   <View style={styles.textField}>
                     <Feather name="lock" color="white" size={20} />
-                    {/* <IconImage source={require('./../../Assets/Images/lock.png')} /> */}
-                    {/* <TextInputFeild
-                    placeholder="Password"
-                    value={password}
-                    onchange={onChangePassword}
-                   
-                    secureTextEntry={true}
-                  /> */}
+
 
                     <TextInput
                       placeholder="Password"
@@ -398,14 +359,7 @@ const SignupScreen = ({
                 <View style={styles.textElement}>
                   <View style={styles.textField}>
                     <Feather name="lock" color="white" size={20} />
-                    {/* <IconImage source={require('./../../Assets/Images/lock.png')} /> */}
-                    {/* <TextInputFeild
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onchange={onChangeConfirmPassword}
-                    keyboardType="default"
-                    secureTextEntry={true}
-                  /> */}
+
                     <TextInput
                       keyboardType="default"
                       placeholder="Confirm Password"
@@ -434,9 +388,9 @@ const SignupScreen = ({
                   alignContent: 'space-between',
                 }}>
                 <TouchableOpacityBtn onPress={onSubmit} title="Sign Up" />
-                <View style={{top: 5}}>
+                <View style={{ top: 5 }}>
                   <View
-                    style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text
                       style={{
                         color: 'white',
@@ -464,58 +418,16 @@ const SignupScreen = ({
           ) : (
             stepTwo == false &&
             stepOne == true && (
-              // (
-              //   <Animated.View style={{opacity: fadeAnim}}>
-              //     <ScrollView
-              //       showsVerticalScrollIndicator={false}
-              //       style={styles.scrollView}>
-              //       <View style={{flexDirection: 'column', height: hp('90%')}}>
-              //         <Logo />
 
-              //         <Heading Label="Verification" />
-
-              //         <TextSample Label="Verify Your Phone Number with OTP" />
-
-              //         <OTPTextView
-              //           inputCount={4}
-              //           handleTextChange={text => setOtp(text)}
-              //           containerStyle={styles.textInputContainer}
-              //           textInputStyle={[
-              //             styles.roundedTextInput,
-              //             {borderRadius: 100},
-              //           ]}
-              //           tintColor="#FF3D46"
-              //           offTintColor="#FF3D46"
-              //         />
-
-              //         <View
-              //           style={{
-              //             height: hp('20%'),
-              //             alignItems: 'center',
-              //             flexDirection: 'column',
-              //             alignContent: 'space-between',
-              //             marginTop: 30,
-              //           }}>
-              //           <TouchableOpacityBtn
-              //             onPress={() => onSubmit2()}
-              //             title="Continue"
-              //           />
-              //         </View>
-              //       </View>
-              //     </ScrollView>
-              //   </Animated.View>
-              // )
-
-              // :
 
               //----- GENDER SELECTION -----
-              <Animated.View style={{opacity: fadeAnim}}>
-                <View style={{flexDirection: 'column', height: hp('110%')}}>
+              <Animated.View style={{ opacity: fadeAnim }}>
+                <View style={{ flexDirection: 'column', height: hp('110%') }}>
                   <Logo />
 
                   {!modalVisible ? null : (
                     <Heading
-                      passedStyle={{color: 'white', textAlign: 'center'}}
+                      passedStyle={{ color: 'white', textAlign: 'center' }}
                       title="Interested in"
                     />
                   )}
@@ -566,7 +478,7 @@ const SignupScreen = ({
                             textAlign: 'left',
                             color: 'white',
                           }}
-                          textStyle={{color: 'white'}}
+                          textStyle={{ color: 'white' }}
                           dropDownContainerStyle={{
                             backgroundColor: 'rgba(0, 0, 0, 0.0)',
                             borderColor: 'rgba(0, 0, 0, 0.0)',
@@ -653,7 +565,7 @@ const SignupScreen = ({
                     <IconImage
                       source={require('./../../Assets/Images/male.png')}
                     />
-                    <View style={{marginLeft: 12}}></View>
+                    <View style={{ marginLeft: 12 }}></View>
                     <Text
                       style={{
                         color: 'black',
@@ -712,7 +624,7 @@ const SignupScreen = ({
                     <IconImage
                       source={require('./../../Assets/Images/female.png')}
                     />
-                    <View style={{marginLeft: 12}}></View>
+                    <View style={{ marginLeft: 12 }}></View>
                     <Text
                       style={{
                         color: 'black',
@@ -772,7 +684,7 @@ const SignupScreen = ({
                     <IconImage
                       source={require('./../../Assets/Images/lgbt.png')}
                     />
-                    <View style={{marginLeft: 12}}></View>
+                    <View style={{ marginLeft: 12 }}></View>
                     <Text
                       style={{
                         color: 'black',
@@ -843,6 +755,8 @@ const SignupScreen = ({
                       navigation,
                       LAT,
                       LONG,
+                      CName,
+                      CCode
                     );
                     setModalVisible(!modalVisible);
                     //  navigation.navigate('YourInterests')
@@ -870,8 +784,8 @@ const SignupScreen = ({
 //       return {userOtp}
 // }
 
-const mapStateToProps = ({userCoordsReducer, userSignup}) => {
-  return {userCoordsReducer, userSignup};
+const mapStateToProps = ({ userCoordsReducer, userSignup }) => {
+  return { userCoordsReducer, userSignup };
 };
 export default connect(mapStateToProps, actions)(SignupScreen);
 

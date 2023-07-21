@@ -372,6 +372,8 @@ export const SignUpStepOne =
     navigation,
     lat,
     long,
+    CName,
+    CCode
   ) =>
     async dispatch => {
       // console.log(
@@ -399,6 +401,8 @@ export const SignUpStepOne =
           user_gender_interest: obj,
           user_latitude: lat,
           user_longitude: long,
+          user_lives: CName,
+          country_code: CCode
         };
 
         navigation.navigate('YourInterests');
@@ -536,6 +540,8 @@ export const SignupAll =
           user_contact: userSignup?.user_contact,
           user_latitude: userSignup.user_latitude?.toString(),
           user_longitude: userSignup.user_longitude?.toString(),
+          country_code: userSignup?.country_code,
+          user_lives: userSignup?.user_lives,
           // user_reg_verify_code: userSignup.user_reg_verify_code,
           user_gender: [userSignup?.user_gender],
           user_gender_interest: userSignup?.user_gender_interest?.filter(
@@ -744,7 +750,7 @@ export const connectUser =
       if (response?.data?.success === true) {
         // console.log('Request Sent');
         showMessage({
-          message: 'Offer requested, Wait for his/her approval.',
+          message: 'Offer requested, Wait for your friend to approve.',
           type: 'success',
         });
         onSuccess();

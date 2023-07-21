@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -23,54 +23,54 @@ import LinearGradient from 'react-native-linear-gradient';
 import AppText from '../../../Components/AppText';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/Feather';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
 import PhoneInput from 'react-native-phone-number-input';
 import * as actions from '../../../Store/Actions';
-import {imageUrl} from '../../../Config/Apis.json';
-import {connect} from 'react-redux';
-import CountryPicker, {FlagButton} from 'react-native-country-picker-modal';
-import {themeRed} from '../../../Assets/Colors/Colors';
-import {CountryCode, Country} from './src/types';
+import { imageUrl } from '../../../Config/Apis.json';
+import { connect } from 'react-redux';
+import CountryPicker, { FlagButton } from 'react-native-country-picker-modal';
+import { themeRed } from '../../../Assets/Colors/Colors';
+import { CountryCode, Country } from './src/types';
 import ImagePicker from 'react-native-image-crop-picker';
 import IconComp from '../../../Components/IconComp';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { responsiveScreenWidth } from 'react-native-responsive-dimensions';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
 
 const data = [
-  {key: 'A', image: require('../../../Assets/Images/post1.png')},
-  {key: 'B', image: require('../../../Assets/Images/post2.png')},
-  {key: 'C', image: require('../../../Assets/Images/post3.png')},
-  {key: 'D', image: require('../../../Assets/Images/Animal.png')},
-  {key: 'E', image: require('../../../Assets/Images/Tech.png')},
-  {key: 'F', image: require('../../../Assets/Images/share1.png')},
-  {key: 'G', image: require('../../../Assets/Images/share2.png')},
-  {key: 'H', image: require('../../../Assets/Images/share2.png')},
-  {key: 'I', image: require('../../../Assets/Images/share2.png')},
-  {key: 'J', image: require('../../../Assets/Images/share1.png')},
-  {key: 'K', image: require('../../../Assets/Images/share1.png')},
-  {key: 'L', image: require('../../../Assets/Images/share1.png')},
-  {key: 'M', image: require('../../../Assets/Images/post1.png')},
-  {key: 'N', image: require('../../../Assets/Images/post1.png')},
-  {key: 'O', image: require('../../../Assets/Images/Animal.png')},
-  {key: 'P', image: require('../../../Assets/Images/post1.png')},
-  {key: 'Q', image: require('../../../Assets/Images/Animal.png')},
-  {key: 'R', image: require('../../../Assets/Images/post1.png')},
-  {key: 'S', image: require('../../../Assets/Images/Animal.png')},
-  {key: 'I', image: require('../../../Assets/Images/share2.png')},
-  {key: 'J', image: require('../../../Assets/Images/share1.png')},
-  {key: 'K', image: require('../../../Assets/Images/share1.png')},
-  {key: 'L', image: require('../../../Assets/Images/share1.png')},
-  {key: 'M', image: require('../../../Assets/Images/post1.png')},
-  {key: 'N', image: require('../../../Assets/Images/post1.png')},
-  {key: 'O', image: require('../../../Assets/Images/Animal.png')},
-  {key: 'P', image: require('../../../Assets/Images/post1.png')},
-  {key: 'Q', image: require('../../../Assets/Images/Animal.png')},
-  {key: 'R', image: require('../../../Assets/Images/post1.png')},
-  {key: 'S', image: require('../../../Assets/Images/Animal.png')},
+  { key: 'A', image: require('../../../Assets/Images/post1.png') },
+  { key: 'B', image: require('../../../Assets/Images/post2.png') },
+  { key: 'C', image: require('../../../Assets/Images/post3.png') },
+  { key: 'D', image: require('../../../Assets/Images/Animal.png') },
+  { key: 'E', image: require('../../../Assets/Images/Tech.png') },
+  { key: 'F', image: require('../../../Assets/Images/share1.png') },
+  { key: 'G', image: require('../../../Assets/Images/share2.png') },
+  { key: 'H', image: require('../../../Assets/Images/share2.png') },
+  { key: 'I', image: require('../../../Assets/Images/share2.png') },
+  { key: 'J', image: require('../../../Assets/Images/share1.png') },
+  { key: 'K', image: require('../../../Assets/Images/share1.png') },
+  { key: 'L', image: require('../../../Assets/Images/share1.png') },
+  { key: 'M', image: require('../../../Assets/Images/post1.png') },
+  { key: 'N', image: require('../../../Assets/Images/post1.png') },
+  { key: 'O', image: require('../../../Assets/Images/Animal.png') },
+  { key: 'P', image: require('../../../Assets/Images/post1.png') },
+  { key: 'Q', image: require('../../../Assets/Images/Animal.png') },
+  { key: 'R', image: require('../../../Assets/Images/post1.png') },
+  { key: 'S', image: require('../../../Assets/Images/Animal.png') },
+  { key: 'I', image: require('../../../Assets/Images/share2.png') },
+  { key: 'J', image: require('../../../Assets/Images/share1.png') },
+  { key: 'K', image: require('../../../Assets/Images/share1.png') },
+  { key: 'L', image: require('../../../Assets/Images/share1.png') },
+  { key: 'M', image: require('../../../Assets/Images/post1.png') },
+  { key: 'N', image: require('../../../Assets/Images/post1.png') },
+  { key: 'O', image: require('../../../Assets/Images/Animal.png') },
+  { key: 'P', image: require('../../../Assets/Images/post1.png') },
+  { key: 'Q', image: require('../../../Assets/Images/Animal.png') },
+  { key: 'R', image: require('../../../Assets/Images/post1.png') },
+  { key: 'S', image: require('../../../Assets/Images/Animal.png') },
 ];
 
 const formatData = (data, numColumns) => {
@@ -80,7 +80,7 @@ const formatData = (data, numColumns) => {
     numberOfElementsLastRow !== numColumns &&
     numberOfElementsLastRow !== 0
   ) {
-    data.push({key: `blank-${numberOfElementsLastRow}`, empty: true});
+    data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
     numberOfElementsLastRow++;
   }
   return data;
@@ -117,7 +117,7 @@ const Data = [
   'item 1',
   'item 1',
 ];
-const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
+const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
   const [username, setUsername] = useState(userReducer?.data?.user_name);
   const [phone_no, setPhone_no] = useState(userReducer?.data?.user_contact);
   const [countryCodeForPhone, onChangecountryCodeForPhone] = useState(
@@ -130,12 +130,12 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
   const usernameRegex = /^[a-zA-Z0-9]+$/;
 
   const [value, setValue] = useState(userReducer?.data?.user_contact);
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <View style={styles.item}>
         <TouchableOpacity>
           <Image
-            style={{height: 105, width: 105, borderRadius: 10}}
+            style={{ height: 105, width: 105, borderRadius: 10 }}
             source={item.image}
           />
         </TouchableOpacity>
@@ -190,7 +190,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
   });
   const ID = userReducer?.data?.user_id;
 
-  const [countryCode, setCountryCode] = useState('AR');
+  const [countryCode, setCountryCode] = useState('PK');
   const [flagName, setFlagName] = useState('flag-as');
   const [country, setCountry] = useState(userReducer?.data?.user_lives);
   const [withCountryNameButton, setWithCountryNameButton] = useState(false);
@@ -202,6 +202,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
   const [withFilter, setWithFilter] = useState(true);
   const [withAlphaFilter, setWithAlphaFilter] = useState(false);
   const [withCallingCode, setWithCallingCode] = useState(false);
+  console.log("userReducer?.data?.user_lives", userReducer?.data)
   const STATUS_BAR_HEIGHT =
     Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
 
@@ -304,7 +305,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
               },
             },
           ],
-          {useNativeDriver: false},
+          { useNativeDriver: false },
         )}>
         <View style={[styles.iconContainer]}>
           <TouchableOpacity
@@ -359,16 +360,15 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
                 source={require('../../../Assets/Images/test.png')}
               />
             )}
-            <View style={[styles.textContainer, isIOS && {top: height * 0.33}]}>
-              <Text style={styles.nameStyles}>{`${
-                username?.length > 17
-                  ? `${username?.substring(0, 17)}...`
-                  : username
-              }`}</Text>
+            <View style={[styles.textContainer, isIOS && { top: height * 0.33 }]}>
+              <Text style={styles.nameStyles}>{`${username?.length > 17
+                ? `${username?.substring(0, 17)}...`
+                : username
+                }`}</Text>
               <Text
                 style={[
                   styles.emailStyles,
-                  isIOS && {marginTop: height * 0.007},
+                  isIOS && { marginTop: height * 0.007 },
                 ]}>
                 {userReducer?.data?.user_email}
               </Text>
@@ -387,7 +387,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
             ref={phoneInput}
             defaultValue={value}
             addInternationalOption={false}
-            defaultCode={countryCodeForPhone || 'PK'}
+            defaultCode={countryCodeForPhone || userReducer?.data?.country_code}
             layout="first"
             placeholder="Phone"
             containerStyle={styles.phoneInputContainerStyle}
@@ -430,7 +430,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
           <CountryPicker
             containerButtonStyle={[
               styles.textInputLabel,
-              { color: 'white',    zIndex: 9999},
+              { color: 'white', zIndex: 9999 },
             ]}
             withFilter={true}
             withFlag={true}
@@ -447,7 +447,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
             withCurrencyButton
             placeholder={''}
             onSelect={t => {
-              console.log("T",t.flag, "==============")
+              console.log("T", t.flag, "==============")
               setFlagName(t.flag);
               setCountryCode(t.cca2);
               setCountry(t.name);
@@ -459,12 +459,12 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
               width: '90%',
-            
-              alignSelf:'center',
+
+              alignSelf: 'center',
               marginTop: isIOS ? height * -0.055 : height * -0.056,
-           
+
             }}>
-          
+
             <FlagButton withEmoji={true} countryCode={countryCode} />
             <Text
               style={{
@@ -477,7 +477,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
               }}>
               {country}
             </Text>
-            <View style={{width: responsiveScreenWidth(10)}} />
+            <View style={{ width: responsiveScreenWidth(10) }} />
           </View>
 
           <AntDesign
@@ -506,7 +506,7 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
             </TouchableOpacity>
           )}
         </View>
-        <View style={{height: 100}}></View>
+        <View style={{ height: 100 }}></View>
       </ScrollView>
 
       {/* <View style={{height: '37%'}} /> */}
@@ -514,8 +514,8 @@ const MyProfileScreen = ({navigation, route, userReducer, updateProfile}) => {
   );
 };
 
-function mapStateToProps({userReducer}) {
-  return {userReducer};
+function mapStateToProps({ userReducer }) {
+  return { userReducer };
 }
 export default connect(mapStateToProps, actions)(MyProfileScreen);
 

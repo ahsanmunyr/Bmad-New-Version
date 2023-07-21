@@ -327,7 +327,7 @@ const NewPostScreen = ({
               onChange={event => onChangeCaption(event.nativeEvent.text)}
               onSubmitEditing={event => onChangeCaption(event.nativeEvent.text)}
               multiline={true}
-              maxLength={150}
+              maxLength={250}
               numberOfLines={4}
               textAlignVertical="top"
               style={styles.textFieldStyle}

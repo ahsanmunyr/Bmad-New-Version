@@ -1,5 +1,5 @@
 import Modal from 'react-native-modal';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -7,13 +7,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {CardField, useStripe} from '@stripe/stripe-react-native';
+import { CardField, useStripe } from '@stripe/stripe-react-native';
 import AppText from '../Components/AppText';
 import LottieView from 'lottie-react-native';
-import {themeRed} from '../Assets/Colors/Colors';
+import { themeRed } from '../Assets/Colors/Colors';
 import TextFieldCard from '../Components/TextFieldCard';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
-const {width, height} = Dimensions.get('window');
+
+const { width, height } = Dimensions.get('window');
 
 const BuyDrinksModal = ({
   setIsModalVisible,
@@ -23,6 +25,7 @@ const BuyDrinksModal = ({
   isModalVisible,
   setIsStripeModalVisible,
 }) => {
+  const [ss, setss] = useState()
   return (
     <Modal isVisible={isModalVisible}>
       <View style={styles.container}>
@@ -78,13 +81,47 @@ const BuyDrinksModal = ({
           color="white"
           Label={'Maximum drinks: 05'}
         />
-        <View style={{flexDirection: 'row'}}>
+        <AppText
+          nol={2}
+          textAlign="center"
+          family="Poppins-Medium"
+          size={height * 0.015}
+          color="white"
+          Label={ss}
+        />
+        <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity
             activeOpacity={0.8}
+            // onPress={() => {
+            //   if (Number(drinks) > 0) {
+            //     setIsModalVisible(false);
+            //     setIsStripeModalVisible(true);
+            //   }
+            // }}
             onPress={() => {
-              if (Number(drinks) > 0) {
+              // Check if the value contains a decimal point using regular expression
+              if (!/^\d+$/.test(drinks)) {
+                setss("Please enter a valid number of drinks (no decimal allowed)")
+                // showMessage({
+                //   message: 'Please enter a valid number of drinks (no decimal allowed)',
+                //   danger: 'error',
+                // });
+                return; // Exit the function if the condition is not met
+              }
+
+              // Convert the string to an integer
+              const intValue = parseInt(drinks);
+
+              // Check if the parsed intValue is not NaN (i.e., it is a valid integer) and if it is greater than 0
+              if (!isNaN(intValue) && intValue > 0) {
                 setIsModalVisible(false);
                 setIsStripeModalVisible(true);
+              } else {
+                setss("Please select a valid number of drinks")
+                // showMessage({
+                //   message: 'Please select a valid number of drinks',
+                //   danger: 'error',
+                // });
               }
             }}
             style={{

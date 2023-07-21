@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -25,14 +25,14 @@ import {
 } from 'react-native-responsive-screen';
 import FavouriteList from './../../Components/FavouriteList';
 import * as actions from '../../Store/Actions';
-import {connect} from 'react-redux';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { connect } from 'react-redux';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import Geolocation from '@react-native-community/geolocation';
 import LottieView from 'lottie-react-native';
-import {themeRed} from '../../Assets/Colors/Colors';
-import {useIsFocused} from '@react-navigation/native';
+import { themeRed } from '../../Assets/Colors/Colors';
+import { useIsFocused } from '@react-navigation/native';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const Data = [
   {
@@ -99,7 +99,7 @@ const FavoriteDScreen = ({
   const isFocused = useIsFocused();
   const _onPressDone = async () => {
     if (userFavourite?.length === 0 || userFavourite == undefined) {
-      
+
 
       showMessage({
         message: 'Please Select Atleast One Drink.',
@@ -109,8 +109,9 @@ const FavoriteDScreen = ({
       return;
     }
     setIsLoading(true);
+    console.log("usersignupppp", userSignup)
     await SignupAll(userSignup, userFavourite, userInterest, _onSignUpFailed);
-    // console.log(userSignup);
+    console.log("+++++++++++++++++++++0-0-9-0", userSignup);
   };
 
   const _onSignUpFailed = () => {
@@ -150,7 +151,7 @@ const FavoriteDScreen = ({
   return (
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
-      <View style={{alignItems: 'center', height: hp(100)}}>
+      <View style={{ alignItems: 'center', height: hp(100) }}>
         <FlatList
           contentContainerStyle={{
             justifyContent: 'center',
@@ -166,12 +167,12 @@ const FavoriteDScreen = ({
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           ListEmptyComponent={null}
-          ListHeaderComponent={<View style={{height: 40}}></View>}
-          ListFooterComponent={<View style={{height: 120}}></View>}
+          ListHeaderComponent={<View style={{ height: 40 }}></View>}
+          ListFooterComponent={<View style={{ height: 120 }}></View>}
           data={Data}
           keyExtractor={(item, index) => index}
           extraData={items}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <FavouriteList
               Name={item.Name}
               Images={item.Image}
@@ -185,7 +186,7 @@ const FavoriteDScreen = ({
           <View style={styles.viewOfBtn}>
             {!isLoading ? (
               <TouchableOpacity onPress={_onPressDone} style={styles.donebtn}>
-                <Text style={{color: 'white', fontSize: width * 0.05}}>
+                <Text style={{ color: 'white', fontSize: width * 0.05 }}>
                   Done
                 </Text>
               </TouchableOpacity>
