@@ -1,15 +1,15 @@
 // @ts-nocheck
-import React, {useRef} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import HomeIcon from 'react-native-vector-icons/FontAwesome';
 import BioIcon from 'react-native-vector-icons/FontAwesome';
 import MenuIcon from 'react-native-vector-icons/Entypo';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Location from 'react-native-vector-icons/MaterialIcons';
 import Notification from 'react-native-vector-icons/Ionicons';
-import {colors} from './src/screens/drawer/constant';
+import { colors } from './src/screens/drawer/constant';
 import NotificationStack from './Screens/Notification/NotificationStack';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -18,8 +18,8 @@ import {
 import Home from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ReportIcon from 'react-native-vector-icons/Feather';
-import {useEffect} from 'react';
-import {useState} from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 function CustomTabBar({
   dataProps,
@@ -29,11 +29,12 @@ function CustomTabBar({
   userReducer,
   notificationsReducer,
 }) {
-  console.log(notificationsReducer?.unreadNoti, 'unreadNoti');
+  console.log(notificationsReducer?.unreadNoti, '+++++++++');
   const [change, onChange] = useState(false);
   const [hasNewRequests, setHasNewRequests] = useState(false);
 
   useEffect(() => {
+    console.log("______+_+_+_+", notificationsReducer?.unreadNoti)
     if (notificationsReducer?.unreadNoti > 0) {
       setHasNewRequests(true);
     } else {
@@ -85,7 +86,16 @@ function CustomTabBar({
                   right: responsiveScreenFontSize(3.1),
                   zIndex: 9999,
                 }}
-              />
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    alignSelf: "center",
+                    fontSize: 7,
+                    fontWeight: "500"
+                  }}
+                >{notificationsReducer?.unreadNoti}</Text>
+              </View>
             )}
 
             <Notification
@@ -113,13 +123,13 @@ function CustomTabBar({
   useEffect(() => {
     if (state) {
       state.routes.map((route, index) => {
-        const {options} = descriptors[route.key];
+        const { options } = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-            ? options.title
-            : route.name;
+              ? options.title
+              : route.name;
 
         const isFocused = state.index === index;
 
@@ -162,13 +172,13 @@ function CustomTabBar({
         if (false) {
           return null;
         } else {
-          const {options} = descriptors[route.key];
+          const { options } = descriptors[route.key];
           const label =
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
               : options.title !== undefined
-              ? options.title
-              : route.name;
+                ? options.title
+                : route.name;
 
           var realName = '';
 
@@ -243,7 +253,7 @@ function CustomTabBar({
             <TouchableOpacity
               key={index}
               accessibilityRole="button"
-              accessibilityState={isFocused ? {selected: true} : {}}
+              accessibilityState={isFocused ? { selected: true } : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
               testID={options.tabBarTestID}
               onPress={onPress}
@@ -270,7 +280,7 @@ function CustomTabBar({
     </View>
   );
 }
-function mapStateToProps({userReducer, notificationsReducer}) {
+function mapStateToProps({ userReducer, notificationsReducer }) {
   return {
     userReducer,
     notificationsReducer,
