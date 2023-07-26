@@ -57,6 +57,8 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
   console.log(".sjlkdhslkahdlkhsalkhdlks", chatPersonId)
   console.log("Messages", messages)
   const mymessages = () => {
+    console.log("=======================================",
+      "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
     const eventName = 'sendMessage';
     const eventData = {
       receiverId: chatPersonId,
@@ -69,6 +71,8 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
   }
   useEffect(() => {
     socket.on("getMessage", (data) => {
+      getMessageIsFocused(isFocused);
+
       console.log("adkhksahgdkj", data)
     })
   }, [])
