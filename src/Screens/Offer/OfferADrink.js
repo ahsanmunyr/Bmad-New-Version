@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -21,7 +21,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import AppText from './../../Components/AppText';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -29,12 +29,12 @@ import {
 import SplashScreen from 'react-native-splash-screen';
 import * as actions from '../../Store/Actions/index';
 import LottieView from 'lottie-react-native';
-import {showMessage, hideMessage} from 'react-native-flash-message';
-import {imageUrl} from '../../Config/Apis.json';
-import {themeRed} from '../../Assets/Colors/Colors';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import { imageUrl } from '../../Config/Apis.json';
+import { themeRed } from '../../Assets/Colors/Colors';
 import { responsiveHeight, responsiveScreenFontSize } from 'react-native-responsive-dimensions';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const OfferADrink = ({
   usersNearmeReducer,
@@ -48,12 +48,14 @@ const OfferADrink = ({
 
   // send request to drink buddy
   const _onPressConfirm = async () => {
-    
+
     setLoading(true);
+
     const apiData = {
       user: userReducer?.data?.user_id,
       friend: NEARME_USERDATA?.user_id,
     };
+    // console.log("http://192.168.0.136:3000", apiData)
     await connectUser(apiData, onSuccess, NEARME_USERDATA, _onRequestFialed);
     setLoading(false)
   };
@@ -68,107 +70,107 @@ const OfferADrink = ({
     setLoading(false);
   };
 
- 
+
   return (
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
-    
-      <AppText
-          nol={1}
-          textAlign="left"
-          family="Poppins-SemiBold"
-          size={width * 0.13}
-          color="white"
-          Label={'Cheers!'}
-        />
-      <View style={{height: responsiveHeight(60), width: '100%',alignSelf:'center',justifyContent:'flex-start',alignItems:'center'}}>
-      <View style={{height: 100}}></View>
-      <View style={styles.contentContainer}>
-        
-        <View style={styles.userInfoContainer}>
-          <View style={styles.imageContainer}>
-            <Image
-              style={styles.imageStyles}
-              // resizeMethod="auto"
-              source={
-                userReducer?.data?.user_image !== null &&
-                userReducer?.data?.user_image !== undefined
-                  ? {uri: `${imageUrl}/${userReducer?.data?.user_image}`}
-                  : require('../../Assets/Images/placeholderImage.png')
-              }
-            />
-          </View>
-          <View style={styles.loaderContainer}>
-            <Image
-              style={styles.imageStyles}
-              source={
-                NEARME_USERDATA?.user_image !== null &&
-                NEARME_USERDATA?.user_image !== undefined
-                  ? {uri: `${imageUrl}/${NEARME_USERDATA?.user_image}`}
-                  : require('../../Assets/Images/placeholderImage.png')
-              }
-            />
-          </View>
-        </View>
-      </View>
-      <View style={styles.actionContainer}>
-        <AppText
-          nol={5}
-          textAlign="center"
-          family="Poppins-SemiBold"
-          size={width * 0.045}
-          color="white"
-          Label={`Proceed to Offer a Drink to ${NEARME_USERDATA?.user_name} Today!`}
-        />
-      </View>
-      {loading ? (
-        <>
-          <LottieView
-            style={styles.lottieStyles}
-            source={require('../../Assets/Lottie/white-loader.json')}
-            autoPlay
-            loop
-          />
-          <Text style={styles.pleaseWait}>Please Wait</Text>
-        </>
-      ) : (
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            onPress={() => _onPressConfirm()}
-            style={styles.touchableOpacity}>
-            <AppText
-              nol={1}
-              textAlign="left"
-              family="Poppins-SemiBold"
-              size={width * 0.045}
-              color={'white'}
-              Label={'Confirm'}
-            />
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={[styles.touchableOpacity, {marginTop: height * 0.02}]}>
-            <AppText
-              nol={1}
-              textAlign="left"
-              family="Poppins-SemiBold"
-              size={width * 0.045}
-              color={'white'}
-              Label={'Later'}
-            />
-          </TouchableOpacity>
+      <AppText
+        nol={1}
+        textAlign="left"
+        family="Poppins-SemiBold"
+        size={width * 0.13}
+        color="white"
+        Label={'Cheers!'}
+      />
+      <View style={{ height: responsiveHeight(60), width: '100%', alignSelf: 'center', justifyContent: 'flex-start', alignItems: 'center' }}>
+        <View style={{ height: 100 }}></View>
+        <View style={styles.contentContainer}>
+
+          <View style={styles.userInfoContainer}>
+            <View style={styles.imageContainer}>
+              <Image
+                style={styles.imageStyles}
+                // resizeMethod="auto"
+                source={
+                  userReducer?.data?.user_image !== null &&
+                    userReducer?.data?.user_image !== undefined
+                    ? { uri: `${imageUrl}/${userReducer?.data?.user_image}` }
+                    : require('../../Assets/Images/placeholderImage.png')
+                }
+              />
+            </View>
+            <View style={styles.loaderContainer}>
+              <Image
+                style={styles.imageStyles}
+                source={
+                  NEARME_USERDATA?.user_image !== null &&
+                    NEARME_USERDATA?.user_image !== undefined
+                    ? { uri: `${imageUrl}/${NEARME_USERDATA?.user_image}` }
+                    : require('../../Assets/Images/placeholderImage.png')
+                }
+              />
+            </View>
+          </View>
         </View>
-      )}
+        <View style={styles.actionContainer}>
+          <AppText
+            nol={5}
+            textAlign="center"
+            family="Poppins-SemiBold"
+            size={width * 0.045}
+            color="white"
+            Label={`Proceed to Offer a Drink to ${NEARME_USERDATA?.user_name} Today!`}
+          />
+        </View>
+        {loading ? (
+          <>
+            <LottieView
+              style={styles.lottieStyles}
+              source={require('../../Assets/Lottie/white-loader.json')}
+              autoPlay
+              loop
+            />
+            <Text style={styles.pleaseWait}>Please Wait</Text>
+          </>
+        ) : (
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              onPress={() => _onPressConfirm()}
+              style={styles.touchableOpacity}>
+              <AppText
+                nol={1}
+                textAlign="left"
+                family="Poppins-SemiBold"
+                size={width * 0.045}
+                color={'white'}
+                Label={'Confirm'}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={[styles.touchableOpacity, { marginTop: height * 0.02 }]}>
+              <AppText
+                nol={1}
+                textAlign="left"
+                family="Poppins-SemiBold"
+                size={width * 0.045}
+                color={'white'}
+                Label={'Later'}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
-    
-    
+
+
     </View>
   );
 };
 
-const mapStateToProps = ({userReducer, usersNearmeReducer}) => {
-  return {userReducer, usersNearmeReducer};
+const mapStateToProps = ({ userReducer, usersNearmeReducer }) => {
+  return { userReducer, usersNearmeReducer };
 };
 export default connect(mapStateToProps, actions)(OfferADrink);
 

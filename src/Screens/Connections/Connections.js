@@ -8,20 +8,20 @@ import {
   FlatList,
 } from 'react-native';
 import axios from 'axios';
-import React, {useState, useEffect} from 'react';
-import {connect, useDispatch} from 'react-redux';
-import {api} from '../../Config/Apis.json';
+import React, { useState, useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import { api } from '../../Config/Apis.json';
 import AppText from '../../Components/AppText';
-import {testFunc} from '../../Store/Actions/index';
+import { testFunc } from '../../Store/Actions/index';
 import ConnectionsMapper from './ConnectionsMapper';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import * as types from '../../Store/Actions/actionType';
 import ConnectionButtonsMapper from './ConnectionButtonsMapper';
 
 import * as actions from '../../Store/Actions/index';
-import {useIsFocused} from '@react-navigation/native';
-import {themeRed} from '../../Assets/Colors/Colors';
-const {width, height} = Dimensions.get('window');
+import { useIsFocused } from '@react-navigation/native';
+import { themeRed } from '../../Assets/Colors/Colors';
+const { width, height } = Dimensions.get('window');
 
 const Test = ({
   getAllConnections,
@@ -98,7 +98,7 @@ const Test = ({
       friend: item?.user_id,
     };
     console.log(data, 'accept data');
-    acceptInvite(data);
+    // acceptInvite(data);
   };
   useEffect(() => {
     if (choice === 0) {
@@ -145,7 +145,7 @@ const Test = ({
             horizontal={true}
             data={buttonData}
             keyExtractor={item => item?.id?.toString()}
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <ConnectionButtonsMapper
                 onlyInvitations={invitation}
                 item={item}
@@ -158,7 +158,7 @@ const Test = ({
         )}
         data={choice === 0 ? connections : choice === 1 ? invitation : requests}
         keyExtractor={(item, index) => index}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <ConnectionsMapper
             item={item}
             navigation={navigation}
@@ -172,14 +172,14 @@ const Test = ({
       />
       {choice === 0 && connections?.length === 0 && (
         <View style={styles.cardView}>
-          <Text style={{color: 'white', alignSelf: 'center'}}>
+          <Text style={{ color: 'white', alignSelf: 'center' }}>
             You have no connections
           </Text>
         </View>
       )}
       {choice === 1 && invitation.length === 0 && (
         <View style={styles.cardView}>
-          <Text style={{color: 'white', alignSelf: 'center'}}>
+          <Text style={{ color: 'white', alignSelf: 'center' }}>
             You have no invitations
           </Text>
         </View>
@@ -187,7 +187,7 @@ const Test = ({
 
       {choice === 2 && requests.length === 0 && (
         <View style={styles.cardView}>
-          <Text style={{color: 'white', alignSelf: 'center'}}>
+          <Text style={{ color: 'white', alignSelf: 'center' }}>
             You have no requests
           </Text>
         </View>

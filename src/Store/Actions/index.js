@@ -896,6 +896,7 @@ export const getInvites = userId => async dispatch => {
 export const acceptInvite = data => async dispatch => {
   try {
     const response = await axios.post(`${api}/api/friends/acceptFriend`, data);
+    console.log("acceptor ", data)
     // console.log(response.data);
     if (response.data.success) {
       // console.log(response.data);

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -21,15 +21,15 @@ import {
 } from 'react-native-responsive-screen';
 import LottieView from 'lottie-react-native';
 import AppText from '../../Components/AppText';
-import {connect} from 'react-redux';
-import {imageUrl} from '../../Config/Apis.json';
-import {useRoute, StackActions, useIsFocused} from '@react-navigation/native';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { connect } from 'react-redux';
+import { imageUrl } from '../../Config/Apis.json';
+import { useRoute, StackActions, useIsFocused } from '@react-navigation/native';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import * as actions from '../../Store/Actions/index';
-import {themeRed} from '../../Assets/Colors/Colors';
+import { themeRed } from '../../Assets/Colors/Colors';
 //  import {useNavigation} from "@react-navigation/native"
 // import { NavigationActions } from 'react-navigation';
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const ProfileScreen = ({
   userReducer,
@@ -194,19 +194,19 @@ const ProfileScreen = ({
         {/* User Profile Section  */}
 
         {nearMeUserData?.user_image === undefined ||
-        nearMeUserData?.user_image == null ? (
+          nearMeUserData?.user_image == null ? (
           <Image
-            style={[styles.userProfilePic, isIOS && {height: height * 0.45}]}
+            style={[styles.userProfilePic, isIOS && { height: height * 0.45 }]}
             source={require('./../../Assets/Images/userr.jpeg')}
             resizeMode="cover"
-            // resizeMethod="auto"
+          // resizeMethod="auto"
           />
         ) : (
           <Image
             style={styles.userProfilePic}
-            source={{uri: `${imageUrl}/${nearMeUserData?.user_image}`}}
-            // resizeMode=""
-            // resizeMethod="auto"
+            source={{ uri: `${imageUrl}/${nearMeUserData?.user_image}` }}
+          // resizeMode=""
+          // resizeMethod="auto"
           />
         )}
 
@@ -239,7 +239,7 @@ const ProfileScreen = ({
               Label={nearMeUserData?.user_gender[0] || 'Female'}
             /> */}
           </View>
-          <View style={{marginLeft: width * 0.05}}>
+          <View style={{ marginLeft: width * 0.05 }}>
             {/* <AppText
               nol={1}
               textAlign="left"
@@ -276,14 +276,14 @@ const ProfileScreen = ({
                     size={hp('2%')}
                     color="white"
                     Label={'Lecturer'}
-                    // Label={nearMeUserData?.user_title}
+                  // Label={nearMeUserData?.user_title}
                   />
                   {(nearMeUserData?.user_title != null ||
                     (nearMeUserData?.user_title !== undefined &&
                       nearMeUserData?.user_lives != null &&
                       nearMeUserData?.user_lives != undefined)) && (
-                    <View style={styles.noProfessions} />
-                  )}
+                      <View style={styles.noProfessions} />
+                    )}
                   <AppText
                     nol={1}
                     textAlign="left"
@@ -291,7 +291,7 @@ const ProfileScreen = ({
                     size={hp('2%')}
                     color="white"
                     Label={'New York City'}
-                    // Label={nearMeUserData?.user_lives}
+                  // Label={nearMeUserData?.user_lives}
                   />
                 </View>
               )}
@@ -308,7 +308,7 @@ const ProfileScreen = ({
                   Label={
                     'New York, Times Square 1st Block 1st Cross Street# 43'
                   }
-                  // Label={nearMeUserData?.user_address}
+                // Label={nearMeUserData?.user_address}
                 />
               </View>
             )}
@@ -371,29 +371,29 @@ const ProfileScreen = ({
             {(nearMeUserData?.status === null ||
               nearMeUserData?.status === 'null' ||
               nearMeUserData?.status === 'rejected') && (
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.touchableOpacity}
-                onPress={() => {
-                  if (userReducer?.data?.coins <= 0) {
-                    showMessage({
-                      message: "You don't have enough coins to send a request.",
-                      danger: 'error',
-                    });
-                    return;
-                  }
-                  navigation.navigate('OfferADrink');
-                }}>
-                <AppText
-                  nol={1}
-                  textAlign="left"
-                  family="Poppins-SemiBold"
-                  size={width * 0.03}
-                  color="black"
-                  Label={'Offer A Drink'}
-                />
-              </TouchableOpacity>
-            )}
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={styles.touchableOpacity}
+                  onPress={() => {
+                    if (userReducer?.data?.coins <= 0) {
+                      showMessage({
+                        message: "You don't have enough coins to send a request.",
+                        danger: 'error',
+                      });
+                      return;
+                    }
+                    navigation.navigate('OfferADrink');
+                  }}>
+                  <AppText
+                    nol={1}
+                    textAlign="left"
+                    family="Poppins-SemiBold"
+                    size={width * 0.03}
+                    color="black"
+                    Label={'Offer A Drink'}
+                  />
+                </TouchableOpacity>
+              )}
 
             {/* REmove Friend  */}
             {nearMeUserData?.status === 'accepted' && !actionLoader && (
@@ -445,7 +445,7 @@ const ProfileScreen = ({
                     onPress={() => {
                       _onPressIgnoreInvite();
                     }}
-                    style={[styles.touchableOpacity, {marginLeft: 10}]}>
+                    style={[styles.touchableOpacity, { marginLeft: 10 }]}>
                     <AppText
                       nol={1}
                       textAlign="left"
@@ -466,7 +466,7 @@ const ProfileScreen = ({
                 // }
                 activeOpacity={0.8}
                 onPress={() => _onPressMessageButton()}
-                style={[styles.touchableOpacity, {marginLeft: 10}]}>
+                style={[styles.touchableOpacity, { marginLeft: 10 }]}>
                 <AppText
                   nol={1}
                   textAlign="left"
@@ -499,33 +499,33 @@ const ProfileScreen = ({
               data={nearMeUserData?.user_favorite}
               horizontal
               keyExtractor={(item, index) => index}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <View
                   style={{
                     margin: 10,
                   }}>
                   <ImageBackground
-                    style={{width: 120, height: 120}}
+                    style={{ width: 120, height: 120 }}
                     resizeMode="contain"
-                    imageStyle={{borderRadius: 5}}
+                    imageStyle={{ borderRadius: 5 }}
                     source={
                       item == 'Old Fashioned'
                         ? require('../../Assets/Images/1.png')
                         : item == 'Margarita'
-                        ? require('../../Assets/Images/2.png')
-                        : item == 'Dark & Stormy'
-                        ? require('../../Assets/Images/3.png')
-                        : item == 'Mimosa'
-                        ? require('../../Assets/Images/4.png')
-                        : item == 'Manhattan'
-                        ? require('../../Assets/Images/5.png')
-                        : item == 'Whiskey Sour'
-                        ? require('../../Assets/Images/6.png')
-                        : item == 'Cosmopolitan'
-                        ? require('../../Assets/Images/7.png')
-                        : item == 'Martini'
-                        ? require('../../Assets/Images/8.png')
-                        : null
+                          ? require('../../Assets/Images/2.png')
+                          : item == 'Dark & Stormy'
+                            ? require('../../Assets/Images/3.png')
+                            : item == 'Mimosa'
+                              ? require('../../Assets/Images/4.png')
+                              : item == 'Manhattan'
+                                ? require('../../Assets/Images/5.png')
+                                : item == 'Whiskey Sour'
+                                  ? require('../../Assets/Images/6.png')
+                                  : item == 'Cosmopolitan'
+                                    ? require('../../Assets/Images/7.png')
+                                    : item == 'Martini'
+                                      ? require('../../Assets/Images/8.png')
+                                      : null
                     }>
                     <View style={styles.flatTextStyle}>
                       <Text numberOfLines={2} style={styles.flatText}>
@@ -559,33 +559,33 @@ const ProfileScreen = ({
               data={nearMeUserData?.user_interest}
               horizontal
               keyExtractor={(item, index) => index}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <View
                   style={{
                     margin: 10,
                   }}>
                   <ImageBackground
-                    style={{width: 120, height: 120}}
+                    style={{ width: 120, height: 120 }}
                     resizeMode="contain"
-                    imageStyle={{borderRadius: 5}}
+                    imageStyle={{ borderRadius: 5 }}
                     source={
                       item == 'Tech'
                         ? require('../../Assets/Images/Tech.png')
                         : item == 'Food'
-                        ? require('../../Assets/Images/Food.png')
-                        : item == 'Animal'
-                        ? require('../../Assets/Images/Animal.png')
-                        : item == 'Art & Design'
-                        ? require('../../Assets/Images/Art.png')
-                        : item == 'Book'
-                        ? require('../../Assets/Images/Book.png')
-                        : item == 'Movie'
-                        ? require('../../Assets/Images/Movies.png')
-                        : item == 'Nature'
-                        ? require('../../Assets/Images/Nature.png')
-                        : item == 'Poetry'
-                        ? require('../../Assets/Images/Poetry.png')
-                        : null
+                          ? require('../../Assets/Images/Food.png')
+                          : item == 'Animal'
+                            ? require('../../Assets/Images/Animal.png')
+                            : item == 'Art & Design'
+                              ? require('../../Assets/Images/Art.png')
+                              : item == 'Book'
+                                ? require('../../Assets/Images/Book.png')
+                                : item == 'Movie'
+                                  ? require('../../Assets/Images/Movies.png')
+                                  : item == 'Nature'
+                                    ? require('../../Assets/Images/Nature.png')
+                                    : item == 'Poetry'
+                                      ? require('../../Assets/Images/Poetry.png')
+                                      : null
                     }>
                     <View style={styles.flatTextStyle}>
                       <Text style={styles.flatText}>{item}</Text>
@@ -595,7 +595,7 @@ const ProfileScreen = ({
               )}
             />
           </View>
-          <View style={{height: 170}} />
+          <View style={{ height: 170 }} />
         </View>
       </ScrollView>
     </View>
@@ -607,7 +607,7 @@ const mapStateToProps = ({
   usersNearmeReducer,
   messagesReducer,
 }) => {
-  return {userReducer, usersNearmeReducer, messagesReducer};
+  return { userReducer, usersNearmeReducer, messagesReducer };
 };
 export default connect(mapStateToProps, actions)(ProfileScreen);
 
