@@ -98,7 +98,7 @@ const Test = ({
       friend: item?.user_id,
     };
     console.log(data, 'accept data');
-    // acceptInvite(data);
+    acceptInvite(data);
   };
   useEffect(() => {
     if (choice === 0) {
