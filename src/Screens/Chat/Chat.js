@@ -44,9 +44,10 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
     receiver: CURRENT_CHAT?.chatPerson?.user_id,
   };
   const socket = io(api);
-  // const socket = io("ws://192.168.0.42:5001");
+  // const socket = io("http://192.168.0.136:5001");
   useEffect(() => {
     socket.connect();
+
     const eventData = {
       userId: `${userId}`,
 
@@ -54,11 +55,17 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
     socket.emit('addUser', eventData);
 
   }, [])
-  console.log(".sjlkdhslkahdlkhsalkhdlks", chatPersonId)
+  socket.on('connect', () => {
+    console.log('Socket.IO connected+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+  });
+  socket.on('disconnect', (reason) => {
+    console.log('Socket.IO disconnected:', reason);
+  });
   console.log("Messages", messages)
   const mymessages = () => {
     console.log("=======================================",
       "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+    console.log(".sjlkdhslkahdlkhsalkhdlks", chatPersonId)
     const eventName = 'sendMessage';
     const eventData = {
       receiverId: chatPersonId,
@@ -106,12 +113,13 @@ function Chat({ route, getMessages, messagesReducer, sendMessage, userReducer })
   useEffect(() => {
     setMessages(messagesReducer?.messages);
   }, [messagesReducer?.messages]);
-
+  console.log("date__+_+_+_+_+_", new Date().toISOString())
   const handlesend = async () => {
     const messageToBeSend = {
       receiver: chatPersonId,
       sender: userId,
       message: text,
+      // createdAt: new Date()
     };
     console.log("text", text)
     console.log(messageToBeSend, 'message to send');
