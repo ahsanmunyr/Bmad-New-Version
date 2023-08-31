@@ -225,8 +225,8 @@ const NewPostScreen = ({
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    SelectCamera(),
-                    setModalVisible(false)
+                    SelectCamera()
+                    // setModalVisible(false)
                   }}
                   style={{
                     flexDirection: "row",
