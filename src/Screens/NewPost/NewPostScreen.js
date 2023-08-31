@@ -82,6 +82,7 @@ const NewPostScreen = ({
   });
 
   const SelectCamera = () => {
+    // setModalVisible(!modalVisible)
     ImagePickerMultiple.openCamera({
       multiple: true,
       width: 300,
@@ -103,6 +104,7 @@ const NewPostScreen = ({
         ImageArray.push(showImage);
         // }
         setFilePath(ImageArray);
+        setModalVisible(false)
       })
       .catch(err => {
         console.log(err);
@@ -133,6 +135,7 @@ const NewPostScreen = ({
           ImageArray.push(showImage);
         }
         setFilePath(ImageArray);
+        setModalVisible(false)
       })
       .catch(err => {
         console.log(err);
@@ -222,11 +225,8 @@ const NewPostScreen = ({
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    setModalVisible(!modalVisible)
-                    setTimeout(() => {
-                      SelectCamera()
-                    }, 50);
-
+                    SelectCamera(),
+                    setModalVisible(false)
                   }}
                   style={{
                     flexDirection: "row",
@@ -253,10 +253,9 @@ const NewPostScreen = ({
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    setModalVisible(!modalVisible)
-                    setTimeout(() => {
+                  
                       SelectMultipleImage()
-                    }, 50);
+                    
 
                   }}
                   style={{
@@ -631,7 +630,7 @@ var styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height: height * 0.22,
+    height: height * 0.21,
     width: width * 0.8
   },
   button: {
