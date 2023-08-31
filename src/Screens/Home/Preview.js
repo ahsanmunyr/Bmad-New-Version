@@ -39,7 +39,7 @@ export default Preview = ({item, scrollX, index}) => {
         <Image
         
           style={styles.posterImage}
-          resizeMode="contain"
+          // resizeMode="contain"
           source={{uri: item}}
         />
       </View>
