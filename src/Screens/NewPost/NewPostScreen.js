@@ -18,6 +18,7 @@ import {
   TouchableHighlight,
   TextInput,
   ScrollView,
+  Modal
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -72,6 +73,7 @@ const NewPostScreen = ({
   };
 
   const [filePath, setFilePath] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [caption, onChangeCaption] = useState('');
   const [tags, onChangeArrays] = useState({
@@ -79,7 +81,35 @@ const NewPostScreen = ({
     tagsArray: [],
   });
 
+  const SelectCamera = () => {
+    ImagePickerMultiple.openCamera({
+      multiple: true,
+      width: 300,
+      height: 400,
+      selectionLimit: 3,
+      mediaType: 'photo',
+      // cropping: true,
+      includeBase64: true,
+    })
+
+      .then(response => {
+        console.log(response)
+        var ImageArray = [];
+        let showImage = {
+          uri: 'data:image/jpeg;base64,' + response?.data,
+          path: response?.path,
+          type: response?.mime,
+        };
+        ImageArray.push(showImage);
+        // }
+        setFilePath(ImageArray);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   const SelectMultipleImage = () => {
+
     ImagePickerMultiple.openPicker({
       multiple: true,
       width: 300,
@@ -91,6 +121,7 @@ const NewPostScreen = ({
     })
 
       .then(response => {
+        console.log(response)
         var ImageArray = [];
         for (var i = 0; i < response.length; i++) {
           // console.log(response[i].size, 'SIZE');
@@ -106,6 +137,7 @@ const NewPostScreen = ({
       .catch(err => {
         console.log(err);
       });
+
   };
 
   const updateTagState = tag => {
@@ -162,6 +194,105 @@ const NewPostScreen = ({
   return (
     <View style={styles.container}>
       <View style={styles.imagesSection}>
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <TouchableOpacity
+                  onPress={() => { setModalVisible(!modalVisible) }}
+                  style={{
+                    alignSelf: "flex-end",
+                    marginTop: -height * 0.0355,
+                    marginRight: -width * 0.0535,
+                  }}
+                >
+
+                  <Entypo
+                    name="cross"
+                    size={responsiveScreenFontSize(3)}
+                    color="#b01125"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(!modalVisible)
+                    setTimeout(() => {
+                      SelectCamera()
+                    }, 50);
+
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "rgba(176, 17, 38, 0.1)",
+                    width: width * 0.6,
+                    paddingHorizontal: 15,
+                    borderRadius: width * 0.0155
+                    // justifyContent: "space-around"
+                  }}
+                >
+                  <Image
+                    style={{ height: height * 0.06, width: width * 0.08, resizeMode: "contain" }}
+                    source={require("../../Assets/Images/camera.png")}
+                  />
+                  <Text style={{
+                    marginLeft: width * 0.0325,
+                    fontSize: width * 0.0345,
+                    color: "black",
+                    fontFamily: "Poppins-Medium"
+
+                  }}>Open Camera</Text>
+
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(!modalVisible)
+                    setTimeout(() => {
+                      SelectMultipleImage()
+                    }, 50);
+
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "rgba(176, 17, 38, 0.1)",
+                    width: width * 0.6,
+                    paddingHorizontal: 15,
+                    borderRadius: width * 0.0155,
+                    marginTop: height * 0.0125
+                    // justifyContent: "space-around"
+                  }}
+                >
+                  <Image
+                    style={{ height: height * 0.06, width: width * 0.08, resizeMode: "contain" }}
+                    source={require("../../Assets/Images/gallery.png")}
+                  />
+                  <Text style={{
+                    marginLeft: width * 0.0325,
+                    fontSize: width * 0.0345,
+                    color: "black",
+                    fontFamily: "Poppins-Medium"
+
+                  }}>Open Gallery</Text>
+
+                </TouchableOpacity>
+
+              </View>
+            </View>
+          </Modal>
+          <TouchableOpacity
+            style={[styles.button, styles.buttonOpen]}
+            onPress={() => setModalVisible(true)}>
+            <Text style={styles.textStyle}>Show Modal</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.addPicView}>
           <AppText
             nol={1}
@@ -187,8 +318,8 @@ const NewPostScreen = ({
               width: '100%',
             }}>
             <TouchableOpacity
-              onPress={SelectMultipleImage}
-              // onPress={launchCamera}
+              // onPress={SelectMultipleImage}
+              onPress={() => { setModalVisible(!modalVisible) }}
 
               style={{
                 backgroundColor: 'white',
@@ -477,5 +608,50 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     height: height * 0.04,
     width: '25%',
+  },
+  centeredView: {
+    flex: 1,
+    height: height,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginTop: 22,
+    backgroundColor: "rgba(0, 0, 0, 0.19)"
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    height: height * 0.22,
+    width: width * 0.8
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
