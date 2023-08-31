@@ -89,7 +89,7 @@ const NewPostScreen = ({
       height: 400,
       selectionLimit: 3,
       mediaType: 'photo',
-      // cropping: true,
+      cropping: true,
       includeBase64: true,
     })
 
@@ -118,7 +118,7 @@ const NewPostScreen = ({
       height: 400,
       selectionLimit: 3,
       mediaType: 'photo',
-      // cropping: true,
+      cropping: true,
       includeBase64: true,
     })
 
@@ -226,7 +226,7 @@ const NewPostScreen = ({
                 <TouchableOpacity
                   onPress={() => {
                     SelectCamera(),
-                    setModalVisible(false)
+                      setModalVisible(false)
                   }}
                   style={{
                     flexDirection: "row",
@@ -253,9 +253,9 @@ const NewPostScreen = ({
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                  
-                      SelectMultipleImage()
-                    
+
+                    SelectMultipleImage()
+
 
                   }}
                   style={{
