@@ -65,7 +65,7 @@ function CustomTabBar({
         return (
           <Home
             name="plus"
-            size={responsiveFontSize(4.75)}
+            size={responsiveFontSize(3.75)}
             color={isFocues ? colors.themeblue : colors.lightGray}
           />
         );
