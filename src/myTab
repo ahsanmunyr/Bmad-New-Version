@@ -1,7 +1,7 @@
-import {View, StyleSheet, LogBox, Text, Dimensions} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {themeRed} from './Assets/Colors/Colors';
+import { View, StyleSheet, LogBox, Text, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { themeRed } from './Assets/Colors/Colors';
 import Home from 'react-native-vector-icons/Feather';
 import ProfileStack from './Screens/Home/Profile/ProfileStack';
 import Location from 'react-native-vector-icons/MaterialIcons';
@@ -12,11 +12,11 @@ import NotificationStack from './Screens/Notification/NotificationStack';
 import NearMeStack from './Screens/NearMe/NearMeStack';
 import MessageStack from './Screens/Messages/MessageStack';
 import * as actions from './Store/Actions';
-import {useRoute} from '@react-navigation/native';
-import {connect} from 'react-redux';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
+import { connect } from 'react-redux';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import BmadStack from './Screens/BMAD/BmadStack';
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const MyTabs = ({
   userReducer,
@@ -96,7 +96,7 @@ const MyTabs = ({
         component={HomeStack}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Home name="home" style={{}} size={size} color={color} />
           ),
         }}
@@ -104,16 +104,16 @@ const MyTabs = ({
       <Tab.Screen
         name="nearme"
         component={NearMeStack}
-        listeners={({navigation, route}) => ({
+        listeners={({ navigation, route }) => ({
           tabPress: e => {
             // if (route.state && route.state.routeNames.length > 0) {
             navigation.navigate('nearme');
             // }
           },
         })}
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           tabBarLabel: 'Nearby Me',
-          tabBarIcon: ({color, size}) => {
+          tabBarIcon: ({ color, size }) => {
             // console.log(navigation)
             return (
               <Location
@@ -131,7 +131,7 @@ const MyTabs = ({
         component={NewPostStack}
         options={{
           tabBarLabel: 'New Post',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Home name="plus-square" style={{}} size={size} color={color} />
           ),
         }}
@@ -139,13 +139,13 @@ const MyTabs = ({
       <Tab.Screen
         name="notification"
         component={NotificationStack}
-        listeners={({navigation, route}) => ({
+        listeners={({ navigation, route }) => ({
           tabPress: e => {
             showNotificationsBadge(false);
             resetTotalUnreadNotificationsCount();
           },
         })}
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           tabBarLabel: 'Notification',
           tabBarBadge:
             // routeName === 'notification'
@@ -154,8 +154,8 @@ const MyTabs = ({
             hasNewRequests && notificationsReducer?.unreadNoti > 0
               ? notificationsReducer?.unreadNoti
               : null,
-          tabBarBadgeStyle: {color: 'white', backgroundColor: themeRed},
-          tabBarIcon: ({color, size}) => (
+          tabBarBadgeStyle: { color: 'white', backgroundColor: themeRed },
+          tabBarIcon: ({ color, size }) => (
             <Notification
               name="notifications-outline"
               style={{}}
@@ -176,27 +176,27 @@ const MyTabs = ({
       <Tab.Screen
         name="BMAD"
         component={ProfileStack}
-        listeners={({navigation, route}) => ({
+        listeners={({ navigation, route }) => ({
           tabPress: e => {
             // if (route.state && route.state.routeNames.length > 0) {
             navigation.navigate('BMAD');
             // }
           },
         })}
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           tabBarLabel: 'Bmad',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Notification
               name="fast-food-outline"
               style={{}}
               size={size}
               color={color}
-              // onPress={() => {
-              //   navigation.navigate('BMAD', {
-              //     screen: 'BMAD',
-              //     initial: false,
-              //   });
-              // }}
+            // onPress={() => {
+            //   navigation.navigate('BMAD', {
+            //     screen: 'BMAD',
+            //     initial: false,
+            //   });
+            // }}
             />
           ),
         })}
@@ -244,8 +244,8 @@ const MyTabs = ({
     </Tab.Navigator>
   );
 };
-const mapStateToProps = ({userReducer, notificationsReducer}) => {
-  return {userReducer, notificationsReducer};
+const mapStateToProps = ({ userReducer, notificationsReducer }) => {
+  return { userReducer, notificationsReducer };
 };
 
 export default connect(mapStateToProps, actions)(MyTabs);
@@ -307,7 +307,7 @@ export default connect(mapStateToProps, actions)(MyTabs);
     component={HomeStack}
     options={{
       tabBarLabel: 'Home',
-      tabBarIcon: ({color, size}) => (
+      tabBarIcon: ({ color, size }) => (
         <Home name="home" style={{}} size={size} color={color} />
       ),
     }}
@@ -315,16 +315,16 @@ export default connect(mapStateToProps, actions)(MyTabs);
   <Tab.Screen
     name="nearme"
     component={NearMeStack}
-    listeners={({navigation, route}) => ({
+    listeners={({ navigation, route }) => ({
       tabPress: e => {
         // if (route.state && route.state.routeNames.length > 0) {
         navigation.navigate('nearme');
         // }
       },
     })}
-    options={({navigation}) => ({
+    options={({ navigation }) => ({
       tabBarLabel: 'Nearby Me',
-      tabBarIcon: ({color, size}) => {
+      tabBarIcon: ({ color, size }) => {
         // console.log(navigation)
         return (
           <Location name="location-on" style={{}} size={size} color={color} />
@@ -337,7 +337,7 @@ export default connect(mapStateToProps, actions)(MyTabs);
     component={NewPostStack}
     options={{
       tabBarLabel: 'New Post',
-      tabBarIcon: ({color, size}) => (
+      tabBarIcon: ({ color, size }) => (
         <Home name="plus-square" style={{}} size={size} color={color} />
       ),
     }}
@@ -345,13 +345,13 @@ export default connect(mapStateToProps, actions)(MyTabs);
   <Tab.Screen
     name="notification"
     component={NotificationStack}
-    listeners={({navigation, route}) => ({
+    listeners={({ navigation, route }) => ({
       tabPress: e => {
         showNotificationsBadge(false);
         resetTotalUnreadNotificationsCount();
       },
     })}
-    options={({navigation}) => ({
+    options={({ navigation }) => ({
       tabBarLabel: 'Notification',
       tabBarBadge:
         // routeName === 'notification'
@@ -360,8 +360,8 @@ export default connect(mapStateToProps, actions)(MyTabs);
         hasNewRequests && notificationsReducer?.unreadNoti > 0
           ? notificationsReducer?.unreadNoti
           : null,
-      tabBarBadgeStyle: {color: 'white', backgroundColor: themeRed},
-      tabBarIcon: ({color, size}) => (
+      tabBarBadgeStyle: { color: 'white', backgroundColor: themeRed },
+      tabBarIcon: ({ color, size }) => (
         <Notification
           name="notifications-outline"
           style={{}}
@@ -382,27 +382,27 @@ export default connect(mapStateToProps, actions)(MyTabs);
   <Tab.Screen
     name="BMAD"
     component={ProfileStack}
-    listeners={({navigation, route}) => ({
+    listeners={({ navigation, route }) => ({
       tabPress: e => {
         // if (route.state && route.state.routeNames.length > 0) {
         navigation.navigate('BMAD');
         // }
       },
     })}
-    options={({navigation}) => ({
+    options={({ navigation }) => ({
       tabBarLabel: 'Bmad',
-      tabBarIcon: ({color, size}) => (
+      tabBarIcon: ({ color, size }) => (
         <Notification
           name="fast-food-outline"
           style={{}}
           size={size}
           color={color}
-          // onPress={() => {
-          //   navigation.navigate('BMAD', {
-          //     screen: 'BMAD',
-          //     initial: false,
-          //   });
-          // }}
+        // onPress={() => {
+        //   navigation.navigate('BMAD', {
+        //     screen: 'BMAD',
+        //     initial: false,
+        //   });
+        // }}
         />
       ),
     })}

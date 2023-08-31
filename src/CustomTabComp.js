@@ -64,8 +64,8 @@ function CustomTabBar({
       case 'newpost':
         return (
           <Home
-            name="plus-square"
-            size={responsiveFontSize(2.75)}
+            name="plus"
+            size={responsiveFontSize(4.75)}
             color={isFocues ? colors.themeblue : colors.lightGray}
           />
         );
@@ -263,16 +263,39 @@ function CustomTabBar({
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: responsiveFontSize(0.5),
-                // backgroundColor:isFocused ? "red" : "white"
+                backgroundColor: label == 'newpost' ? "white" : null,
+                borderRadius: label == 'newpost' ? 100 : 0,
+                marginTop: label == 'newpost' ? -30 : 0,
+                marginBottom: label == 'newpost' ? 20 : 0,
+                elevation: label == 'newpost' ? 15 : 0,
+                shadowColor: label == 'newpost' ? "#b01125" : null,
+                shadowOffset: label == 'newpost' ? {
+                  width: 0,
+                  height: 5,
+                } : null,
+                shadowOpacity: label == 'newpost' ? 0.36 : 0,
+                shadowRadius: label == 'newpost' ? 6.68 : 0,
+
+
+                // borderBottomColor: label == 'newpost' ? "black" : null,
+                // borderBottomWidth: label == 'newpost' ? 2 : 0,
+                // // borderTopColor: label == 'newpost' ? "black" : null,
+                // // borderTopWidth: label == 'newpost' ? 2 : 0,
+                // borderLeftColor: label == 'newpost' ? "black" : null,
+                // borderLeftWidth: label == 'newpost' ? 2 : 0,
+                // borderRightColor: label == 'newpost' ? "black" : null,
+                // borderRightWidth: label == 'newpost' ? 2 : 0
               }}>
               {renderIcon(label, isFocused)}
-              <Text
-                style={{
-                  color: isFocused ? colors.themeblue : 'grey',
-                  fontSize: responsiveFontSize(1.2),
-                }}>
-                {realName}
-              </Text>
+              {
+                label == 'newpost' ? null : <Text
+                  style={{
+                    color: isFocused ? colors.themeblue : 'grey',
+                    fontSize: responsiveFontSize(1.2),
+                  }}>
+                  {realName}
+                </Text>
+              }
             </TouchableOpacity>
           );
         }
