@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -18,18 +18,20 @@ import {
   TouchableHighlight,
   TextInput,
   ScrollView,
-  Modal
+  Modal,
+  FlatList,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {
   ImagePicker,
   launchImageLibrary,
   launchCamera,
 } from 'react-native-image-picker';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import ImagePickerMultiple from 'react-native-image-crop-picker';
 import AppText from '../../Components/AppText';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -38,15 +40,15 @@ import Icon1 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import TagInput from 'react-native-tags-input';
 import * as actions from '../../Store/Actions';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   responsiveHeight,
   responsiveScreenFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import { colors } from '../../src/screens/drawer/constant';
+import {colors} from '../../src/screens/drawer/constant';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const NewPostScreen = ({
   navigation,
@@ -75,12 +77,14 @@ const NewPostScreen = ({
   const [filePath, setFilePath] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState();
   const [caption, onChangeCaption] = useState('');
+  const [step, setStep] = useState(1);
   const [tags, onChangeArrays] = useState({
     tag: '',
     tagsArray: [],
   });
-
+  const [photos, setPhotos] = useState([]);
   const SelectCamera = () => {
     // setModalVisible(!modalVisible)
     ImagePickerMultiple.openCamera({
@@ -94,7 +98,7 @@ const NewPostScreen = ({
     })
 
       .then(response => {
-        console.log(response)
+        console.log(response);
         var ImageArray = [];
         let showImage = {
           uri: 'data:image/jpeg;base64,' + response?.data,
@@ -104,14 +108,13 @@ const NewPostScreen = ({
         ImageArray.push(showImage);
         // }
         setFilePath(ImageArray);
-        setModalVisible(false)
+        setModalVisible(false);
       })
       .catch(err => {
         console.log(err);
       });
   };
   const SelectMultipleImage = () => {
-
     ImagePickerMultiple.openPicker({
       multiple: true,
       width: 300,
@@ -123,7 +126,7 @@ const NewPostScreen = ({
     })
 
       .then(response => {
-        console.log(response)
+        console.log(response);
         var ImageArray = [];
         for (var i = 0; i < response.length; i++) {
           // console.log(response[i].size, 'SIZE');
@@ -135,12 +138,11 @@ const NewPostScreen = ({
           ImageArray.push(showImage);
         }
         setFilePath(ImageArray);
-        setModalVisible(false)
+        setModalVisible(false);
       })
       .catch(err => {
         console.log(err);
       });
-
   };
 
   const updateTagState = tag => {
@@ -148,7 +150,6 @@ const NewPostScreen = ({
   };
 
   const newPost = async () => {
-
     if (caption.length > 0) {
       if (caption && filePath) {
         setLoading(true);
@@ -193,249 +194,169 @@ const NewPostScreen = ({
   const _onPostFailed = () => {
     setLoading(false);
   };
-
+  useEffect(() => {
+    getAllPhotos();
+  }, []);
+  const getAllPhotos = () => {
+    CameraRoll.getPhotos({
+      first: 70,
+      assetType: 'Photos',
+    })
+      .then(r => {
+        // this.setState({ photos: r.edges });
+        console.log(r.edges);
+        setPhotos(r?.edges);
+        setImages(r?.edges[0])
+      })
+      .catch(err => {
+        console.log(err);
+        //Error Loading Images
+      });
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.imagesSection}>
-        <View style={styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-              setModalVisible(!modalVisible);
-            }}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <TouchableOpacity
-                  onPress={() => { setModalVisible(!modalVisible) }}
-                  style={{
-                    alignSelf: "flex-end",
-                    marginTop: -height * 0.0355,
-                    marginRight: -width * 0.0535,
-                  }}
-                >
-
-                  <Entypo
-                    name="cross"
-                    size={responsiveScreenFontSize(3)}
-                    color="#b01125"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    SelectCamera()
-                    // setModalVisible(false)
-                  }}
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    backgroundColor: "rgba(176, 17, 38, 0.1)",
-                    width: width * 0.6,
-                    paddingHorizontal: 15,
-                    borderRadius: width * 0.0155
-                    // justifyContent: "space-around"
-                  }}
-                >
-                  <Image
-                    style={{ height: height * 0.06, width: width * 0.08, resizeMode: "contain" }}
-                    source={require("../../Assets/Images/camera.png")}
-                  />
-                  <Text style={{
-                    marginLeft: width * 0.0325,
-                    fontSize: width * 0.0345,
-                    color: "black",
-                    fontFamily: "Poppins-Medium"
-
-                  }}>Open Camera</Text>
-
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                  
-                      SelectMultipleImage()
-                    
-
-                  }}
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    backgroundColor: "rgba(176, 17, 38, 0.1)",
-                    width: width * 0.6,
-                    paddingHorizontal: 15,
-                    borderRadius: width * 0.0155,
-                    marginTop: height * 0.0125
-                    // justifyContent: "space-around"
-                  }}
-                >
-                  <Image
-                    style={{ height: height * 0.06, width: width * 0.08, resizeMode: "contain" }}
-                    source={require("../../Assets/Images/gallery.png")}
-                  />
-                  <Text style={{
-                    marginLeft: width * 0.0325,
-                    fontSize: width * 0.0345,
-                    color: "black",
-                    fontFamily: "Poppins-Medium"
-
-                  }}>Open Gallery</Text>
-
-                </TouchableOpacity>
-
-              </View>
-            </View>
-          </Modal>
-          <TouchableOpacity
-            style={[styles.button, styles.buttonOpen]}
-            onPress={() => setModalVisible(true)}>
-            <Text style={styles.textStyle}>Show Modal</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.addPicView}>
-          <AppText
-            nol={1}
-            textAlign="left"
-            family="Poppins-Regular"
-            size={hp('3.5%')}
-            color="black"
-            Label={'Add Pictures'}
-          />
-        </View>
-        <View
-          style={{
-            // margin: 10,
-            height: '100%',
-          }}>
-          <ScrollView
-            bouncesZoom
-            scrollToOverflowEnabled
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            scrollEnabled
-            style={{
-              width: '100%',
-            }}>
-            <TouchableOpacity
-              // onPress={SelectMultipleImage}
-              onPress={() => { setModalVisible(!modalVisible) }}
-
-              style={{
-                backgroundColor: 'white',
-                borderRadius: 3,
-
-                zIndex: 199,
-
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-
-                elevation: 5,
-                height: responsiveHeight(25.5),
-                width: responsiveWidth(40),
-                justifyContent: 'center',
-                alignContent: 'center',
-                margin: responsiveScreenFontSize(1.5),
-              }}>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  flexDirection: 'row',
-                  paddingLeft: 42,
-                  paddingRight: 42,
-                }}>
-                <Icon name="camera" size={28} color="#B01125" />
-                <Icon1
-                  name="plus"
-                  size={12}
-                  style={{
-                    top: -10,
-                  }}
-                  color="#B01125"
-                />
-              </View>
-            </TouchableOpacity>
-            <View style={{ marginTop: 10, flexDirection: 'row' }}>
-              {filePath != null
-                ? filePath.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        alignContent: 'center',
-                        // padding: 12,
-                        // backgroundColor:'red',
-                        paddingHorizontal: 10,
-                        height: responsiveHeight(31),
-                        // width: responsiveWidth(50),
-                        // borderWidth: 1, borderColor:'grey'
-                      }}>
-                      <TouchableOpacity
-                        key={index}
-                        style={{
-                          zIndex: 99,
-                        }}
-                        onPress={() => {
-                          let val = filePath.filter((x, i) => i !== index);
-                          setFilePath(val);
-
-                          // alert('asd')
-                        }}>
-                        <View
-                          key={index}
-                          style={{
-                            height: 30,
-                            width: 30,
-                            backgroundColor: colors.themeblue,
-                            borderRadius: responsiveScreenFontSize(50),
-                            position: 'absolute',
-                            left: -5,
-                            zIndex: 99,
-                            top: -10,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Entypo
-                            name="cross"
-                            size={responsiveScreenFontSize(3)}
-                            color="white"
-                          />
-                        </View>
-                      </TouchableOpacity>
-                      <Image
-                        resizeMode='cover'
-                        key={index}
-                        source={item}
-                        style={{
-                          height: responsiveHeight(25.5),
-                          width: responsiveWidth(40),
-                          marginHorizontal: 3,
-                          // top: 8,
-
-                          backgroundColor: 'white',
-                          borderWidth: 1,
-                          borderColor: '#e8e8e8',
-                          borderRadius: 3,
-                        }}
-                      />
-                    </View>
-                  );
-                })
-                : null}
-            </View>
-          </ScrollView>
-        </View>
-      </View>
-
-      <View style={styles.postDescribeContainer}>
+ <>
+ {step==1?
+ <View style={{backgroundColor:"white",flex:1}}>
+ <TouchableOpacity
+ onPress={()=>{setStep(2)}}
+ style={{
+   position:"absolute",
+   zIndex:100,
+   height:height*0.05,
+   backgroundColor:"rgba(247, 247, 247, 0.76)",
+   width:width*0.2,
+   borderRadius:100,
+   justifyContent:"center",
+   alignItems:"center",
+   marginTop:height*0.01,
+   alignSelf:'flex-end',
+ }}
+ >
+   <Text
+   style={{
+     color:colors.themeblue,
+     fontFamily:"Poppins-Bold"
+   }}
+   >Next</Text>
+ </TouchableOpacity>
+ <View style={{height: height * 0.3, backgroundColor: 'black'}}>
+   <Image
+   style={{height:height * 0.3,width:width*1,resizeMode:"cover"}}
+   source={{uri:images?.node?.image?.uri}}
+   />
+ </View>
+ <View
+   style={{
+     height: height * 0.055,
+     backgroundColor: colors.themeblue,
+     flexDirection:"row",
+     justifyContent:"space-between",
+     alignItems:"center",
+     paddingHorizontal:width*0.034
+   }}>
+     <Text
+     style={{
+       fontFamily:"Poppins-Bold",
+       color:"white",
+       fontSize:width*0.045
+     }}
+     >Gallery Photos</Text>
+  <TouchableOpacity 
+  onPress={()=>{SelectCamera()}}
+  style={{
+   // alignSelf:"flex-end",
+   // marginRight:width*0.06,
+   alignItems:"center",
+   backgroundColor:"rgba(0, 0, 0, 0.21)",
+   padding:4,
+   borderRadius:100,
+   width:width*0.1,
+   height:height*0.045,
+   justifyContent:"center",
+   // marginTop:height*0.0045
+   }}>
+  <Image
+     style={{
+       height: height * 0.03,
+       width: width * 0.05,
+       resizeMode: 'contain',
+       tintColor:"white",
+       
+     }}
+     source={require('../../Assets/Images/camera.png')}
+   />
+  </TouchableOpacity>
+ </View>
+ <View
+ style={{
+   backgroundColor:"white",
+   justifyContent:"center"
+ }}
+ >
+   <FlatList
+     data={photos}
+     numColumns={3}
+     style={{alignSelf:"center"}}
+     renderItem={({item, index}) => {
+       console.log('itemmmm', item);
+       return (
+         <TouchableOpacity
+         onPress={()=>{setImages(item)}}
+           style={{
+             backgroundColor: colors.themeblue,
+             height:height*0.14,
+             width: width*0.3,
+             margin: 5,
+             flexWrap:"wrap",
+             alignSelf:"center",
+             
+           }}>
+           <Image
+             style={{
+               height:height*0.14,
+             width: width*0.3,
+             opacity:images?.node?.image?.uri==item?.node?.image?.uri?0.3:1,
+             resizeMode:"cover"
+            
+             }}
+             source={{uri: item?.node?.image?.uri}}
+           />
+         </TouchableOpacity>
+       );
+     }}
+   />
+ </View>
+</View>:
+ <View style={{backgroundColor:"white",flex:1}}>
+ <TouchableOpacity
+ onPress={()=>{setStep(1)}}
+ style={{
+   position:"absolute",
+   zIndex:100,
+   height:height*0.05,
+   backgroundColor:"rgba(247, 247, 247, 0.76)",
+   width:width*0.2,
+   borderRadius:100,
+   justifyContent:"center",
+   alignItems:"center",
+   marginTop:height*0.01,
+   alignSelf:'flex-end',
+ }}
+ >
+   <Text
+   style={{
+     color:colors.themeblue,
+     fontFamily:"Poppins-Bold"
+   }}
+   >Share</Text>
+ </TouchableOpacity>
+ <View style={{height: height * 0.3, backgroundColor: 'black'}}>
+   <Image
+   style={{height:height * 0.3,width:width*1}}
+   source={{uri:images?.node?.image?.uri}}
+   />
+ </View>
+ <View style={styles.postDescribeContainer}>
         <ScrollView scrollEnabled showsVerticalScrollIndicator={false}>
           <View
             style={{
@@ -462,43 +383,8 @@ const NewPostScreen = ({
               textAlignVertical="top"
               style={styles.textFieldStyle}
             />
-            {/* <View style={{marginTop: 25}}>
-              <TagInput
-                updateState={updateTagState}
-                tags={tags}
-                placeholder="Tags"
-                labelStyle={{color: '#B01125'}}
-                leftElement={
-                  <Icon2 name={'add-circle-outline'} size={20} color="grey" />
-                }
-                leftElementContainerStyle={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                }}
-                containerStyle={{
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                }}
-                inputContainerStyle={styles.tagInputContainerStyle}
-                inputStyle={{color: 'black', fontSize: hp('1.5%')}}
-                // onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
-                // onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
-                autoCorrect={false}
-                tagStyle={{
-                  backgroundColor: 'white',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                }}
-                tagTextStyle={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  fontSize: hp('1.5%'),
-                }}
-                keysForTag={', '}
-              />
-            </View> */}
-            {!loading ? (
+           
+            {/* {!loading ? (
               <View
                 style={{
                   justifyContent: 'center',
@@ -522,8 +408,8 @@ const NewPostScreen = ({
               <LottieView
                 style={{
                   position: 'absolute',
-                  top: isIOS ? height * 0.035 : height * 0.05,
-                  left: isIOS ? width * 0.1 : width * 0.15,
+                  top: isIOS ? height*0.035 : height * 0.05,
+                  left: isIOS ? width*0.1 : width * 0.15,
                   // backgroundColor:'white',
                   width: width * 0.4,
                   height: height * 0.3,
@@ -532,65 +418,32 @@ const NewPostScreen = ({
                 autoPlay
                 loop
               />
-            )}
+            )} */}
             <View style={{ height: 100 }}></View>
           </View>
         </ScrollView>
       </View>
-    </View>
+</View> 
+}
+ </>
   );
 };
 
-function mapStateToProps({ userReducer }) {
-  return { userReducer };
+function mapStateToProps({userReducer}) {
+  return {userReducer};
 }
 
 export default connect(mapStateToProps, actions)(NewPostScreen);
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    height: '100%',
-    backgroundColor: 'white',
-  },
-  addPicView: {
-    width: '100%',
-    left: width * 0.03,
-    height: 60,
-    // backgroundColor:'red',
-    justifyContent: 'flex-end',
-    marginTop: height * 0.08,
-  },
-  imagesSection: {
-    justifyContent: 'flex-start',
-    flexDirection: 'column',
-  },
-  touchableOpacity: {
-    backgroundColor: 'white',
-    borderWidth: 0,
-    borderColor: 'white',
-    width: width * 0.4,
-    height: hp('6%'),
-    justifyContent: 'center',
-    borderRadius: 25,
-    alignItems: 'center',
-  },
-  touchableOpacityText: {
-    color: 'black',
-    fontFamily: 'Poppins-Bold',
-    fontSize: hp('2'),
-    textAlign: 'center',
-  },
   postDescribeContainer: {
     backgroundColor: '#B01125',
     borderTopRightRadius: 20,
     width: '100%',
-    height: height * 0.51,
+    height: height * 0.63,
     bottom: 0,
     position: 'absolute',
-  },
-  textFieldStyle: {
+  }, textFieldStyle: {
     width: width * 0.9,
     backgroundColor: '#D19F9F',
     borderRadius: 6,
@@ -599,58 +452,5 @@ var styles = StyleSheet.create({
     color: 'white',
     height: responsiveHeight(20),
     fontSize: width * 0.04,
-  },
-  tagInputContainerStyle: {
-    backgroundColor: 'white',
-    borderRadius: 125,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: height * 0.04,
-    width: '25%',
-  },
-  centeredView: {
-    flex: 1,
-    height: height,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // marginTop: 22,
-    backgroundColor: "rgba(0, 0, 0, 0.19)"
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    height: height * 0.21,
-    width: width * 0.8
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
   },
 });
