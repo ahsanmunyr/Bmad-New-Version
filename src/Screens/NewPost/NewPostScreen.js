@@ -98,7 +98,7 @@ const NewPostScreen = ({
     })
 
       .then(response => {
-        console.log(response);
+        console.log("nshdfkjlhkjh", response);
         var ImageArray = [];
         let showImage = {
           uri: 'data:image/jpeg;base64,' + response?.data,
@@ -126,7 +126,7 @@ const NewPostScreen = ({
     })
 
       .then(response => {
-        console.log(response);
+        console.log("jjkgkjgkjg", response);
         var ImageArray = [];
         for (var i = 0; i < response.length; i++) {
           // console.log(response[i].size, 'SIZE');
@@ -138,13 +138,29 @@ const NewPostScreen = ({
           ImageArray.push(showImage);
         }
         setFilePath(ImageArray);
-        setModalVisible(false);
+
       })
       .catch(err => {
         console.log(err);
       });
   };
+  const jsonString = JSON.stringify(images)
+  const base64Encoded = btoa(jsonString);
 
+  console.log("base64", base64Encoded);
+  const setposting = () => {
+    var ImageArray = [];
+    let showImage = {
+      uri: 'data:image/jpeg;base64,' + base64Encoded,
+      path: images?.node?.image?.uri,
+      type: images?.node?.type,
+    };
+    ImageArray.push(showImage);
+    setFilePath(ImageArray);
+    setStep(2)
+  }
+  console.log("filePath", filePath)
+  console.log("photos", images)
   const updateTagState = tag => {
     onChangeArrays(tag);
   };
@@ -218,7 +234,7 @@ const NewPostScreen = ({
       {step == 1 ?
         <View style={{ backgroundColor: "white", flex: 1 }}>
           <TouchableOpacity
-            onPress={() => { setStep(2) }}
+            onPress={() => { setposting() }}
             style={{
               position: "absolute",
               zIndex: 100,
@@ -329,7 +345,7 @@ const NewPostScreen = ({
         </View> :
         <View style={{ backgroundColor: "white", flex: 1 }}>
           <TouchableOpacity
-            onPress={() => { setStep(1) }}
+            onPress={() => { newPost() }}
             style={{
               position: "absolute",
               zIndex: 100,
