@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -25,13 +25,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import {
   ImagePicker,
   launchImageLibrary,
   launchCamera,
 } from 'react-native-image-picker';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 import ImagePickerMultiple from 'react-native-image-crop-picker';
 import AppText from '../../Components/AppText';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -40,15 +40,15 @@ import Icon1 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import TagInput from 'react-native-tags-input';
 import * as actions from '../../Store/Actions';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import {
   responsiveHeight,
   responsiveScreenFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import {colors} from '../../src/screens/drawer/constant';
+import { colors } from '../../src/screens/drawer/constant';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const NewPostScreen = ({
   navigation,
@@ -214,177 +214,177 @@ const NewPostScreen = ({
       });
   };
   return (
- <>
- {step==1?
- <View style={{backgroundColor:"white",flex:1}}>
- <TouchableOpacity
- onPress={()=>{setStep(2)}}
- style={{
-   position:"absolute",
-   zIndex:100,
-   height:height*0.05,
-   backgroundColor:"rgba(247, 247, 247, 0.76)",
-   width:width*0.2,
-   borderRadius:100,
-   justifyContent:"center",
-   alignItems:"center",
-   marginTop:height*0.01,
-   alignSelf:'flex-end',
- }}
- >
-   <Text
-   style={{
-     color:colors.themeblue,
-     fontFamily:"Poppins-Bold"
-   }}
-   >Next</Text>
- </TouchableOpacity>
- <View style={{height: height * 0.3, backgroundColor: 'black'}}>
-   <Image
-   style={{height:height * 0.3,width:width*1,resizeMode:"cover"}}
-   source={{uri:images?.node?.image?.uri}}
-   />
- </View>
- <View
-   style={{
-     height: height * 0.055,
-     backgroundColor: colors.themeblue,
-     flexDirection:"row",
-     justifyContent:"space-between",
-     alignItems:"center",
-     paddingHorizontal:width*0.034
-   }}>
-     <Text
-     style={{
-       fontFamily:"Poppins-Bold",
-       color:"white",
-       fontSize:width*0.045
-     }}
-     >Gallery Photos</Text>
-  <TouchableOpacity 
-  onPress={()=>{SelectCamera()}}
-  style={{
-   // alignSelf:"flex-end",
-   // marginRight:width*0.06,
-   alignItems:"center",
-   backgroundColor:"rgba(0, 0, 0, 0.21)",
-   padding:4,
-   borderRadius:100,
-   width:width*0.1,
-   height:height*0.045,
-   justifyContent:"center",
-   // marginTop:height*0.0045
-   }}>
-  <Image
-     style={{
-       height: height * 0.03,
-       width: width * 0.05,
-       resizeMode: 'contain',
-       tintColor:"white",
-       
-     }}
-     source={require('../../Assets/Images/camera.png')}
-   />
-  </TouchableOpacity>
- </View>
- <View
- style={{
-   backgroundColor:"white",
-   justifyContent:"center"
- }}
- >
-   <FlatList
-     data={photos}
-     numColumns={3}
-     style={{alignSelf:"center"}}
-     renderItem={({item, index}) => {
-       console.log('itemmmm', item);
-       return (
-         <TouchableOpacity
-         onPress={()=>{setImages(item)}}
-           style={{
-             backgroundColor: colors.themeblue,
-             height:height*0.14,
-             width: width*0.3,
-             margin: 5,
-             flexWrap:"wrap",
-             alignSelf:"center",
-             
-           }}>
-           <Image
-             style={{
-               height:height*0.14,
-             width: width*0.3,
-             opacity:images?.node?.image?.uri==item?.node?.image?.uri?0.3:1,
-             resizeMode:"cover"
-            
-             }}
-             source={{uri: item?.node?.image?.uri}}
-           />
-         </TouchableOpacity>
-       );
-     }}
-   />
- </View>
-</View>:
- <View style={{backgroundColor:"white",flex:1}}>
- <TouchableOpacity
- onPress={()=>{setStep(1)}}
- style={{
-   position:"absolute",
-   zIndex:100,
-   height:height*0.05,
-   backgroundColor:"rgba(247, 247, 247, 0.76)",
-   width:width*0.2,
-   borderRadius:100,
-   justifyContent:"center",
-   alignItems:"center",
-   marginTop:height*0.01,
-   alignSelf:'flex-end',
- }}
- >
-   <Text
-   style={{
-     color:colors.themeblue,
-     fontFamily:"Poppins-Bold"
-   }}
-   >Share</Text>
- </TouchableOpacity>
- <View style={{height: height * 0.3, backgroundColor: 'black'}}>
-   <Image
-   style={{height:height * 0.3,width:width*1}}
-   source={{uri:images?.node?.image?.uri}}
-   />
- </View>
- <View style={styles.postDescribeContainer}>
-        <ScrollView scrollEnabled showsVerticalScrollIndicator={false}>
+    <>
+      {step == 1 ?
+        <View style={{ backgroundColor: "white", flex: 1 }}>
+          <TouchableOpacity
+            onPress={() => { setStep(2) }}
+            style={{
+              position: "absolute",
+              zIndex: 100,
+              height: height * 0.05,
+              backgroundColor: "rgba(247, 247, 247, 0.76)",
+              width: width * 0.2,
+              borderRadius: 100,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: height * 0.01,
+              alignSelf: 'flex-end',
+            }}
+          >
+            <Text
+              style={{
+                color: colors.themeblue,
+                fontFamily: "Poppins-Bold"
+              }}
+            >Next</Text>
+          </TouchableOpacity>
+          <View style={{ height: height * 0.35, backgroundColor: 'black' }}>
+            <Image
+              style={{ height: height * 0.35, width: width * 1, resizeMode: "cover" }}
+              source={{ uri: images?.node?.image?.uri }}
+            />
+          </View>
           <View
             style={{
-              padding: 20,
+              height: height * 0.055,
+              backgroundColor: colors.themeblue,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingHorizontal: width * 0.034
             }}>
-            <AppText
-              nol={2}
-              textAlign="left"
-              family="Poppins-SemiBold"
-              size={responsiveScreenFontSize(1.8)}
-              color="white"
-              Label={'Write a short description about your post:'}
+            <Text
+              style={{
+                fontFamily: "Poppins-Bold",
+                color: "white",
+                fontSize: width * 0.045
+              }}
+            >Gallery Photos</Text>
+            <TouchableOpacity
+              onPress={() => { SelectCamera() }}
+              style={{
+                // alignSelf:"flex-end",
+                // marginRight:width*0.06,
+                alignItems: "center",
+                backgroundColor: "rgba(0, 0, 0, 0.21)",
+                padding: 4,
+                borderRadius: 100,
+                width: width * 0.1,
+                height: height * 0.045,
+                justifyContent: "center",
+                // marginTop:height*0.0045
+              }}>
+              <Image
+                style={{
+                  height: height * 0.03,
+                  width: width * 0.05,
+                  resizeMode: 'contain',
+                  tintColor: "white",
+
+                }}
+                source={require('../../Assets/Images/camera.png')}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              backgroundColor: "white",
+              justifyContent: "center"
+            }}
+          >
+            <FlatList
+              data={photos}
+              numColumns={3}
+              style={{ alignSelf: "center" }}
+              renderItem={({ item, index }) => {
+                console.log('itemmmm', item);
+                return (
+                  <TouchableOpacity
+                    onPress={() => { setImages(item) }}
+                    style={{
+                      backgroundColor: colors.themeblue,
+                      height: height * 0.17,
+                      width: width * 0.3,
+                      margin: 5,
+                      flexWrap: "wrap",
+                      alignSelf: "center",
+
+                    }}>
+                    <Image
+                      style={{
+                        height: height * 0.17,
+                        width: width * 0.3,
+                        opacity: images?.node?.image?.uri == item?.node?.image?.uri ? 0.3 : 1,
+                        resizeMode: "cover"
+
+                      }}
+                      source={{ uri: item?.node?.image?.uri }}
+                    />
+                  </TouchableOpacity>
+                );
+              }}
             />
-            <TextInput
-              placeholder="Your text here..."
-              value={caption}
-              placeholderTextColor="white"
-              keyboardType="default"
-              onChange={event => onChangeCaption(event.nativeEvent.text)}
-              onSubmitEditing={event => onChangeCaption(event.nativeEvent.text)}
-              multiline={true}
-              maxLength={250}
-              numberOfLines={4}
-              textAlignVertical="top"
-              style={styles.textFieldStyle}
+          </View>
+        </View> :
+        <View style={{ backgroundColor: "white", flex: 1 }}>
+          <TouchableOpacity
+            onPress={() => { setStep(1) }}
+            style={{
+              position: "absolute",
+              zIndex: 100,
+              height: height * 0.05,
+              backgroundColor: "rgba(247, 247, 247, 0.76)",
+              width: width * 0.2,
+              borderRadius: 100,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: height * 0.01,
+              alignSelf: 'flex-end',
+            }}
+          >
+            <Text
+              style={{
+                color: colors.themeblue,
+                fontFamily: "Poppins-Bold"
+              }}
+            >Share</Text>
+          </TouchableOpacity>
+          <View style={{ height: height * 0.3, backgroundColor: 'black' }}>
+            <Image
+              style={{ height: height * 0.3, width: width * 1 }}
+              source={{ uri: images?.node?.image?.uri }}
             />
-           
-            {/* {!loading ? (
+          </View>
+          <View style={styles.postDescribeContainer}>
+            <ScrollView scrollEnabled showsVerticalScrollIndicator={false}>
+              <View
+                style={{
+                  padding: 20,
+                }}>
+                <AppText
+                  nol={2}
+                  textAlign="left"
+                  family="Poppins-SemiBold"
+                  size={responsiveScreenFontSize(1.8)}
+                  color="white"
+                  Label={'Write a short description about your post:'}
+                />
+                <TextInput
+                  placeholder="Your text here..."
+                  value={caption}
+                  placeholderTextColor="white"
+                  keyboardType="default"
+                  onChange={event => onChangeCaption(event.nativeEvent.text)}
+                  onSubmitEditing={event => onChangeCaption(event.nativeEvent.text)}
+                  multiline={true}
+                  maxLength={250}
+                  numberOfLines={4}
+                  textAlignVertical="top"
+                  style={styles.textFieldStyle}
+                />
+
+                {/* {!loading ? (
               <View
                 style={{
                   justifyContent: 'center',
@@ -419,18 +419,18 @@ const NewPostScreen = ({
                 loop
               />
             )} */}
-            <View style={{ height: 100 }}></View>
+                <View style={{ height: 100 }}></View>
+              </View>
+            </ScrollView>
           </View>
-        </ScrollView>
-      </View>
-</View> 
-}
- </>
+        </View>
+      }
+    </>
   );
 };
 
-function mapStateToProps({userReducer}) {
-  return {userReducer};
+function mapStateToProps({ userReducer }) {
+  return { userReducer };
 }
 
 export default connect(mapStateToProps, actions)(NewPostScreen);
