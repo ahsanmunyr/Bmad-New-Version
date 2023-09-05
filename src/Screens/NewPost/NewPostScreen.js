@@ -247,7 +247,7 @@ const NewPostScreen = ({
           </View>
           <View
             style={{
-              height: height * 0.055,
+              height: height * 0.057,
               backgroundColor: colors.themeblue,
               flexDirection: "row",
               justifyContent: "space-between",
@@ -271,7 +271,7 @@ const NewPostScreen = ({
                 padding: 4,
                 borderRadius: 100,
                 width: width * 0.1,
-                height: height * 0.045,
+                height: height * 0.05,
                 justifyContent: "center",
                 // marginTop:height*0.0045
               }}>
