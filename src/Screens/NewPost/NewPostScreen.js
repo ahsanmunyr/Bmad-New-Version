@@ -208,6 +208,7 @@ const NewPostScreen = ({
       tag: '',
       tagsArray: [],
     });
+    setStep(1)
     navigation.navigate('HOME');
   };
 
@@ -461,7 +462,7 @@ const NewPostScreen = ({
                 loop
               />
             )} */}
-                <View style={{ height: 100 }}></View>
+                {/* <View style={{ height: 100 }}></View> */}
               </View>
             </ScrollView>
           </View>
@@ -484,7 +485,8 @@ var styles = StyleSheet.create({
     width: '100%',
     height: height * 0.63,
     bottom: 0,
-    position: 'absolute',
+    marginTop: -20
+    // position: 'absolute',
   }, textFieldStyle: {
     width: width * 0.9,
     backgroundColor: '#D19F9F',
