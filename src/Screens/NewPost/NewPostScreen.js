@@ -85,6 +85,8 @@ const NewPostScreen = ({
     tagsArray: [],
   });
   const [photos, setPhotos] = useState([]);
+  const [CamPic, setCamPic] = useState();
+  console.log("Cam pic", CamPic)
   const SelectCamera = () => {
     // setModalVisible(!modalVisible)
     ImagePickerMultiple.openCamera({
@@ -108,42 +110,44 @@ const NewPostScreen = ({
         ImageArray.push(showImage);
         // }
         setFilePath(ImageArray);
-        setModalVisible(false);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-  const SelectMultipleImage = () => {
-    ImagePickerMultiple.openPicker({
-      multiple: true,
-      width: 300,
-      height: 400,
-      selectionLimit: 3,
-      mediaType: 'photo',
-      // cropping: true,
-      includeBase64: true,
-    })
-
-      .then(response => {
-        console.log("jjkgkjgkjg", response);
-        var ImageArray = [];
-        for (var i = 0; i < response.length; i++) {
-          // console.log(response[i].size, 'SIZE');
-          let showImage = {
-            uri: 'data:image/jpeg;base64,' + response[i].data,
-            path: response[i].path,
-            type: response[i].mime,
-          };
-          ImageArray.push(showImage);
-        }
-        setFilePath(ImageArray);
+        setStep(2),
+          setCamPic(response)
 
       })
       .catch(err => {
         console.log(err);
       });
   };
+  // const SelectMultipleImage = () => {
+  //   ImagePickerMultiple.openPicker({
+  //     multiple: true,
+  //     width: 300,
+  //     height: 400,
+  //     selectionLimit: 3,
+  //     mediaType: 'photo',
+  //     // cropping: true,
+  //     includeBase64: true,
+  //   })
+
+  //     .then(response => {
+  //       console.log("jjkgkjgkjg", response);
+  //       var ImageArray = [];
+  //       for (var i = 0; i < response.length; i++) {
+  //         // console.log(response[i].size, 'SIZE');
+  //         let showImage = {
+  //           uri: 'data:image/jpeg;base64,' + response[i].data,
+  //           path: response[i].path,
+  //           type: response[i].mime,
+  //         };
+  //         ImageArray.push(showImage);
+  //       }
+  //       setFilePath(ImageArray);
+
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
   const jsonString = JSON.stringify(images)
   const base64Encoded = btoa(jsonString);
 
@@ -366,10 +370,32 @@ const NewPostScreen = ({
               }}
             >Share</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => { setStep(1) }}
+            style={{
+              position: "absolute",
+              zIndex: 100,
+              height: height * 0.05,
+              backgroundColor: "rgba(247, 247, 247, 0.76)",
+              width: width * 0.2,
+              borderRadius: 100,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: height * 0.01,
+              alignSelf: 'flex-start',
+            }}
+          >
+            <Text
+              style={{
+                color: colors.themeblue,
+                fontFamily: "Poppins-Bold"
+              }}
+            >Back</Text>
+          </TouchableOpacity>
           <View style={{ height: height * 0.3, backgroundColor: 'black' }}>
             <Image
               style={{ height: height * 0.3, width: width * 1 }}
-              source={{ uri: images?.node?.image?.uri }}
+              source={{ uri: filePath?.[0]?.path }}
             />
           </View>
           <View style={styles.postDescribeContainer}>
