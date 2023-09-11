@@ -40,6 +40,7 @@ import Icon1 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import TagInput from 'react-native-tags-input';
 import * as actions from '../../Store/Actions';
+import { encode, decode } from 'base-64';
 import { connect } from 'react-redux';
 import {
   responsiveHeight,
@@ -148,8 +149,9 @@ const NewPostScreen = ({
   //       console.log(err);
   //     });
   // };
-  const jsonString = JSON.stringify(images)
-  const base64Encoded = btoa(jsonString);
+  const jsonString = JSON?.stringify(images)
+  // const base64Encoded = btoa(jsonString);
+  const base64Encoded = encode(jsonString);
 
   console.log("base64", base64Encoded);
   const setposting = () => {
