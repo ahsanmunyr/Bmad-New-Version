@@ -33,6 +33,7 @@ import Colors from '../../src/constants/Colors';
 import Preview from './Preview';
 import { imageUrl } from '../../Config/Apis.json';
 import { colors } from '../../src/screens/drawer/constant';
+import { Text } from 'react-native-elements';
 const { width, height } = Dimensions.get('window');
 // const {width} = Dimensions.get('window');
 const ITEM_SIZE = Platform?.OS === 'ios' ? width * 0.99 : width * 0.99;
@@ -131,7 +132,31 @@ const MainPost = ({
   return (
     <ScrollView>
       <View style={styles.mainContainer}>
+        <TouchableOpacity
+          onPress={() => { navigation.goBack(); }}
+          style={{
+            // position: "absolute",
+            zIndex: 100,
+            height: height * 0.05,
+            backgroundColor: "rgba(247, 247, 247, 0.76)",
+            width: width * 0.2,
+            borderRadius: 100,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: height * 0.01,
+            alignSelf: 'flex-start',
+            marginLeft: width * 0.0125
+          }}
+        >
+          <Text
+            style={{
+              color: colors.themeblue,
+              fontFamily: "Poppins-Bold"
+            }}
+          >Go Back</Text>
+        </TouchableOpacity >
         <>
+
           <View style={styles.outerInfoView}>
             <View style={styles.innerInfoView}>
               <Avatar
@@ -287,7 +312,7 @@ const MainPost = ({
                     : require('../../Assets/Images/maroon-dp2.jpeg')
                 }
               />
-              <TouchableWithoutFeedback>
+              <TouchableWithoutFeedback style={{ marginBottom: 100 }}>
                 <TextInput
                   placeholder="Add a comment"
                   numberOfLines={5}

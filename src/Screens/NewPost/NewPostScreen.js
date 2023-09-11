@@ -78,7 +78,7 @@ const NewPostScreen = ({
   const [filePath, setFilePath] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [images, setImages] = useState();
+  const [images, setImages] = useState([]);
   const [caption, onChangeCaption] = useState('');
   const [step, setStep] = useState(1);
   const [tags, onChangeArrays] = useState({
@@ -87,6 +87,35 @@ const NewPostScreen = ({
   });
   const [photos, setPhotos] = useState([]);
   const [CamPic, setCamPic] = useState();
+  const [selectedItems, setSelectedItems] = useState([]);
+  // const handlePress = (item) => {
+  //   // Check if the item is already in the selectedItems array
+  //   if (!images?.some((images) => images === item)) {
+  //     // If it's not in the array, add it to the selectedItems
+  //     setImages([...images, item]);
+  //   } else {
+  //     // If it's already in the array, remove it from selectedItems
+  //     const updatedSelectedItems = images.filter(
+  //       (images) => images !== item
+  //     );
+  //     setImages(updatedSelectedItems);
+  //   }
+  // };
+  const handlePress = (item) => {
+    // Check if the item is already in the selectedItems array
+    if (!selectedItems.some((selectedItem) => selectedItem === item)) {
+      // If it's not in the array, add it to the selectedItems
+      setSelectedItems([...selectedItems, item]);
+    } else {
+      // If it's already in the array, remove it from selectedItems
+      const updatedSelectedItems = selectedItems.filter(
+        (selectedItem) => selectedItem !== item
+      );
+      setSelectedItems(updatedSelectedItems);
+    }
+  };
+
+  console.log("7777777777777777777777777", selectedItems)
   console.log("Cam pic", CamPic)
   const SelectCamera = () => {
     // setModalVisible(!modalVisible)
@@ -149,24 +178,28 @@ const NewPostScreen = ({
   //       console.log(err);
   //     });
   // };
-  const jsonString = JSON?.stringify(images)
-  // const base64Encoded = btoa(jsonString);
-  const base64Encoded = encode(jsonString);
 
-  console.log("base64", base64Encoded);
+
+  // console.log("base64", base64Encoded);
   const setposting = () => {
     var ImageArray = [];
-    let showImage = {
-      uri: 'data:image/jpeg;base64,' + base64Encoded,
-      path: images?.node?.image?.uri,
-      type: images?.node?.type,
-    };
-    ImageArray.push(showImage);
+    for (var i = 0; i < selectedItems.length; i++) {
+      const jsonString = JSON?.stringify(selectedItems[i])
+      // const base64Encoded = btoa(jsonString);
+      const base64Encoded = encode(jsonString);
+      let showImage = {
+        uri: 'data:image/jpeg;base64,' + base64Encoded,
+        path: selectedItems[i]?.node?.image?.uri,
+        type: selectedItems[i]?.node?.type,
+      };
+      ImageArray.push(showImage);
+    }
+
     setFilePath(ImageArray);
     setStep(2)
   }
   console.log("filePath", filePath)
-  console.log("photos", images)
+  // console.log("photos", images)
   const updateTagState = tag => {
     onChangeArrays(tag);
   };
@@ -222,7 +255,7 @@ const NewPostScreen = ({
   }, []);
   const getAllPhotos = () => {
     CameraRoll.getPhotos({
-      first: 70,
+      first: 1000,
       assetType: 'Photos',
     })
       .then(r => {
@@ -262,11 +295,11 @@ const NewPostScreen = ({
               }}
             >Next</Text>
           </TouchableOpacity>
-          <View style={{ height: height * 0.35, backgroundColor: 'black' }}>
-            <Image
+          <View style={{ height: height * 0.35, backgroundColor: '#e8e6e6', justifyContent: "center" }}>
+            {selectedItems[0]?.node?.image?.uri ? <Image
               style={{ height: height * 0.35, width: width * 1, resizeMode: "cover" }}
-              source={{ uri: images?.node?.image?.uri }}
-            />
+              source={{ uri: selectedItems[0]?.node?.image?.uri }}
+            /> : <Text style={{ color: "grey", alignSelf: "center", textAlign: "center", fontFamily: "Poppins-Bold" }}> Select Image</Text>}
           </View>
           <View
             style={{
@@ -324,7 +357,8 @@ const NewPostScreen = ({
                 console.log('itemmmm', item);
                 return (
                   <TouchableOpacity
-                    onPress={() => { setImages(item) }}
+                    // onLongPress={() => { handlePress(item) }}
+                    onPress={() => { handlePress(item) }}
                     style={{
                       backgroundColor: colors.themeblue,
                       height: height * 0.17,
@@ -338,7 +372,7 @@ const NewPostScreen = ({
                       style={{
                         height: height * 0.17,
                         width: width * 0.3,
-                        opacity: images?.node?.image?.uri == item?.node?.image?.uri ? 0.3 : 1,
+                        opacity: selectedItems.some((i, inx) => i.node?.image?.uri === item?.node?.image?.uri) ? 0.3 : 1,
                         resizeMode: "cover"
 
                       }}
@@ -395,11 +429,19 @@ const NewPostScreen = ({
               }}
             >Back</Text>
           </TouchableOpacity>
-          <View style={{ height: height * 0.3, backgroundColor: 'black' }}>
-            <Image
-              style={{ height: height * 0.3, width: width * 1 }}
-              source={{ uri: filePath?.[0]?.path }}
+          <View style={{ height: height * 0.3, backgroundColor: '#b01125', justifyContent: "center" }}>
+            <FlatList
+              data={filePath}
+              style={{ alignSelf: "center" }}
+              horizontal
+              renderItem={({ item, index }) => (
+                <Image
+                  style={{ height: height * 0.3, width: filePath.length !== 1 ? width * 0.8 : width * 1, borderRadius: 10, marginHorizontal: filePath.length !== 1 ? 5 : 0 }}
+                  source={{ uri: filePath?.[0]?.path }}
+                />
+              )}
             />
+
           </View>
           <View style={styles.postDescribeContainer}>
             <ScrollView scrollEnabled showsVerticalScrollIndicator={false}>
