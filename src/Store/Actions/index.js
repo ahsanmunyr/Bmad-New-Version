@@ -1338,6 +1338,7 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
     formData.append('user_contact', data.user_contact);
     formData.append('user_lives', data.user_lives);
     formData.append('country_code', data.country_code);
+    formData.append('user_bio', data.user_bio);
 
 
     const URL = `${api}/api/post/editProfile`;
@@ -1368,6 +1369,7 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
               user_contact: data.user_contact,
               country_code: data.country_code,
               user_phoneCountryCode: data.user_phoneCountryCode,
+              user_bio: data.user_bio
             },
           });
           showMessage({

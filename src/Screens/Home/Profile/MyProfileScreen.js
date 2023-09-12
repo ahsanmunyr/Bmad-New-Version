@@ -119,6 +119,7 @@ const Data = [
 ];
 const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
   const [username, setUsername] = useState(userReducer?.data?.user_name);
+  const [userBio, setUserBio] = useState(userReducer?.data?.user_bio);
   const [phone_no, setPhone_no] = useState(userReducer?.data?.user_contact);
   const [countryCodeForPhone, onChangecountryCodeForPhone] = useState(
     userReducer?.data?.user_phoneCountryCode,
@@ -241,6 +242,7 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
           ? countryCode
           : userReducer?.data?.country_code,
         user_phoneCountryCode: countryCodeForPhone,
+        user_bio: userBio
       };
 
       if (username && country && phone_no) {
@@ -380,6 +382,12 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
           <TextInput
             value={username}
             onChangeText={e => setUsername(e)}
+            style={styles.textInputLabel}
+          />
+          <Text style={styles.formLabelStyle}>User Bio</Text>
+          <TextInput
+            value={userBio}
+            onChangeText={e => setUserBio(e)}
             style={styles.textInputLabel}
           />
           <Text style={styles.formLabelStyle}>Phone Number</Text>
