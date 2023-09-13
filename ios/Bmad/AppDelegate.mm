@@ -3,7 +3,8 @@
 #import <Firebase.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTBundleURLProvider.h>
-
+#import <UserNotifications/UserNotifications.h>
+#import <RNCPushNotificationIOS.h>
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -37,5 +38,6 @@
 {
   return true;
 }
+
 
 @end
