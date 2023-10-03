@@ -24,7 +24,7 @@ import AppText from '../../../Components/AppText';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/Feather';
 import { showMessage, hideMessage } from 'react-native-flash-message';
-
+import Entypo from 'react-native-vector-icons/Entypo';
 import PhoneInput from 'react-native-phone-number-input';
 import * as actions from '../../../Store/Actions';
 import { imageUrl } from '../../../Config/Apis.json';
@@ -121,6 +121,7 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
   const [username, setUsername] = useState(userReducer?.data?.user_name);
   const [userBio, setUserBio] = useState(userReducer?.data?.user_bio);
   const [phone_no, setPhone_no] = useState(userReducer?.data?.user_contact);
+  const [email, setemail] = useState(userReducer?.data?.user_email);
   const [countryCodeForPhone, onChangecountryCodeForPhone] = useState(
     userReducer?.data?.user_phoneCountryCode,
   );
@@ -203,6 +204,12 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
   const [withFilter, setWithFilter] = useState(true);
   const [withAlphaFilter, setWithAlphaFilter] = useState(false);
   const [withCallingCode, setWithCallingCode] = useState(false);
+  const [Sno, setSno] = useState(0);
+  const [Pno, setPno] = useState(false);
+  const [Fno, setFno] = useState(false);
+  const [Pno2, setPno2] = useState(false);
+  const [Fno2, setFno2] = useState(false);
+  const [local, setlocal] = useState(false);
   console.log("userReducer?.data?.user_lives", userReducer?.data)
   const STATUS_BAR_HEIGHT =
     Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
@@ -211,6 +218,40 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
     setCountryCode(country.cca2);
     setCountry(country);
   };
+  const handleafter = (i) => {
+    if (i - 1 == Sno) {
+      setFno(true)
+    } else {
+      setSno(Sno + 1)
+      setPno(false)
+    }
+  }
+  console.log("yyyyyyyyyyyyyyy", imageObject)
+  const handlePrevios = (i) => {
+    if (Sno == 0) {
+      setPno(true)
+    } else {
+      setFno(false)
+      setSno(Sno - 1)
+    }
+  }
+  const handleafter2 = (i) => {
+    if (i - 1 == Sno) {
+      setFno2(true)
+    } else {
+      setSno(Sno + 1)
+      setPno2(false)
+    }
+  }
+  console.log("yyyyyyyyyyyyyyy", imageObject)
+  const handlePrevios2 = (i) => {
+    if (Sno == 0) {
+      setPno2(true)
+    } else {
+      setFno2(false)
+      setSno(Sno - 1)
+    }
+  }
   const openGallery = async () => {
     try {
       await ImagePicker.openPicker({
@@ -218,16 +259,25 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
         height: 300,
         cropping: true,
         includeBase64: true,
+        multiple: true,
+        maxFiles: 4,
+        minFiles: 1
       }).then(image => {
+        setSno(0)
+        setlocal(true)
+        console.log("gjgjbjb j jklhlknlk", image)
         // console.log(image);
         setImageObject(image);
-        setImage(`data:${image?.mime};base64,${image?.data}`);
+        // setImage(`data:${image[0]?.mime};base64,${image[0]?.data}`);
+        // console.log("yyyyyyyyyyyyyyy", imageObject)
       });
     } catch (err) {
       console.log(err, 'Catched.');
     }
   };
-
+  useEffect(() => {
+    console.log("userReducer?.data?.user_lives", userReducer?.data)
+  }, [])
   const updateProfileChanges = async () => {
     var numbersRegex = /^[0-9]+$/;
     if (numbersRegex.test(value)) {
@@ -242,9 +292,10 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
           ? countryCode
           : userReducer?.data?.country_code,
         user_phoneCountryCode: countryCodeForPhone,
-        user_bio: userBio
+        user_bio: userBio,
+        user_email: email
       };
-
+      console.log("jnksagdkjsakjdkjgkjgkjgkjgjkgkjgk", userReducer?.data?.user_image)
       if (username && country && phone_no) {
         if (usernameRegex.test(username)) {
           setLoading(true);
@@ -271,6 +322,7 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
     }
   };
   const _onSuccess = () => {
+    setlocal(true)
     setLoading(false);
     ImagePicker.clean().then(() => {
       // console.log('removed all tmp images from tmp directory');
@@ -344,9 +396,9 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
                 ]}
                 resizeMode="cover"
                 source={{
-                  uri: image
-                    ? image
-                    : `${imageUrl}/${userReducer?.data?.user_image}`,
+                  uri: imageObject
+                    ? imageObject[Sno]?.path
+                    : `${imageUrl}/${userReducer?.data?.user_image?.[Sno]}`,
                 }}
               />
             ) : (
@@ -376,7 +428,44 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
               </Text>
             </View>
           </View>
+
         </TouchableOpacity>
+        {
+          local == false ?
+
+            <View
+              style={{ justifyContent: "space-between", flexDirection: "row", marginTop: height * 0.025 }}
+            >
+              <TouchableOpacity
+                disabled={Pno}
+                onPress={() => { handlePrevios(userReducer?.data?.user_image?.length) }}
+              >
+                <Entypo name="chevron-small-left" size={35} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={Fno}
+                onPress={() => { handleafter(userReducer?.data?.user_image?.length) }}
+              >
+                <Entypo name="chevron-small-right" size={35} color="white" />
+              </TouchableOpacity>
+            </View> :
+            <View
+              style={{ justifyContent: "space-between", flexDirection: "row", marginTop: height * 0.025 }}
+            >
+              <TouchableOpacity
+                disabled={Pno2}
+                onPress={() => { handlePrevios2(imageObject?.length) }}
+              >
+                {/* <Text>hsadji</Text> */}
+                <Entypo name="chevron-small-left" size={35} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={Fno2}
+                onPress={() => { handleafter2(imageObject?.length) }}
+              >
+                <Entypo name="chevron-small-right" size={35} color="white" />
+              </TouchableOpacity>
+            </View>}
         <View style={styles.formView}>
           <Text style={styles.formLabelStyle}>Username</Text>
           <TextInput

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, {useEffect, useState, useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   StyleSheet,
@@ -18,19 +18,19 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import LottieView from 'lottie-react-native';
-import {Avatar} from 'react-native-elements';
-import {imageUrl} from '../../Config/Apis.json';
+import { Avatar } from 'react-native-elements';
+import { imageUrl } from '../../Config/Apis.json';
 import PostList from './PostList';
 import Geolocation from '@react-native-community/geolocation';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import * as actions from '../../Store/Actions';
-import {connect} from 'react-redux';
-import {themeRed} from '../../Assets/Colors/Colors';
-import {useIsFocused} from '@react-navigation/native';
-import {backgroundColor} from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
-import {responsiveScreenFontSize} from 'react-native-responsive-dimensions';
+import { connect } from 'react-redux';
+import { themeRed } from '../../Assets/Colors/Colors';
+import { useIsFocused } from '@react-navigation/native';
+import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import { responsiveScreenFontSize } from 'react-native-responsive-dimensions';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -66,6 +66,7 @@ const HomeScreen = ({
       setLoading(false);
     });
   }, []);
+
 
   // useEffect(() => {
   //   if (Platform.OS === 'android') {
@@ -215,7 +216,7 @@ const HomeScreen = ({
             scrollEnabled
             showsVerticalScrollIndicator={false}
             data={postsReducer?.feedPosts}
-            contentContainerStyle={{paddingBottom: 100}}
+            contentContainerStyle={{ paddingBottom: 100 }}
             ListFooterComponentStyle={{
               justifyContent: 'center',
               alignItems: 'center',
@@ -224,7 +225,7 @@ const HomeScreen = ({
             ListFooterComponent={() =>
               postsReducer?.feedPosts?.length === 0 && (
                 <>
-                  <View style={{height: 30}}></View>
+                  <View style={{ height: 30 }}></View>
                   <View
                     style={{
                       justifyContent: 'center',
@@ -254,7 +255,7 @@ const HomeScreen = ({
                         nol={1}
                         family="Poppins-Bold"
                         size={width * 0.06}
-                        style={{alignSelf: 'center'}}
+                        style={{ alignSelf: 'center' }}
                         color="black"
                         Label={'No Posts'}
                       />
@@ -262,12 +263,12 @@ const HomeScreen = ({
                         nol={3}
                         family="Poppins-Medium"
                         size={responsiveScreenFontSize(2)}
-                        style={{alignSelf: 'center'}}
+                        style={{ alignSelf: 'center' }}
                         color="black"
                         Label={'Offer drinks and connect'}
                       />
                       <AppText
-                        style={{marginTop: -5}}
+                        style={{ marginTop: -5 }}
                         nol={1}
                         family="Poppins-Medium"
                         size={responsiveScreenFontSize(2)}
@@ -305,22 +306,22 @@ const HomeScreen = ({
                   /> */}
                   </View>
                   <FlatList
-                
+
                     showsHorizontalScrollIndicator={false}
                     data={usersNearmeReducer?.allUsers}
                     horizontal
                     keyExtractor={(item, index) => index}
-                    renderItem={({item, index}) => {
-                    
+                    renderItem={({ item, index }) => {
+                      console.log("ooooooooooooooooooooooo", item)
                       return (
                         <TouchableOpacity
                           key={index}
                           style={[
                             styles.cardHeaderStyle,
-                            isIos && {marginTop: 5},
+                            isIos && { marginTop: 5 },
                           ]}
                           onPress={() => {
-                            navigation.navigate('profile', {userData: item});
+                            navigation.navigate('profile', { userData: item });
                           }}
                           activeOpacity={0.7}>
                           {/* <View style={{bottom: 10, width: 50}}>
@@ -334,7 +335,7 @@ const HomeScreen = ({
                               />
                             </View> */}
                           {item?.user_image === undefined ||
-                          item?.user_image === null ? (
+                            item?.user_image === null ? (
                             <Avatar
                               size="medium"
                               rounded
@@ -350,9 +351,9 @@ const HomeScreen = ({
                             <Avatar
                               size="medium"
                               rounded
-                              containerStyle={{borderColor: 'grey'}}
+                              containerStyle={{ borderColor: 'grey' }}
                               source={{
-                                uri: `${imageUrl}/${item?.user_image}`,
+                                uri: `${imageUrl}/${item?.user_image[0]}`,
                               }}
                             />
                           )}
@@ -368,9 +369,9 @@ const HomeScreen = ({
                                 size={hp('1.3%')}
                                 color="black"
                                 Label={
-                                  (item?.distance * 1000).toPrecision(2) + 'm'
+                                  (item?.distance * 0.62137)?.toFixed(2) + 'miles'
                                 }
-                                // Label={item?.distance?.toPrecision(2) + ' km'}
+                              // Label={item?.distance?.toPrecision(2) + ' km'}
                               />
                             </View>
                           ) : null}
@@ -406,7 +407,8 @@ const HomeScreen = ({
               )
             }
             keyExtractor={(item, index) => index}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
+              console.log("PPPPPPPPPPPPPPPPPPPPPPPPPPP", item)
               return (
                 <PostList
                   index={index}
@@ -414,7 +416,7 @@ const HomeScreen = ({
                   Img={item?.post_url}
                   Name={item?.user_id?.user_name}
                   Description={item?.post_desc}
-                  ProfileImg={item?.user_id?.user_image}
+                  ProfileImg={item?.user_id?.user_image[0]}
                   UploadTime={item?.post_created_at}
                   TotalLike={item?.count_likes}
                   Comment={item?.count_comments}
@@ -436,7 +438,7 @@ function mapStateToProps({
   postsReducer,
   userCoordsReducer,
 }) {
-  return {usersNearmeReducer, userReducer, postsReducer, userCoordsReducer};
+  return { usersNearmeReducer, userReducer, postsReducer, userCoordsReducer };
 }
 
 export default connect(mapStateToProps, actions)(HomeScreen);

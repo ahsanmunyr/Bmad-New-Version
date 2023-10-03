@@ -125,7 +125,7 @@ const NewPostScreen = ({
       height: 400,
       selectionLimit: 3,
       mediaType: 'photo',
-      // cropping: true,
+      cropping: true,
       includeBase64: true,
     })
 

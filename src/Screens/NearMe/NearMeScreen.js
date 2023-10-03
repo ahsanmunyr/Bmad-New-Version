@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect, useCallback} from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,9 +10,9 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import {Badge} from 'react-native-elements';
+import { Badge } from 'react-native-elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MapView, {PROVIDER_GOOGLE, Marker, PROVIDER_DEFAULT, Circle} from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, PROVIDER_DEFAULT, Circle } from 'react-native-maps';
 import {
   markers,
   mapDarkStyle,
@@ -23,19 +23,19 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import AppText from '../../Components/AppText';
-import {Rating} from 'react-native-elements';
-import {connect} from 'react-redux';
-import {imageUrl} from '../../Config/Apis.json';
+import { Rating } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { imageUrl } from '../../Config/Apis.json';
 import * as actions from '../../Store/Actions';
 import UserProfileMarker from './../../Components/UserProfileMarker';
 import YourImage from './../../Assets/Images/pic5.png';
-import {Avatar} from 'react-native-elements';
-import {googleMapKey} from './../../Config/Apis.json';
+import { Avatar } from 'react-native-elements';
+import { googleMapKey } from './../../Config/Apis.json';
 import LottieView from 'lottie-react-native';
-import {themeRed} from '../../Assets/Colors/Colors';
-import {useIsFocused} from '@react-navigation/native';
+import { themeRed } from '../../Assets/Colors/Colors';
+import { useIsFocused } from '@react-navigation/native';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.42;
 const SPACING_FOR_CARD_INSET = width * 0.055 - 10;
@@ -93,7 +93,7 @@ const NearMeScreen = ({
 
   useEffect(() => {
     if (state?.users?.length > 0) {
-      mapAnimation.addListener(({value}) => {
+      mapAnimation.addListener(({ value }) => {
         let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
         if (index >= state?.users?.length) {
           index = state?.users?.length - 1;
@@ -105,7 +105,7 @@ const NearMeScreen = ({
         const regionTimeout = setTimeout(() => {
           if (mapIndex !== index) {
             mapIndex = index;
-            const {user_latitude, user_longitude} = state?.users[index];
+            const { user_latitude, user_longitude } = state?.users[index];
 
             _map.current.animateToRegion(
               {
@@ -148,7 +148,7 @@ const NearMeScreen = ({
       x = x - SPACING_FOR_CARD_INSET;
     }
     console.log(x, markerID);
-    _scrollView.current.scrollTo({x: x, y: 0, animated: true});
+    _scrollView.current.scrollTo({ x: x, y: 0, animated: true });
   };
 
   const interpolations = state?.users?.map((marker, index) => {
@@ -162,7 +162,7 @@ const NearMeScreen = ({
       outputRange: [1, 1.5, 1],
       extrapolate: 'clamp',
     });
-    return {scale};
+    return { scale };
   });
 
   const onRegionChange = mark => {
@@ -183,13 +183,13 @@ const NearMeScreen = ({
           // minZoomLevel={16} // revert it back to 16 !!
           // onMarkerDragEnd={onRegionChange}
           ref={_map}
-          
+
           initialRegion={state?.region}
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           provider={Platform.OS == 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}>
           <Marker
             stopPropagation={false}
-            style={{position: 'absolute'}}
+            style={{ position: 'absolute' }}
             coordinate={{
               latitude: parseFloat(state?.region?.latitude),
               longitude: parseFloat(state?.region?.longitude),
@@ -197,7 +197,7 @@ const NearMeScreen = ({
             // image={require('./../../Assets/Images/maroon-dp2.jpeg')}
             title={'Your Location'}>
             {userReducer?.data?.user_image == null ||
-            userReducer?.data?.user_image == undefined ? (
+              userReducer?.data?.user_image == undefined ? (
               <Avatar
                 rounded
                 size="medium"
@@ -208,7 +208,7 @@ const NearMeScreen = ({
               <Avatar
                 rounded
                 size="small"
-                source={{uri: `${imageUrl}/${userReducer?.data?.user_image}`}}
+                source={{ uri: `${imageUrl}/${userReducer?.data?.user_image}` }}
               />
             )}
           </Marker>
@@ -278,9 +278,10 @@ const NearMeScreen = ({
                 },
               },
             ],
-            {useNativeDriver: true},
+            { useNativeDriver: true },
           )}>
           {state?.users?.map((marker, index) => {
+
             return (
               <View // Parent
                 key={index}
@@ -288,7 +289,7 @@ const NearMeScreen = ({
                   flex: 1,
                   // No backgroundColor
                   shadowColor: '#000',
-                  shadowOffset: {width: 2, height: 2},
+                  shadowOffset: { width: 2, height: 2 },
                   shadowOpacity: 0.8,
                   shadowRadius: 4,
                 }}>
@@ -298,19 +299,19 @@ const NearMeScreen = ({
                   onPress={() => {
                     // Save User Profile Data In Redux
                     // saveNearmeUserData(marker);
-                    navigation.push('profile', {userData: marker});
+                    navigation.push('profile', { userData: marker });
                   }}
                   style={styles.card}>
                   <View style={styles.imageView}>
                     {marker?.user_image ? (
                       <Image
-                        source={{uri: `${imageUrl}/${marker?.user_image}`}}
-                        style={{width: width * 0.5, height: height * 0.18}}
+                        source={{ uri: `${imageUrl}/${marker?.user_image[0]}` }}
+                        style={{ width: width * 0.5, height: height * 0.18 }}
                       />
                     ) : (
                       <Image
                         source={require('./../../Assets/Images/placeholderImage.png')}
-                        style={{width: width * 0.53, height: height * 0.18}}
+                        style={{ width: width * 0.53, height: height * 0.18 }}
                       />
                     )}
 
@@ -351,8 +352,8 @@ const NearMeScreen = ({
                       size={isIOS ? width * 0.032 : width * 0.032}
                       color={'grey'}
                       Label={
-                        parseFloat(marker?.distance * 1000).toFixed(2) +
-                        'm far away'
+                        parseFloat(marker?.distance * 0.621371).toFixed(2) +
+                        'miles far away'
                       }
                     />
                   </View>
@@ -373,10 +374,10 @@ const NearMeScreen = ({
           <View
             style={[
               styles.lottieStyleView,
-              isIos && {marginTop: height * 0.33},
+              isIos && { marginTop: height * 0.33 },
             ]}>
             <LottieView
-              style={[styles.lottie, isIos && {height: height * 0.1}]}
+              style={[styles.lottie, isIos && { height: height * 0.1 }]}
               source={require('./../../Assets/Lottie/test2.json')}
               autoPlay
               loop
@@ -384,7 +385,7 @@ const NearMeScreen = ({
             <View
               style={[
                 styles.noPeopleFound,
-                isIos && {marginTop: height * 0.02},
+                isIos && { marginTop: height * 0.02 },
               ]}>
               <AppText
                 nol={1}
@@ -409,8 +410,8 @@ const NearMeScreen = ({
     );
   }
 };
-function mapStateToProps({userCoordsReducer, usersNearmeReducer, userReducer}) {
-  return {userCoordsReducer, usersNearmeReducer, userReducer};
+function mapStateToProps({ userCoordsReducer, usersNearmeReducer, userReducer }) {
+  return { userCoordsReducer, usersNearmeReducer, userReducer };
 }
 
 export default connect(mapStateToProps, actions)(NearMeScreen);
@@ -472,7 +473,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     height: 35,
     shadowColor: '#ccc',
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,

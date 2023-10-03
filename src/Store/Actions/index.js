@@ -1324,11 +1324,23 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
     // console.log(data.imageObj, 'data.imageObjdata.imageObjdata.imageObj');
     var formData = new FormData();
     if (data?.imageObj !== null) {
-      formData.append('post_file', {
-        uri: data.imageObj.path,
-        name: data.imageObj.filename || `filename.jpg`,
-        type: data.imageObj.mime,
-      });
+      data.imageObj.map(images => {
+        formData.append('post_file', {
+          uri: images.path,
+          name: images.filename || `filename.jpg`,
+          type: images.mime,
+        });
+        // return {
+        //   uri: images.path,
+        //   name: images.filename || `filename.jpg`,
+        //   type: images.mime,
+        // }
+      })
+      // formData.append('post_file', {
+      //   uri: data.imageObj[0].path,
+      //   name: data.imageObj[0].filename || `filename.jpg`,
+      //   type: data.imageObj[0].mime,
+      // });
     } else {
       // console.log('Old image going in api');
     }
@@ -1339,8 +1351,9 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
     formData.append('user_lives', data.user_lives);
     formData.append('country_code', data.country_code);
     formData.append('user_bio', data.user_bio);
+    formData.append('user_email', data.user_email);
 
-
+    console.log("kaduuuuu", formData)
     const URL = `${api}/api/post/editProfile`;
     fetch(URL, {
       method: 'PUT',
@@ -1352,15 +1365,15 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
     })
       .then(res => res.json())
       .then(res => {
-
+        console.log("looooooooooooooog", res?.data?.User_Images)
         if (res.status) {
-
+          alert("hogya")
           dispatch({
             type: types.UPDATE_PROFILE,
             payload: {
               user_image:
-                res?.data?.data?.User_Images?.length > 0
-                  ? res?.data?.data?.User_Images[0]
+                res?.data?.User_Images?.length > 0
+                  ? res?.data?.User_Images
                   : data.user_image,
               user_contact: data.phone_no,
               user_lives: data.user_lives,
@@ -1369,7 +1382,8 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
               user_contact: data.user_contact,
               country_code: data.country_code,
               user_phoneCountryCode: data.user_phoneCountryCode,
-              user_bio: data.user_bio
+              user_bio: data.user_bio,
+              user_email: data?.user_email
             },
           });
           showMessage({

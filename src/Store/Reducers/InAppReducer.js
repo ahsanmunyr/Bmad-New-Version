@@ -125,7 +125,7 @@ export function userReducer(state = INITIAL_USER_DATA, action) {
       return {
         ...state,
         data: {
-          ...state.data,
+          // ...state.data,
           ...action.payload,
         },
       };
@@ -251,7 +251,7 @@ export function postsReducer(state = INITIAL_STATE_POSTS, action) {
       };
 
     case LIKE_POST_FROM_SCREEN:
-      let oldData = {...state.post};
+      let oldData = { ...state.post };
       oldData.count_likes = action.payload.totalLikes;
       oldData.is_like = oldData?.is_like === 1 ? 0 : 1;
       return {
@@ -397,8 +397,8 @@ export function messagesReducer(state = INITIAL_MESSAGES_DATA, action) {
       const arr = action.payload.messages.map(ele => {
         const userImage =
           action.payload?.currentChat?.user_image !== null &&
-          action.payload?.currentChat?.user_image !== undefined &&
-          action.payload?.currentChat?.user_image !== ''
+            action.payload?.currentChat?.user_image !== undefined &&
+            action.payload?.currentChat?.user_image !== ''
             ? currentChat?.user_image
             : require('../../Assets/Images/dp.png');
 

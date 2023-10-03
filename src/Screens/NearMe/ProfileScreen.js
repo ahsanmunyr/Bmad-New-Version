@@ -27,6 +27,8 @@ import { useRoute, StackActions, useIsFocused } from '@react-navigation/native';
 import { showMessage, hideMessage } from 'react-native-flash-message';
 import * as actions from '../../Store/Actions/index';
 import { themeRed } from '../../Assets/Colors/Colors';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Colors from '../../src/constants/Colors';
 //  import {useNavigation} from "@react-navigation/native"
 // import { NavigationActions } from 'react-navigation';
 const { width, height } = Dimensions.get('window');
@@ -51,6 +53,9 @@ const ProfileScreen = ({
   const [refreshing, setRefreshing] = React.useState(false);
   const isFocused = useIsFocused();
   const [actionLoader, setActionLoader] = useState(false);
+  const [Sno, setSno] = useState(0);
+  const [Pno, setPno] = useState(false);
+  const [Fno, setFno] = useState(false);
   const LOGGED_IN_USER = userReducer?.data?.user_id;
   const profileData = route?.params?.userData;
   const isIOS = Platform.OS === 'ios';
@@ -99,7 +104,7 @@ const ProfileScreen = ({
     // };
     // await createConversation(apiData, nearMeUserData, _onSuccess);
   };
-
+  console.log("lllllllllllllllllllllll",)
   const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   };
@@ -145,6 +150,7 @@ const ProfileScreen = ({
       // console.log('After Cancelling Request: Data Changed');
       // console.log(usersNearmeReducer?.user);
       setNearMeUserData(usersNearmeReducer?.user);
+      console.log("opopopopppp", usersNearmeReducer?.user)
     }
   }, [usersNearmeReducer?.user]);
 
@@ -180,7 +186,22 @@ const ProfileScreen = ({
       </View>
     );
   }
-
+  const handlePrevios = (i) => {
+    if (Sno == 0) {
+      setPno(true)
+    } else {
+      setFno(false)
+      setSno(Sno - 1)
+    }
+  }
+  const handleafter = (i) => {
+    if (i - 1 == Sno) {
+      setFno(true)
+    } else {
+      setSno(Sno + 1)
+      setPno(false)
+    }
+  }
   // console.log(JSON.stringify(nearMeUserData?.sendBy, null, 2));
   return (
     <View style={styles.container}>
@@ -204,11 +225,36 @@ const ProfileScreen = ({
         ) : (
           <Image
             style={styles.userProfilePic}
-            source={{ uri: `${imageUrl}/${nearMeUserData?.user_image}` }}
+            source={{ uri: `${imageUrl}/${nearMeUserData?.user_image?.[Sno]}` }}
           // resizeMode=""
           // resizeMethod="auto"
           />
         )}
+
+        <View
+          style={{
+            justifyContent: "space-between",
+            flexDirection: "row",
+            marginTop: -height * 0.045,
+            backgroundColor: Colors?.themeColor,
+            width: width * 1,
+            zIndex: 5457,
+
+          }}
+        >
+          <TouchableOpacity
+            disabled={Pno}
+            onPress={() => { handlePrevios(nearMeUserData?.user_image?.length) }}
+          >
+            <Entypo name="chevron-small-left" size={35} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={Fno}
+            onPress={() => { handleafter(nearMeUserData?.user_image?.length) }}
+          >
+            <Entypo name="chevron-small-right" size={35} color="white" />
+          </TouchableOpacity>
+        </View>
 
         {/* Total Profile Likes  */}
         {/* <View style={styles.heartContainer}>
@@ -488,6 +534,7 @@ const ProfileScreen = ({
               size={isIOS ? width * 0.05 : width * 0.05}
               color="white"
               Label={'Favourites'}
+            // Label={'Favourites'}
             />
           </View>
 
