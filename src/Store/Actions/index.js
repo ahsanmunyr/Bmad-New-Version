@@ -1367,7 +1367,7 @@ export const updateProfile = (data, onSuccess, _onFailed) => async dispatch => {
       .then(res => {
         console.log("looooooooooooooog", res?.data?.User_Images)
         if (res.status) {
-          alert("hogya")
+          // alert("hogya")
           dispatch({
             type: types.UPDATE_PROFILE,
             payload: {

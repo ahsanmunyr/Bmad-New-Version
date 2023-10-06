@@ -135,30 +135,13 @@ const PostList = ({
                 />
               </View>
               <View
-                style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={{ paddingRight: 5 }}>
-                    <TouchableOpacity
-                      onPress={() => _onPressHeart(item)}
-                      activeOpacity={0.9}>
-                      {item?.is_like === 1 ? (
-                        <Icon name="heart" size={18} color="#B01125" />
-                      ) : (
-                        <Icon name="heart-o" size={18} color="#B01125" />
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                  <AppText
-                    nol={1}
-                    textAlign="left"
-                    family="Poppins-Regular"
-                    size={hp('1.5%')}
-                    color="black"
-                    Label={TotalLike}
-                  />
-                </View>
-                <TouchableOpacity
-                  style={{ flexDirection: 'row', left: 5 }}
+                style={{ flexDirection: 'row', justifyContent: 'space-around',height:60 }}>
+
+<TouchableOpacity
+                  style={{ 
+                    flexDirection: 'row',
+                    // backgroundColor:"green",
+                    paddingTop:10 }}
                   activeOpacity={0.9}
                   // onPress={() => {
                   //   if (routeName === 'post') {
@@ -205,6 +188,39 @@ const PostList = ({
                     Label={Comment}
                   />
                 </TouchableOpacity>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ paddingRight: 5 }}>
+                    <TouchableOpacity
+                    style={{
+                      // backgroundColor:"orange",
+                      width:width*0.2,
+                      flexDirection:"row",
+                      height:height*0.05,
+                      paddingLeft:20,
+                      paddingTop:10
+                    }}
+                      onPress={() => _onPressHeart(item)}
+                      activeOpacity={0.9}>
+                      {item?.is_like === 1 ? (
+                        <Icon name="heart" size={18} color="#B01125" />
+                      ) : (
+                        <Icon name="heart-o" size={18} color="#B01125" />
+                      )}
+                    <View style={{marginLeft:width*0.02}}>
+                    <AppText
+                    nol={1}
+                    textAlign="left"
+                    family="Poppins-Regular"
+                    size={hp('1.5%')}
+                    color="black"
+                    Label={TotalLike}
+                  />
+                    </View>
+                    </TouchableOpacity>
+                  </View>
+                  
+                </View>
+               
               </View>
             </View>
           </View>

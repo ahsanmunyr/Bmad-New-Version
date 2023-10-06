@@ -245,6 +245,7 @@ const NewPostScreen = ({
     });
     setStep(1)
     navigation.navigate('HOME');
+    setSelectedItems([])
   };
 
   const _onPostFailed = () => {
@@ -346,13 +347,15 @@ const NewPostScreen = ({
           <View
             style={{
               backgroundColor: "white",
-              justifyContent: "center"
+              justifyContent: "center",
+              marginBottom:height*0.32,
+              
             }}
           >
             <FlatList
               data={photos}
               numColumns={3}
-              style={{ alignSelf: "center" }}
+              style={{ alignSelf: "center",marginBottom:height*0.22 }}
               renderItem={({ item, index }) => {
                 console.log('itemmmm', item);
                 return (
@@ -435,9 +438,10 @@ const NewPostScreen = ({
               style={{ alignSelf: "center" }}
               horizontal
               renderItem={({ item, index }) => (
+           
                 <Image
                   style={{ height: height * 0.3, width: filePath.length !== 1 ? width * 0.8 : width * 1, borderRadius: 10, marginHorizontal: filePath.length !== 1 ? 5 : 0 }}
-                  source={{ uri: filePath?.[0]?.path }}
+                  source={{ uri: item?.path }}
                 />
               )}
             />

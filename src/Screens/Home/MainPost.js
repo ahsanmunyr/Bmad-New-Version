@@ -307,7 +307,7 @@ const MainPost = ({
                 source={
                   route?.params?.profileImg
                     ? {
-                      uri: `${imageUrl}/${route?.params?.profileImg}`,
+                      uri: `${imageUrl}/${userReducer?.data?.user_image?.[0]}`,
                     }
                     : require('../../Assets/Images/maroon-dp2.jpeg')
                 }

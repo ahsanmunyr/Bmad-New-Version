@@ -14,6 +14,7 @@ import {
   TextInput,
   ScrollView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -386,6 +387,10 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
             ]}>
             <View style={{}} />
             {image !== null || userReducer?.data?.user_image ? (
+              <>
+              <ActivityIndicator style={{
+                marginTop:height*0.22,position:"absolute",alignSelf:"center",
+              }} color={"white"} size={"large"}/>
               <Image
                 style={[
                   styles.imagebackground,
@@ -401,6 +406,7 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
                     : `${imageUrl}/${userReducer?.data?.user_image?.[Sno]}`,
                 }}
               />
+              </>
             ) : (
               <Image
                 style={[
