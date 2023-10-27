@@ -203,6 +203,7 @@ const ProfileScreen = ({
     }
   }
   // console.log(JSON.stringify(nearMeUserData?.sendBy, null, 2));
+  console.log("nearMeUserData", nearMeUserData)
   return (
     <View style={styles.container}>
       <ScrollView
@@ -229,6 +230,7 @@ const ProfileScreen = ({
           // resizeMode=""
           // resizeMethod="auto"
           />
+
         )}
 
         <View
@@ -285,6 +287,14 @@ const ProfileScreen = ({
               Label={nearMeUserData?.user_gender[0] || 'Female'}
             /> */}
           </View>
+          <Text style={{
+            color: "white",
+            fontSize: 16,
+            marginLeft: 20
+          }}>
+
+            {nearMeUserData?.user_bio}
+          </Text>
           <View style={{ marginLeft: width * 0.05 }}>
             {/* <AppText
               nol={1}
