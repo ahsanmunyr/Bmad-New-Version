@@ -289,10 +289,17 @@ const ProfileScreen = ({
           </View>
           <Text style={{
             color: "white",
-            fontSize: 16,
-            marginLeft: 20
+            fontSize: 15,
+            marginLeft: 20,
+            marginTop: -20
           }}>
-
+            {/* <Text
+              style={{
+                color: "white",
+                fontSize: 15,
+                fontWeight: "800"
+              }}
+            >Bio:</Text> */}
             {nearMeUserData?.user_bio}
           </Text>
           <View style={{ marginLeft: width * 0.05 }}>
