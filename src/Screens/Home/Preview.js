@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ImageBackground,
   ScrollView,
+
 } from 'react-native';
 import {
   responsiveWidth,
@@ -16,11 +17,11 @@ import {
   responsiveScreenFontSize,
 } from 'react-native-responsive-dimensions';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const SPACING = 10;
 const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.99 : width * 0.99;
 
-export default Preview = ({item, scrollX, index}) => {
+export default Preview = ({ item, scrollX, index }) => {
   const inputRange = [
     (index - 2) * ITEM_SIZE,
     (index - 1) * ITEM_SIZE,
@@ -37,10 +38,10 @@ export default Preview = ({item, scrollX, index}) => {
     <View key={index} style={styles.main}>
       <View style={[styles.animatedView]}>
         <Image
-        
+
           style={styles.posterImage}
           // resizeMode="contain"
-          source={{uri: item}}
+          source={{ uri: item }}
         />
       </View>
     </View>

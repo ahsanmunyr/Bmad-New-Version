@@ -26,11 +26,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
-import {
-  ImagePicker,
-  launchImageLibrary,
-  launchCamera,
-} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import { showMessage, hideMessage } from 'react-native-flash-message';
 import ImagePickerMultiple from 'react-native-image-crop-picker';
 import AppText from '../../Components/AppText';
@@ -101,6 +97,7 @@ const NewPostScreen = ({
   //     setImages(updatedSelectedItems);
   //   }
   // };
+  console.log("arraysss", filePath)
   const handlePress = (item) => {
     // Check if the item is already in the selectedItems array
     if (!selectedItems.some((selectedItem) => selectedItem === item)) {
@@ -114,7 +111,33 @@ const NewPostScreen = ({
       setSelectedItems(updatedSelectedItems);
     }
   };
+  const openPicket = (item) => {
 
+    ImagePicker.openCropper({
+      path: `${item?.path}`,
+      width: 300,
+      height: 400
+    }).then(image => {
+      setFilePath((arr) => {
+        const modifiedImage = {
+          uri: item?.uri,
+          path: image.path,
+          type: image?.mime
+        }
+        const e = structuredClone(arr);
+        const index = e.findIndex((i) => {
+          return i.path === item.path
+
+        })
+        if (index !== -1) {
+          e[index] = modifiedImage
+        }
+        return e
+      })
+      console.log("kshdlkahsk", image);
+      // setImage(image?.path)
+    });
+  }
   console.log("7777777777777777777777777", selectedItems)
   console.log("Cam pic", CamPic)
   const SelectCamera = () => {
@@ -348,14 +371,14 @@ const NewPostScreen = ({
             style={{
               backgroundColor: "white",
               justifyContent: "center",
-              marginBottom:height*0.32,
-              
+              marginBottom: height * 0.32,
+
             }}
           >
             <FlatList
               data={photos}
               numColumns={3}
-              style={{ alignSelf: "center",marginBottom:height*0.22 }}
+              style={{ alignSelf: "center", marginBottom: height * 0.22 }}
               renderItem={({ item, index }) => {
                 console.log('itemmmm', item);
                 return (
@@ -432,17 +455,52 @@ const NewPostScreen = ({
               }}
             >Back</Text>
           </TouchableOpacity>
-          <View style={{ height: height * 0.3, backgroundColor: '#b01125', justifyContent: "center" }}>
+          <View style={{ height: height * 0.4, backgroundColor: '#b01125', justifyContent: "center" }}>
             <FlatList
               data={filePath}
               style={{ alignSelf: "center" }}
               horizontal
               renderItem={({ item, index }) => (
-           
-                <Image
-                  style={{ height: height * 0.3, width: filePath.length !== 1 ? width * 0.8 : width * 1, borderRadius: 10, marginHorizontal: filePath.length !== 1 ? 5 : 0 }}
-                  source={{ uri: item?.path }}
-                />
+                <>
+                  <Image
+                    style={{ height: height * 0.3, width: filePath.length !== 1 ? width * 0.8 : width * 1, borderRadius: 10, marginHorizontal: filePath.length !== 1 ? 5 : 0 }}
+                    source={{ uri: item?.path }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => { openPicket(item) }}
+                    style={{
+                      position: "absolute",
+                      zIndex: 100,
+                      height: height * 0.045,
+                      backgroundColor: "rgba(247, 247, 247, 0.76)",
+                      width: width * 0.2,
+                      borderRadius: 100,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginTop: height * 0.23,
+                      alignSelf: 'flex-start',
+                      marginLeft: width * 0.03,
+                      flexDirection: "row"
+                    }}
+                  >
+                    <Image
+                      style={{
+                        // height
+                        resizeMode: "contain",
+                        height: 100,
+                        width: 20,
+                        tintColor: "#b01125"
+                      }}
+                      source={require("../../Assets/Images/crop.png")} />
+                    <Text
+                      style={{
+                        color: colors.themeblue,
+                        fontFamily: "Poppins-Bold"
+                      }}
+                    >Crop</Text>
+                  </TouchableOpacity>
+                </>
+
               )}
             />
 
@@ -531,9 +589,10 @@ var styles = StyleSheet.create({
     backgroundColor: '#B01125',
     borderTopRightRadius: 20,
     width: '100%',
-    height: height * 0.63,
+    height: height * 0.61,
     bottom: 0,
-    marginTop: -20
+    marginTop: -60
+    // marginTop: 15
     // position: 'absolute',
   }, textFieldStyle: {
     width: width * 0.9,
