@@ -37,6 +37,8 @@ import ImagePicker from 'react-native-image-crop-picker';
 import IconComp from '../../../Components/IconComp';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { responsiveScreenWidth } from 'react-native-responsive-dimensions';
+import Images from '../../../src/constants/images';
+import { colors } from 'react-native-elements';
 
 const { width, height } = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
@@ -279,6 +281,33 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
   useEffect(() => {
     console.log("userReducer?.data?.user_lives", userReducer?.data)
   }, [])
+  const openPicket = (item) => {
+
+    ImagePicker.openCropper({
+      path: `${item?.path}`,
+      width: 300,
+      height: 400
+    }).then(image => {
+      setImageObject((arr) => {
+        const modifiedImage = {
+          data: item?.uri,
+          path: image.path,
+          mime: image?.mime
+        }
+        const e = JSON.parse(JSON.stringify(arr));
+        const index = e.findIndex((i) => {
+          return i.path === item.path
+
+        })
+        if (index !== -1) {
+          e[index] = modifiedImage
+        }
+        return e
+      })
+      console.log("kshdlkahsk", image);
+      // setImage(image?.path)
+    });
+  }
   const updateProfileChanges = async () => {
     var numbersRegex = /^[0-9]+$/;
     if (numbersRegex.test(value)) {
@@ -346,52 +375,153 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
   return (
     <SafeAreaView style={styles.container}>
       {/* <StatusBar translucent backgroundColor="transparent" /> */}
+      {
+        imageObject
+          ?
+          <ScrollView>
+            <View
+              style={{
+                flex: 1,
+                marginTop: height * 0.1,
+                marginBottom:height*0.2
+                // backgroundColor:"red"
+              }}
+            >
 
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: {
-                  y: AnimatedHeaderValue,
-                },
-              },
-            },
-          ],
-          { useNativeDriver: false },
-        )}>
-        <View style={[styles.iconContainer]}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('BMAD', {
-                screen: 'BMAD',
-                initial: false,
-              })
-            }>
-            <Icon name="arrow-back" size={25} color="white" />
-          </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={0.7} onPress={openGallery}>
-            <MaterialIcons name="edit-3" color="white" size={25} style={{}} />
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity onPress={openGallery}>
-          <View
-            style={[
-              styles.imagebackground,
               {
-                height: isIOS ? height * 0.45 : height * 0.5,
-              },
-            ]}>
-            <View style={{}} />
-            {image !== null || userReducer?.data?.user_image ? (
-              <>
-              <ActivityIndicator style={{
-                marginTop:height*0.22,position:"absolute",alignSelf:"center",
-              }} color={"white"} size={"large"}/>
-              <Image
+                imageObject?.map((i) => (
+                  <>
+                    <Image
+                      // key={i.id}  // Replace 'id' with the actual unique identifier in your imageObject
+                      style={{
+                        height: height * 0.3,
+                        width: width * 0.9,
+                        resizeMode: "cover",
+                        margin: width * 0.055,
+                        alignSelf: "center",
+                        borderRadius:20
+                      }}
+                      // resizeMode='contain'
+                      source={{ uri: i?.path }}
+                    />
+                    <TouchableOpacity
+                      onPress={() => { openPicket(i) }}
+                      style={{
+                        // position: "absolute",
+                        zIndex: 100,
+                        height: height * 0.045,
+                        // backgroundColor: "rgba(247, 247, 247, 0.76)",
+                        backgroundColor:"white",
+                        width: width * 0.2,
+                        borderRadius: 100,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginTop: -height * 0.083,
+                        // alignSelf: 'flex-start',
+                        marginLeft: width * 0.06,
+                        flexDirection: "row"
+                      }}
+                    >
+                      <Image
+                        style={{
+                          // height
+                          resizeMode: "contain",
+                          height: 20,
+                          width: 20,
+                          tintColor: "#b01125"
+                        }}
+                        // source={require("../../Assets/Images/crop.png")}
+                        source={require("../../../Assets/Images/crop.png")}
+
+                      />
+                      <Text
+                        style={{
+                          color: colors.themeblue,
+                          fontFamily: "Poppins-Bold"
+                        }}
+                      >Crop</Text>
+                    </TouchableOpacity>
+                  </>
+                ))
+              }
+              {loading ? (
+                <View style={styles.updateBtnStyle}>
+                  <Text style={styles.btnTxt}>Updating..</Text>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={updateProfileChanges}
+                  style={styles.updateBtnStyle}>
+                  <Text style={styles.btnTxt}>Update image</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </ScrollView>
+          :
+          <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: {
+                      y: AnimatedHeaderValue,
+                    },
+                  },
+                },
+              ],
+              { useNativeDriver: false },
+            )}>
+            <View style={[styles.iconContainer]}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('BMAD', {
+                    screen: 'BMAD',
+                    initial: false,
+                  })
+                }>
+                <Icon name="arrow-back" size={25} color="white" />
+              </TouchableOpacity>
+
+              <TouchableOpacity activeOpacity={0.7} onPress={openGallery}>
+                <MaterialIcons name="edit-3" color="white" size={25} style={{}} />
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={openGallery}>
+              <View
+                style={[
+                  styles.imagebackground,
+                  {
+                    height: isIOS ? height * 0.45 : height * 0.5,
+                  },
+                ]}>
+                <View style={{}} />
+                {image !== null || userReducer?.data?.user_image ? (
+                  <>
+                    <ActivityIndicator style={{
+                      marginTop: height * 0.22, position: "absolute", alignSelf: "center",
+                    }} color={"white"} size={"large"} />
+                    <Image
+                      style={[
+                        styles.imagebackground,
+                        {
+                          height: isIOS ? height * 0.45 : height * 0.5,
+                          // backgroundColor: animatedHeaderBgColor,
+                        },
+                      ]}
+                      resizeMode="cover"
+                      // source={{
+                      //   uri: imageObject
+                      //     ? imageObject[Sno]?.path
+                      //     : null,
+                      // }}
+                      source={{
+                        uri:`${imageUrl}/${userReducer?.data?.user_image?.[Sno]}`,
+                      }}
+                    />
+                    {/* <Image
                 style={[
                   styles.imagebackground,
                   {
@@ -401,118 +531,116 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
                 ]}
                 resizeMode="cover"
                 source={{
-                  uri: imageObject
-                    ? imageObject[Sno]?.path
-                    : `${imageUrl}/${userReducer?.data?.user_image?.[Sno]}`,
+                  uri:`${imageUrl}/${userReducer?.data?.user_image?.[Sno]}`,
+                }}
+              /> */}
+                  </>
+                ) : (
+                  <Image
+                    style={[
+                      styles.imagebackground,
+                      {
+                        height: isIOS ? height * 0.45 : height * 0.5,
+                        // backgroundColor: animatedHeaderBgColor,
+                      },
+                    ]}
+                    resizeMode="cover"
+                    source={require('../../../Assets/Images/test.png')}
+                  />
+                )}
+                <View style={[styles.textContainer, isIOS && { top: height * 0.33 }]}>
+                  <Text style={styles.nameStyles}>{`${username?.length > 17
+                    ? `${username?.substring(0, 17)}...`
+                    : username
+                    }`}</Text>
+                  <Text
+                    style={[
+                      styles.emailStyles,
+                      isIOS && { marginTop: height * 0.007 },
+                    ]}>
+                    {userReducer?.data?.user_email}
+                  </Text>
+                </View>
+              </View>
+
+            </TouchableOpacity>
+            {
+              local == false ?
+
+                <View
+                  style={{ justifyContent: "space-between", flexDirection: "row", marginTop: height * 0.025 }}
+                >
+                  <TouchableOpacity
+                    disabled={Pno}
+                    onPress={() => { handlePrevios(userReducer?.data?.user_image?.length) }}
+                  >
+                    <Entypo name="chevron-small-left" size={35} color="white" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    disabled={Fno}
+                    onPress={() => { handleafter(userReducer?.data?.user_image?.length) }}
+                  >
+                    <Entypo name="chevron-small-right" size={35} color="white" />
+                  </TouchableOpacity>
+                </View> :
+                <View
+                  style={{ justifyContent: "space-between", flexDirection: "row", marginTop: height * 0.025 }}
+                >
+                  <TouchableOpacity
+                    disabled={Pno2}
+                    onPress={() => { handlePrevios2(imageObject?.length) }}
+                  >
+                    {/* <Text>hsadji</Text> */}
+                    <Entypo name="chevron-small-left" size={35} color="white" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    disabled={Fno2}
+                    onPress={() => { handleafter2(imageObject?.length) }}
+                  >
+                    <Entypo name="chevron-small-right" size={35} color="white" />
+                  </TouchableOpacity>
+                </View>}
+            <View style={styles.formView}>
+              <Text style={styles.formLabelStyle}>Username</Text>
+              <TextInput
+                value={username}
+                onChangeText={e => setUsername(e)}
+                style={styles.textInputLabel}
+              />
+              <Text style={styles.formLabelStyle}>User Bio</Text>
+              <TextInput
+                value={userBio}
+                onChangeText={e => setUserBio(e)}
+                style={styles.textInputLabel}
+              />
+              <Text style={styles.formLabelStyle}>Phone Number</Text>
+              <PhoneInput
+                ref={phoneInput}
+                defaultValue={value}
+                addInternationalOption={false}
+                defaultCode={countryCodeForPhone || userReducer?.data?.country_code}
+                layout="first"
+                placeholder="Phone"
+                containerStyle={styles.phoneInputContainerStyle}
+                textInputStyle={styles.phoneInputTextStyle}
+                // codeTextStyle={styles.codeTextStyle}
+                textContainerStyle={styles.textContainerStyle}
+                // flagButtonStyle={{backgroundColor:'red'}}
+                onChangeCountry={c => {
+                  // console.log(c.cca2, "====================================")
+                  onChangecountryCodeForPhone(c.cca2);
+                }}
+                onChangeText={text => {
+                  setValue(text);
+                }}
+                onChangeFormattedText={text => {
+                  setPhone_no(text);
                 }}
               />
-              </>
-            ) : (
-              <Image
-                style={[
-                  styles.imagebackground,
-                  {
-                    height: isIOS ? height * 0.45 : height * 0.5,
-                    // backgroundColor: animatedHeaderBgColor,
-                  },
-                ]}
-                resizeMode="cover"
-                source={require('../../../Assets/Images/test.png')}
-              />
-            )}
-            <View style={[styles.textContainer, isIOS && { top: height * 0.33 }]}>
-              <Text style={styles.nameStyles}>{`${username?.length > 17
-                ? `${username?.substring(0, 17)}...`
-                : username
-                }`}</Text>
-              <Text
-                style={[
-                  styles.emailStyles,
-                  isIOS && { marginTop: height * 0.007 },
-                ]}>
-                {userReducer?.data?.user_email}
-              </Text>
-            </View>
-          </View>
 
-        </TouchableOpacity>
-        {
-          local == false ?
+              <Text style={styles.formLabelStyle}>Country</Text>
 
-            <View
-              style={{ justifyContent: "space-between", flexDirection: "row", marginTop: height * 0.025 }}
-            >
-              <TouchableOpacity
-                disabled={Pno}
-                onPress={() => { handlePrevios(userReducer?.data?.user_image?.length) }}
-              >
-                <Entypo name="chevron-small-left" size={35} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={Fno}
-                onPress={() => { handleafter(userReducer?.data?.user_image?.length) }}
-              >
-                <Entypo name="chevron-small-right" size={35} color="white" />
-              </TouchableOpacity>
-            </View> :
-            <View
-              style={{ justifyContent: "space-between", flexDirection: "row", marginTop: height * 0.025 }}
-            >
-              <TouchableOpacity
-                disabled={Pno2}
-                onPress={() => { handlePrevios2(imageObject?.length) }}
-              >
-                {/* <Text>hsadji</Text> */}
-                <Entypo name="chevron-small-left" size={35} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={Fno2}
-                onPress={() => { handleafter2(imageObject?.length) }}
-              >
-                <Entypo name="chevron-small-right" size={35} color="white" />
-              </TouchableOpacity>
-            </View>}
-        <View style={styles.formView}>
-          <Text style={styles.formLabelStyle}>Username</Text>
-          <TextInput
-            value={username}
-            onChangeText={e => setUsername(e)}
-            style={styles.textInputLabel}
-          />
-          <Text style={styles.formLabelStyle}>User Bio</Text>
-          <TextInput
-            value={userBio}
-            onChangeText={e => setUserBio(e)}
-            style={styles.textInputLabel}
-          />
-          <Text style={styles.formLabelStyle}>Phone Number</Text>
-          <PhoneInput
-            ref={phoneInput}
-            defaultValue={value}
-            addInternationalOption={false}
-            defaultCode={countryCodeForPhone || userReducer?.data?.country_code}
-            layout="first"
-            placeholder="Phone"
-            containerStyle={styles.phoneInputContainerStyle}
-            textInputStyle={styles.phoneInputTextStyle}
-            // codeTextStyle={styles.codeTextStyle}
-            textContainerStyle={styles.textContainerStyle}
-            // flagButtonStyle={{backgroundColor:'red'}}
-            onChangeCountry={c => {
-              // console.log(c.cca2, "====================================")
-              onChangecountryCodeForPhone(c.cca2);
-            }}
-            onChangeText={text => {
-              setValue(text);
-            }}
-            onChangeFormattedText={text => {
-              setPhone_no(text);
-            }}
-          />
-
-          <Text style={styles.formLabelStyle}>Country</Text>
-
-          {/* <CountryPicker
+              {/* <CountryPicker
             containerButtonStyle={[
               styles.textInputLabel,
               {padding: height * 0.02, color: 'black'},
@@ -520,7 +648,7 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
             
             visible
           /> */}
-          {/* {...{
+              {/* {...{
               countryCode,
               withFilter,
               withFlag,
@@ -530,90 +658,91 @@ const MyProfileScreen = ({ navigation, route, userReducer, updateProfile }) => {
               withEmoji,
             }} */}
 
-          <CountryPicker
-            containerButtonStyle={[
-              styles.textInputLabel,
-              { color: 'white', zIndex: 9999 },
-            ]}
-            withFilter={true}
-            withFlag={true}
-            visible={false}
-            withCallingCode
-            withAlphaFilter
-            withCloseButton
-            withCountryNameButton
-            withEmoji
-            withCurrency
-            withFlagButton
-            withModal
-            withCallingCodeButton
-            withCurrencyButton
-            placeholder={''}
-            onSelect={t => {
-              console.log("T", t.flag, "==============")
-              setFlagName(t.flag);
-              setCountryCode(t.cca2);
-              setCountry(t.name);
-            }}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '90%',
+              <CountryPicker
+                containerButtonStyle={[
+                  styles.textInputLabel,
+                  { color: 'white', zIndex: 9999 },
+                ]}
+                withFilter={true}
+                withFlag={true}
+                visible={false}
+                withCallingCode
+                withAlphaFilter
+                withCloseButton
+                withCountryNameButton
+                withEmoji
+                withCurrency
+                withFlagButton
+                withModal
+                withCallingCodeButton
+                withCurrencyButton
+                placeholder={''}
+                onSelect={t => {
+                  console.log("T", t.flag, "==============")
+                  setFlagName(t.flag);
+                  setCountryCode(t.cca2);
+                  setCountry(t.name);
+                }}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  width: '90%',
 
-              alignSelf: 'center',
-              marginTop: isIOS ? height * -0.055 : height * -0.056,
+                  alignSelf: 'center',
+                  marginTop: isIOS ? height * -0.05 : height * -0.05,
 
-            }}>
+                }}>
 
-            <FlagButton withEmoji={true} countryCode={countryCode} />
-            <Text
-              style={{
-                // width: width * 0.7,
-                // marginTop: isIOS ? height * -0.055 : height * -0.056,
-                // marginLeft: width * 0.28,
-                color: 'black',
-                fontSize: width * 0.04,
-                fontFamily: 'Poppins-Medium',
-              }}>
-              {country}
-            </Text>
-            <View style={{ width: responsiveScreenWidth(10) }} />
-          </View>
+                <FlagButton withEmoji={true} countryCode={countryCode} />
+                <Text
+                  style={{
+                    // width: width * 0.7,
+                    // marginTop: isIOS ? height * -0.055 : height * -0.056,
+                    // marginLeft: width * 0.28,
+                    color: 'black',
+                    fontSize: width * 0.04,
+                    fontFamily: 'Poppins-Medium',
+                  }}>
+                  {country}
+                </Text>
+                <View style={{ width: responsiveScreenWidth(10) }} />
+              </View>
 
-          <AntDesign
-            name="caretdown"
-            color="black"
-            style={{
-              width: width * 0.7,
-              marginTop: isIOS ? height * -0.025 : height * -0.025,
-              marginLeft: width * 0.16,
-              color: 'black',
-              fontSize: width * 0.026,
-              fontFamily: 'Poppins-Medium',
-            }}
-          />
+              <AntDesign
+                name="caretdown"
+                color="black"
+                style={{
+                  width: width * 0.7,
+                  marginTop: isIOS ? height * -0.025 : height * -0.025,
+                  marginLeft: width * 0.16,
+                  color: 'black',
+                  fontSize: width * 0.026,
+                  fontFamily: 'Poppins-Medium',
+                }}
+              />
 
-          {loading ? (
-            <View style={styles.updateBtnStyle}>
-              <Text style={styles.btnTxt}>Updating..</Text>
+              {loading ? (
+                <View style={styles.updateBtnStyle}>
+                  <Text style={styles.btnTxt}>Updating..</Text>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={updateProfileChanges}
+                  style={styles.updateBtnStyle}>
+                  <Text style={styles.btnTxt}>Update</Text>
+                </TouchableOpacity>
+              )}
             </View>
-          ) : (
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={updateProfileChanges}
-              style={styles.updateBtnStyle}>
-              <Text style={styles.btnTxt}>Update</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-        <View style={{ height: 100 }}></View>
-      </ScrollView>
-
+            <View style={{ height: 100 }}></View>
+          </ScrollView>
+      }
       {/* <View style={{height: '37%'}} /> */}
     </SafeAreaView>
+
   );
 };
 
@@ -710,7 +839,7 @@ var styles = StyleSheet.create({
     backgroundColor: themeRed,
     width: width * 0.4,
     alignSelf: 'center',
-    height: height * 0.07,
+    height: height * 0.06,
     borderRadius: width * 0.3,
     justifyContent: 'center',
     alignItems: 'center',
@@ -782,20 +911,22 @@ var styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     borderRadius: width * 0.3,
     fontSize: width * 0.04,
-    height: height * 0.08,
+    height: height * 0.065,
     paddingHorizontal: width * 0.05,
     elevation: 20,
+    alignItems: "center",
+    justifyContent: "center"
   },
   phoneInputContainerStyle: {
     // backgroundColor: 'green',
     borderRadius: 50,
     color: 'black',
-    height: height * 0.0755,
+    height: height * 0.065,
     width: width * 0.9,
   },
   phoneInputTextStyle: {
     color: 'black',
-    height: height * 0.07,
+    height: height * 0.05,
     paddingVertical: 0,
     // backgroundColor: 'purple',
   },

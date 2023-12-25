@@ -561,14 +561,14 @@ const ProfileScreen = ({
               contentContainerStyle={styles.contentContainerStyle}
               showsHorizontalScrollIndicator={false}
               data={nearMeUserData?.user_favorite}
-              horizontal
+              // horizontal
               keyExtractor={(item, index) => index}
               renderItem={({ item, index }) => (
                 <View
                   style={{
                     margin: 10,
                   }}>
-                  <ImageBackground
+                  {/* <ImageBackground
                     style={{ width: 120, height: 120 }}
                     resizeMode="contain"
                     imageStyle={{ borderRadius: 5 }}
@@ -590,13 +590,28 @@ const ProfileScreen = ({
                                     : item == 'Martini'
                                       ? require('../../Assets/Images/8.png')
                                       : null
-                    }>
-                    <View style={styles.flatTextStyle}>
-                      <Text numberOfLines={2} style={styles.flatText}>
+                    }> */}
+                    {/* <View style={styles.flatTextStyle}> */}
+                     <View
+                     style={{
+                      flexDirection:"row",
+                      alignItems:"center"
+                     }}
+                     >
+                      <View
+                      style={{
+                        height:10,
+                        width:10,
+                        backgroundColor:"white",
+                        borderRadius:100
+                      }}
+                      ></View>
+                     <Text numberOfLines={2} style={styles.flatText}>
                         {item}
                       </Text>
-                    </View>
-                  </ImageBackground>
+                     </View>
+                    {/* </View> */}
+                  {/* </ImageBackground> */}
                 </View>
               )}
             />
@@ -615,20 +630,20 @@ const ProfileScreen = ({
           </View>
 
           {/* Interest FlatList  */}
-          <View style={styles.favoritesFlatlistView}>
+          {/* <View style={styles.favoritesFlatlistView}> */}
             {/* {console.log(nearMeUserData, '...')} */}
             <FlatList
               contentContainerStyle={styles.contentContainerStyle}
               showsHorizontalScrollIndicator={false}
               data={nearMeUserData?.user_interest}
-              horizontal
+              // horizontal
               keyExtractor={(item, index) => index}
               renderItem={({ item, index }) => (
                 <View
                   style={{
                     margin: 10,
                   }}>
-                  <ImageBackground
+                  {/* <ImageBackground
                     style={{ width: 120, height: 120 }}
                     resizeMode="contain"
                     imageStyle={{ borderRadius: 5 }}
@@ -650,15 +665,31 @@ const ProfileScreen = ({
                                     : item == 'Poetry'
                                       ? require('../../Assets/Images/Poetry.png')
                                       : null
-                    }>
-                    <View style={styles.flatTextStyle}>
+                    }> */}
+                    {/* <View style={styles.flatTextStyle}> */}
+                    <View
+                     style={{
+                      flexDirection:"row",
+                      alignItems:"center"
+                     }}
+                    >
+                    <View
+                      style={{
+                        height:10,
+                        width:10,
+                        backgroundColor:"white",
+                        borderRadius:100
+                      }}
+                      ></View>
+                    
                       <Text style={styles.flatText}>{item}</Text>
-                    </View>
-                  </ImageBackground>
+                      </View>
+                    {/* </View> */}
+                  {/* </ImageBackground> */}
                 </View>
               )}
             />
-          </View>
+          {/* </View> */}
           <View style={{ height: 170 }} />
         </View>
       </ScrollView>
